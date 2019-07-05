@@ -6,10 +6,10 @@ from pptx import Presentation
 from pptx.util import Inches
 
 # 1. Loading the file with data for one year
-#file_path = os.getcwd() + '/data/yearly/20' + sys.argv[1]+'.xlsx'
-file_path = os.getcwd() + '/data/yearly/2099.xlsx'
-#year_label = '20' + sys.argv[1]
-year_label = '2099'
+file_path = os.getcwd() + '/data/yearly/20' + sys.argv[1]+'.xlsx'
+#file_path = os.getcwd() + '/data/yearly/2099.xlsx'
+year_label = '20' + sys.argv[1]
+#year_label = '2099'
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.sheets_list
