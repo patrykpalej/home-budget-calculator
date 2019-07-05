@@ -30,13 +30,13 @@ low_indices = index_order[5:len(index_order)]
 
 top_labels = [myWorksheet.cats_names[i] for i in top_indices]
 top_values = [myWorksheet.cats_sums_list[i] for i in top_indices]
-rest_values = [myWorksheet.cats_sums_list[i] for i in low_indices]
+others_values = [myWorksheet.cats_sums_list[i] for i in low_indices]
 
-top_plus_rest_values = top_values + [sum(rest_values)]
-top_plus_rest_labels = top_labels + ['Pozostałe']
-top_plus_rest_labels = [top_plus_rest_labels[i] + '\n' \
-                     + str(round(top_plus_rest_values[i],2)) + ' zł' \
-                     for i in range(len(top_plus_rest_values))]
+top_plus_others_values = top_values + [sum(others_values)]
+top_plus_others_labels = top_labels + ['Pozostałe']
+top_plus_others_labels = [top_plus_others_labels[i] + '\n' \
+                     + str(round(top_plus_others_values[i],2)) + ' zł' \
+                     for i in range(len(top_plus_others_values))]
 
 # c) Piechart of the metacategories
 metacats_values = [myWorksheet.sum_basic, myWorksheet.sum_addit, \
@@ -121,8 +121,8 @@ fig = plotBar(values, labels, title)
 plt.savefig(figure = fig, fname = fig_name)
 
 # b) Piechart of spendings for the main categories
-values = top_plus_rest_values
-labels = top_plus_rest_labels
+values = top_plus_others_values
+labels = top_plus_others_labels
 title = month_label + \
         ' - Struktura miesięcznych wydatków\n z podziałem na kategorie\n\n' \
         +"Całkowita kwota: " + str(round(myWorksheet.sum_total,2)) + "zł\n"

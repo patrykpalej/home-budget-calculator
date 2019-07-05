@@ -13,6 +13,67 @@ class MyWorkbook():
             self.sheets_list.append(_myWs)
             self.sheets_dict[ws] = _myWs
 
+
+    def sumAllSheets(self, myWorksheets):
+        # -- ! Sums up all sheets of the workbook into one structure ! --
+        # self.sheets_list  <--> myWorksheets
+        # 1. Ballances, spendings' sums, incomes and earnings
+        self.ballance = [0, 0]
+        self.sum_basic = 0
+        self.sum_addit = 0
+        self.sum_giftdon = 0
+        self.savings = 0
+        self.sum_total = 0
+        self.incomes = 0
+        self.earnings = 0
+        self.incomes_dict = {}
+        self.earnings_dict = {}
+
+        for sheet in myWorksheets:
+            self.ballance = [self.ballance[0] + sheet.ballance[0], \
+                             self.ballance[1] + sheet.ballance[1]]
+            self.sum_basic += sheet.sum_basic
+            self.sum_addit += sheet.sum_addit
+            self.sum_giftdon += sheet.sum_giftdon
+            self.savings += sheet.savings
+            self.sum_total += sheet.sum_total
+            self.incomes += sheet.incomes
+            self.earnings += sheet.earnings
+
+            for source in sheet.incomes_dict:
+                if source in self.incomes_dict:
+                    self.incomes_dict[source] += sheet.incomes_dict[source]
+                    self.earnings_dict[source]+=sheet.earnings_dict[source]
+                else:
+                    self.incomes_dict[source]=sheet.incomes_dict[source]
+                    self.earnings_dict[source]=sheet.earnings_dict[source]
+
+
+        # 2. Sums of the spendings within categories
+        self.cats_sums = {}
+        for sheet in myWorksheets:
+            for c_name in sheet.cats_sums:
+                if c_name in self.cats_sums:
+                    self.cats_sums[c_name]+=sheet.cats_sums[c_name]
+                else:
+                    self.cats_sums[c_name]=sheet.cats_sums[c_name]
+
+        self.cats_sums_list = list(self.cats_sums.values())
+        self.cats_names = list(self.cats_sums.keys())
+
+
+        # 3. Individual spendings with descriptions
+        self.spends_values = {}
+        self.spends_items = {}
+        for sheet in myWorksheets:
+            for c_name in sheet.spends_values:
+                if c_name in self.spends_values:
+                    self.spends_values[c_name]+=sheet.spends_values[c_name]
+                    self.spends_items[c_name]+=sheet.spends_items[c_name]
+                else:
+                    self.spends_values[c_name]=sheet.spends_values[c_name]
+                    self.spends_items[c_name]=sheet.spends_items[c_name]
+
 # -----------------------------------------------------------------------------
 
 class MyWorksheet():
@@ -45,8 +106,8 @@ class MyWorksheet():
                 _name = self.myws.cell(row = 3, column = col_nr).value
 
                 self.sources.append(_name)
-                self.przychody_dict[self.sources[-1]] = _incomes
-                self.incomes_dict[self.sources[-1]] = _earnings
+                self.incomes_dict[self.sources[-1]] = _incomes
+                self.earnings_dict[self.sources[-1]] = _earnings
             except:
                 break
 
@@ -98,7 +159,7 @@ class MyWorksheet():
                         try:
                             _item = self.myws.cell(row_nr, col_nr).comment.text
                             self.spends_items[self.cats_names[i]]\
-                            .append(_item[_opis.find(':\n')+2:])
+                            .append(_item[_item.find(':\n')+2:])
                         except:
                             self.spends_items[self.cats_names[i]].append('')
                     else:

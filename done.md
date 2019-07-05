@@ -4,3 +4,8 @@ v.1.1
 - MyWorksheet class for parsing a single month sheet was implemented
 - first plotting functions were implemented
 - main.py initialized
+
+v.1.2
+
+- first version of yearAnalysis.py scenario implemented
+- sumAllSheets() method added to class MyWorkbook to sum all sheets (months) in a one year workbook 

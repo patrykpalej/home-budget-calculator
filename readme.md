@@ -2,6 +2,7 @@
 -------------------------------------------
 - main.py		a potential main script for a complex scenario
 - monthAnalysis.py	main script for a single month analysis scenario
+- yearAnalysis.py 	main script for a single year analysis scenario
 - classes.py 		contains classes such as MyWorksheet or MyWorkbook whose instances are single worksheets/workbooks
 - plotFuncs.py		file with functions for plotting data
 
@@ -10,12 +11,14 @@
 
 2. How to run
 -------------
-To run the month analysis type in the cmd "python monthAnalysis.py mm yy"
+To run the month analysis enter "python monthAnalysis.py mm yy" to cmd
 where mm and yy stand for month and year respectively. 
 
 For example "python monthAnalysis.py 04 18" is for April 2018 
 
 There is sample data attached to the code for Jan, Feb and Mar 2099.
+- - -
+To run the year analysis enter "python yearAnalysis.py yy" 
  
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
