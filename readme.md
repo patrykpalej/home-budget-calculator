@@ -1,10 +1,10 @@
 1. Names of the files and what they are for
 -------------------------------------------
-- main.py		a potential main script for a complex scenario
-- monthAnalysis.py	main script for a single month analysis scenario
-- yearAnalysis.py 	main script for a single year analysis scenario
-- classes.py 		contains classes such as MyWorksheet or MyWorkbook whose instances are single worksheets/workbooks
-- plotFuncs.py		file with functions for plotting data
+- main.py		- a potential main script for a complex scenario
+- monthAnalysis.py	- main script for a single month analysis scenario
+- yearAnalysis.py 	- main script for a single year analysis scenario
+- classes.py 		- contains classes such as MyWorksheet or MyWorkbook whose instances are single worksheets/workbooks
+- plotFuncs.py		- file with functions for plotting data
 
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
