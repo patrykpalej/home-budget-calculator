@@ -1,3 +1,6 @@
+This is a project of a home budget calculator. Data is stored in excel worksheets. Sample data can be found in a "data" folder. There are different analysis scenarios. The output is a powerpoint presentation which is automatically generated. The main need-to-know information is described below. 
+
+
 1. Names of the files and what they are for
 -------------------------------------------
 - main.py		- a potential main script for a complex scenario
