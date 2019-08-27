@@ -3,6 +3,7 @@
 - main.py		- a potential main script for a complex scenario
 - monthAnalysis.py	- main script for a single month analysis scenario
 - yearAnalysis.py 	- main script for a single year analysis scenario
+- totalAnalysis.py      - main script for the analysis of the whole period
 - classes.py 		- contains classes such as MyWorksheet or MyWorkbook whose instances are single worksheets/workbooks
 - plotFuncs.py		- file with functions for plotting data
 
@@ -24,7 +25,7 @@ To run the year analysis enter "python yearAnalysis.py yy"
 -------------------------------------------------------------------------------------
 
 3. Dictionary
-----------
+-------------
 - categories - arbitrarily chosen categories of spendings such as "Jedzenie" or "Rzeczy i sprzêty"
 - metacategories - high-level categories indicating type of spendings. There are three: "Podstawowe", "Dodatkowe","Donacje/prezenty"
 - subcategories - to specify type of the spendings for category "Jedzenie" there are subcategories included to indicate what kind of food is this
@@ -36,6 +37,6 @@ To run the year analysis enter "python yearAnalysis.py yy"
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 
-4. Code
--------
+4. Code conventions
+-------------------
 - variables starting with "_" are temporary 

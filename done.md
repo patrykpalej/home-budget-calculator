@@ -15,3 +15,9 @@ v.1.2
  - year Analysis divided into three sections - year as a whole, average month and sequence of months
  - 4 new plots added for the year as a sequence of months part
  - sumAllSheets() method deleted and the code included to the constructor
+
+v.1.3
+
+ - small changes in year- and month analysis
+ - totalAnalysis created
+ - piechart design changed

@@ -21,14 +21,14 @@ myWorksheets = myWorkbook.mywb.sheetnames
 # 2. Preparing data from the parsed sheets for visualization
 # -- Year as a whole
 # a) Barplot for all categories
-index_order = np.flip(np.argsort(myWorkbook.cats_sums_list))
+index_order = np.flip(np.argsort(myWorkbook.cats_sums_list), axis=0)
 values_desc = [myWorkbook.cats_sums_list[i] for i in index_order
                if myWorkbook.cats_sums_list[i] > 0]
 labels_desc = [myWorkbook.cats_names[i] for i in index_order
                if myWorkbook.cats_sums_list[i] > 0]
 
 # b) Piechart of spendings for the main categories
-index_order = np.flip(np.argsort(myWorkbook.cats_sums_list))
+index_order = np.flip(np.argsort(myWorkbook.cats_sums_list), axis=0)
 _top_indices = index_order[0:5]
 _low_indices = index_order[5:len(index_order)]
 
@@ -38,30 +38,30 @@ others_values = [myWorkbook.cats_sums_list[i] for i in _low_indices]
 
 top_plus_others_values = top_values + [sum(others_values)]
 top_plus_others_labels_0 = top_labels + ['Pozostałe']
-top_plus_others_labels = [top_plus_others_labels_0[i] + '\n'
+top_plus_others_labels = [top_plus_others_labels_0[i] + ' - '
                           + str(round(top_plus_others_values[i], 2)) + ' zł'
                           for i in range(len(top_plus_others_values))]
 
 # c) Piechart of the metacategories
 metacats_values = [myWorkbook.sum_basic, myWorkbook.sum_addit,
                    myWorkbook.sum_giftdon]
-metacats_labels = ['Podstawowe\n' + str(round(myWorkbook.sum_basic, 2))+'zł',
-                   'Dodatkowe\n' + str(round(myWorkbook.sum_addit, 2))+'zł',
-                   'Prezenty i donacje\n' +
+metacats_labels = ['Podstawowe - ' + str(round(myWorkbook.sum_basic, 2))+'zł',
+                   'Dodatkowe - ' + str(round(myWorkbook.sum_addit, 2))+'zł',
+                   'Prezenty i donacje - ' +
                    str(round(myWorkbook.sum_giftdon, 2)) + 'zł']
 
 # d) Piechart of incomes
 _values_list_inc = list(myWorkbook.incomes_dict.values())
 _labels_list_inc = list(myWorkbook.incomes_dict.keys())
 incomes_values = [inc for inc in _values_list_inc if inc > 0]
-incomes_labels = [inc+'\n'+str(_values_list_inc[i])+'zł' for i, inc in
+incomes_labels = [inc+' - '+str(_values_list_inc[i])+'zł' for i, inc in
                   enumerate(_labels_list_inc) if _values_list_inc[i] > 0]
 
 # e) Piechart of earnings
 _values_list_ear = list(myWorkbook.earnings_dict.values())
 _labels_list_ear = list(myWorkbook.earnings_dict.keys())
 earnings_values = [ear for ear in _values_list_ear if ear > 0]
-earnings_labels = [ear+'\n' + str(_values_list_ear[i])+'zł' for i, ear in
+earnings_labels = [ear+' - ' + str(_values_list_ear[i])+'zł' for i, ear in
                    enumerate(_labels_list_ear) if _values_list_ear[i] > 0]
 
 # f) Piechart of food subcategories
@@ -76,8 +76,8 @@ for i, subcat in enumerate(subcats):
         subcats_dict[subcat] = amounts[i]
 
 subcats_values = list(subcats_dict.values())
-subcats_labels = [list(subcats_dict.keys())[i]+'\n'
-                  + str(round(list(subcats_dict.values())[i], 2))+'zł'
+subcats_labels = [list(subcats_dict.keys())[i]+' - '
+                  + str(round(list(subcats_dict.values())[i], 2)) + 'zł'
                   for i, sc in enumerate(list(subcats_dict.keys()))]
 # ----
 _subcats_fractions = [sc/sum(subcats_values) for sc in subcats_values]
@@ -92,7 +92,7 @@ for i, sc_f in enumerate(_subcats_fractions):
         others_sum += subcats_values[i]
 
 subcats_values_with_others.append(others_sum)
-subcats_labels_with_others.append('inne\n'+str(others_sum)+'zł')
+subcats_labels_with_others.append('inne - '+str(others_sum)+'zł')
 
 # ---
 
@@ -100,31 +100,31 @@ subcats_labels_with_others.append('inne\n'+str(others_sum)+'zł')
 # g) Piechart of spendings for the main categories
 top_plus_others_values_avg = [i/len(myWorksheets)
                               for i in top_plus_others_values]
-top_plus_others_labels_avg = [top_plus_others_labels_0[i] + '\n'
+top_plus_others_labels_avg = [top_plus_others_labels_0[i] + ' - '
                               + str(round(top_plus_others_values[i]
                                           / len(myWorksheets), 2)) + 'zł'
                               for i in range(len(top_plus_others_values))]
 
 # h) Piechart of the metacategories
 metacats_values_avg = [i/len(myWorksheets) for i in metacats_values]
-metacats_labels_avg = ['Podstawowe\n' +
-                       str(round(myWorkbook.sum_basic/len(myWorksheets), 2))
-                       + 'zł', 'Dodatkowe\n'
+metacats_labels_avg = ['Podstawowe - '
+                       + str(round(myWorkbook.sum_basic/len(myWorksheets), 2))
+                       + 'zł', 'Dodatkowe - '
                        + str(round(myWorkbook.sum_addit/len(myWorksheets), 2))
-                       + 'zł', 'Prezenty i donacje\n'
+                       + 'zł', 'Prezenty i donacje - '
                        + str(round(myWorkbook.sum_giftdon/len(myWorksheets), 2))
                        + 'zł']
 
 # i) Piechart of incomes
 incomes_values_avg = [i/len(myWorksheets) for i in incomes_values]
-incomes_labels_avg = [inc + '\n' + str(round(_values_list_inc[i]
+incomes_labels_avg = [inc + ' - ' + str(round(_values_list_inc[i]
                       / len(myWorksheets), 2)) + 'zł'
                       for i, inc in enumerate(_labels_list_inc)
                       if _values_list_inc[i] > 0]
 
 # j) Piechart of earnings
 earnings_values_avg = [i/len(myWorksheets) for i in earnings_values]
-earnings_labels_avg = [ear + '\n'
+earnings_labels_avg = [ear + ' - '
                        + str(round(_values_list_ear[i]/len(myWorksheets), 2))
                        + 'zł'
                        for i, ear in enumerate(_labels_list_ear)
@@ -210,7 +210,7 @@ values = top_plus_others_values
 labels = top_plus_others_labels
 title = year_label \
         + ' - Struktura rocznych wydatków\n z podziałem na kategorie\n\n' \
-        + 'Suma wydatków: ' + str(round(myWorkbook.sum_total, 2)) + 'zł\n'
+        'Suma wydatków: ' + str(round(myWorkbook.sum_total, 2)) + 'zł\n'
 fig_name = results_dir + '/plots/plot2.png'
 
 fig = plotPie(values, labels, title)
@@ -221,7 +221,7 @@ values = metacats_values
 labels = metacats_labels
 title = year_label + ' - Podział wydatków na: \n' \
         + 'Podstawowe, Dodatkowe i Prezenty/Donacje\n\n' \
-        + 'Suma wydatków: ' + str(round(myWorkbook.sum_total, 2)) + 'zł\n'
+        'Suma wydatków: ' + str(round(myWorkbook.sum_total, 2)) + 'zł\n'
 fig_name = results_dir + '/plots/plot3.png'
 
 fig = plotPie(values, labels, title)
@@ -234,8 +234,7 @@ title = year_label + ' - Podział przychodów na poszczególne źródła\n\n' \
         + 'Suma przychodów: ' + str(myWorkbook.incomes) + 'zł\n' \
         + 'Nadwyżka przychodów: ' + str(round(myWorkbook.ballance[0], 2)) \
         + 'zł  (' + str(round(100*myWorkbook.ballance[0]
-                              / myWorkbook.incomes, 2)) \
-        + '%)'
+                               / myWorkbook.incomes, 2)) + '%)'
 
 fig_name = results_dir + '/plots/plot4.png'
 
@@ -249,7 +248,7 @@ title = year_label + ' - Podział zarobków na poszczególne źrodła\n\n' \
         + 'Suma zarobków: ' + str(myWorkbook.earnings) + 'zł\n' \
         + 'Nadwyżka zarobków: ' + str(round(myWorkbook.ballance[1], 2))\
         + 'zł  (' + str(round(100*myWorkbook.ballance[1]
-                              / myWorkbook.earnings, 2)) \
+                               / myWorkbook.earnings, 2)) \
         + '%)'
 fig_name = results_dir + '/plots/plot5.png'
 
@@ -283,7 +282,8 @@ values = metacats_values_avg
 labels = metacats_labels_avg
 title = year_label + ' - Podział wydatków na: Podstawowe, Dodatkowe\n' \
         'i Prezenty/Donacje w uśrednionym miesiącu' \
-        + '\n\nSuma wydatków: ' + str(round(myWorkbook.sum_total, 2)) + 'zł\n'
+        + '\n\nSuma wydatków: ' \
+        + str(round(myWorkbook.sum_total/len(myWorksheets), 2)) + 'zł\n'
 fig_name = results_dir + '/plots/plot8.png'
 
 fig = plotPie(values, labels, title)
@@ -298,7 +298,7 @@ title = year_label + ' - Podział przychodów na poszczególne źródła\n' \
         'Nadwyżka przychodów: ' \
         + str(round(myWorkbook.ballance[0]/len(myWorksheets), 2)) \
         + 'zł  (' + str(round(100*myWorkbook.ballance[0]/len(myWorksheets)
-                              / (myWorkbook.incomes/len(myWorksheets)), 2)) \
+                               / (myWorkbook.incomes/len(myWorksheets)), 2)) \
         + '%)'
 
 fig_name = results_dir + '/plots/plot9.png'
@@ -315,7 +315,7 @@ title = year_label + ' - Podział zarobków na poszczególne źródła\n' \
         'Nadwyżka zarobków: ' \
         + str(round(myWorkbook.ballance[1]/len(myWorksheets), 2)) \
         + 'zł  (' + str(round(100*myWorkbook.ballance[1]/len(myWorksheets)
-                              / (myWorkbook.earnings/len(myWorksheets)), 2)) \
+                               / (myWorkbook.earnings/len(myWorksheets)), 2)) \
         + '%)'
 
 fig_name = results_dir + '/plots/plot10.png'
@@ -326,8 +326,8 @@ plt.savefig(figure=fig, fname=fig_name)
 # k) Stackplot of cummulated spendings for the top categories
 values = top_spends_seqs_cumsum
 labels = top_labels + ['Pozostałe']
-title = year_label + " - Skumulowane wartości wydatków na\n poszczególne " \
-                     "kategorie na przestrzeni roku"
+title = year_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
+                     'kategorie na przestrzeni roku'
 fig_name = results_dir + '/plots/plot11.png'
 
 fig = plotStack(values, labels, title)
@@ -347,8 +347,8 @@ plt.savefig(figure=fig, fname=fig_name)
 # m) Lineplot of average spendings for subsequent categories so far
 values = current_means_seqs
 labels = top_labels + ['Pozostałe']
-title = year_label + ' - Średnie dotychczasowe wydatki na \nposzczególne ' \
-        'kategorie'
+title = year_label + ' - Dotychczasowe średnie miesięczne wydatki na ' \
+        '\nposzczególne kategorie'
 fig_name = results_dir + '/plots/plot13.png'
 
 fig = plotLine(values, labels, title)
@@ -385,7 +385,7 @@ title.text = '1. Rok jako całość'
 
 for i in range(6):
     slides.append(prs.slides.add_slide(blank_slide_layout))
-    left = Inches(1.2)
+    left = Inches(1.5)
     top = Inches(0.0)
     height = width = Inches(7.5)
 
@@ -400,7 +400,7 @@ title.text = '2. Uśredniony miesiąc'
 
 for i in range(4):
     slides.append(prs.slides.add_slide(blank_slide_layout))
-    left = Inches(1.2)
+    left = Inches(1.5)
     top = Inches(0.0)
     height = width = Inches(7.5)
 

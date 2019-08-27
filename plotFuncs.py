@@ -6,12 +6,13 @@ def plotPie(values, labels, plot_title):
 
     plt.style.use('default')
     fig = plt.figure(figsize=(12, 12))
-    plt.pie(x=values, labels=labels, autopct='%1.0f%%',
-            textprops={'fontsize': 20}, labeldistance=1.1, startangle = 140)
+    plt.pie(x=values, autopct='%1.0f%%', textprops={'fontsize': 20},
+            startangle=0)
 
-    plt.title(plot_title, fontsize=24, pad=21)
-    plt.subplots_adjust(left=0.0, bottom=0.00, right=1.0, top=0.8)
-    
+    plt.title(plot_title, fontsize=24, pad=1)
+    plt.subplots_adjust(left=0.0, bottom=0.0, right=0.78, top=0.78)
+    plt.legend(labels=labels, loc=(0.8, 0.8), fontsize='xx-large')
+
     return fig
 
 
