@@ -34,7 +34,7 @@ To run the total analysis enter "python totalAnalysis.py" without arguments
 - categories - arbitrarily chosen categories of spendings such as "Jedzenie" or "Rzeczy i sprzêty"
 - metacategories - high-level categories indicating type of spendings. There are three: "Podstawowe", "Dodatkowe","Donacje/prezenty"
 - subcategories - to specify type of the spendings for category "Jedzenie" there are subcategories included to indicate what kind of food is this
-- incomes - money that come in a given month
+- incomes - money that comes in a given month
 - earnings - money that is earned in a given month
 - source - on of incomes/earnings sources
 - ballance - difference between incomes/earnings and spendings
