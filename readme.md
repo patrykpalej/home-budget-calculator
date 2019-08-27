@@ -20,6 +20,8 @@ For example "python monthAnalysis.py 04 18" is for April 2018
 There is sample data attached to the code for Jan, Feb and Mar 2099.
 - - -
 To run the year analysis enter "python yearAnalysis.py yy" 
+- - -
+To run the total analysis enter "python totalAnalysis.py" without arguments
  
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
