@@ -91,9 +91,9 @@ class MyWorkbook:
 
 
 class MyWorksheet:
-    def __init__(self, sheet_name, myWb):
+    def __init__(self, sheet_name, mywb):
         # Sheet itself:
-        self.myws = myWb[sheet_name]
+        self.myws = mywb[sheet_name]
 
         # -- ! Parsing the sheet ! --
         # 1. balances, spendings' sums, incomes and earnings
