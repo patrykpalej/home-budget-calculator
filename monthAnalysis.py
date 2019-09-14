@@ -165,8 +165,8 @@ values = incomes_values
 labels = incomes_labels
 title = month_label + ' - Podział przychodów na poszczególne źródła\n\n' \
         + 'Suma przychodów: ' + str(myWorksheet.incomes) + 'zł\n' \
-        + 'Nadwyżka przychodów: ' + str(round(myWorksheet.ballance[0], 2)) \
-        + 'zł (' + str(round(100*myWorksheet.ballance[0] /
+        + 'Nadwyżka przychodów: ' + str(round(myWorksheet.balance[0], 2)) \
+        + 'zł (' + str(round(100*myWorksheet.balance[0] /
         myWorksheet.incomes, 2)) + '%)\n'
 fig_name = results_dir + '/plots/plot4.png'
 
@@ -178,8 +178,8 @@ values = earnings_values
 labels = earnings_labels
 title = month_label + ' - Podział zarobków na poszczególne źródła\n\n' \
         + 'Suma zarobków: ' + str(myWorksheet.earnings) + 'zł\n' \
-        + 'Nadwyżka zarobków: ' + str(round(myWorksheet.ballance[1], 2)) \
-        + 'zł (' + str(round(100*myWorksheet.ballance[1] /
+        + 'Nadwyżka zarobków: ' + str(round(myWorksheet.balance[1], 2)) \
+        + 'zł (' + str(round(100*myWorksheet.balance[1] /
         myWorksheet.earnings, 2)) + '%)\n'
 fig_name = results_dir + '/plots/plot5.png'
 

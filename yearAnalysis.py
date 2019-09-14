@@ -152,18 +152,18 @@ for seq in top_spends_seqs:
 # l) Lineplot of cummulated spendings, incomes and savings
 line_incomes = []
 line_spendings = []
-line_ballance = []
+line_balance = []
 line_savings = []
 
 for month in myWorkbook.sheets_list:
     line_incomes.append(month.incomes)
     line_spendings.append(sum(month.cats_sums_list))
-    line_ballance.append(month.ballance[0])
+    line_balance.append(month.balance[0])
     line_savings.append(month.savings)
 
 line_incomes = np.cumsum(line_incomes)
 line_spendings = np.cumsum(line_spendings)
-line_ballance = np.cumsum(line_ballance)
+line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
 # m) Lineplot of average spendings for subsequent categories so far
@@ -232,8 +232,8 @@ values = incomes_values
 labels = incomes_labels
 title = year_label + ' - Podział przychodów na poszczególne źródła\n\n' \
         + 'Suma przychodów: ' + str(myWorkbook.incomes) + 'zł\n' \
-        + 'Nadwyżka przychodów: ' + str(round(myWorkbook.ballance[0], 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.ballance[0]
+        + 'Nadwyżka przychodów: ' + str(round(myWorkbook.balance[0], 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[0]
                                / myWorkbook.incomes, 2)) + '%)'
 
 fig_name = results_dir + '/plots/plot4.png'
@@ -246,8 +246,8 @@ values = earnings_values
 labels = earnings_labels
 title = year_label + ' - Podział zarobków na poszczególne źrodła\n\n' \
         + 'Suma zarobków: ' + str(myWorkbook.earnings) + 'zł\n' \
-        + 'Nadwyżka zarobków: ' + str(round(myWorkbook.ballance[1], 2))\
-        + 'zł  (' + str(round(100*myWorkbook.ballance[1]
+        + 'Nadwyżka zarobków: ' + str(round(myWorkbook.balance[1], 2))\
+        + 'zł  (' + str(round(100*myWorkbook.balance[1]
                                / myWorkbook.earnings, 2)) \
         + '%)'
 fig_name = results_dir + '/plots/plot5.png'
@@ -296,8 +296,8 @@ title = year_label + ' - Podział przychodów na poszczególne źródła\n' \
         'w uśrednionym miesiącu\n\n' + 'Suma przychodów: ' \
         + str(round(myWorkbook.incomes/len(myWorksheets), 2)) + 'zł\n' \
         'Nadwyżka przychodów: ' \
-        + str(round(myWorkbook.ballance[0]/len(myWorksheets), 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.ballance[0]/len(myWorksheets)
+        + str(round(myWorkbook.balance[0]/len(myWorksheets), 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[0]/len(myWorksheets)
                                / (myWorkbook.incomes/len(myWorksheets)), 2)) \
         + '%)'
 
@@ -313,8 +313,8 @@ title = year_label + ' - Podział zarobków na poszczególne źródła\n' \
         'w uśrednionym miesiącu\n\nSuma zarobków: ' \
         + str(round(myWorkbook.earnings/len(myWorksheets), 2)) + 'zł\n' \
         'Nadwyżka zarobków: ' \
-        + str(round(myWorkbook.ballance[1]/len(myWorksheets), 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.ballance[1]/len(myWorksheets)
+        + str(round(myWorkbook.balance[1]/len(myWorksheets), 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[1]/len(myWorksheets)
                                / (myWorkbook.earnings/len(myWorksheets)), 2)) \
         + '%)'
 
@@ -334,7 +334,7 @@ fig = plotStack(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
 # l) Lineplot of cummulated spendings, incomes and savings
-values = [line_incomes, line_spendings, line_ballance, line_savings]
+values = [line_incomes, line_spendings, line_balance, line_savings]
 labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
           'Oszczędności\ndługoterminowe']
 title = year_label + ' - Skumulowane wartości przychodów, \n wydatków ' \

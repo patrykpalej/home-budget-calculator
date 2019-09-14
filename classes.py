@@ -15,8 +15,8 @@ class MyWorkbook:
             self.sheets_dict[ws] = _myWs
 
         # -- ! Sums up all sheets of the workbook into one structure ! --
-        # 1. Ballances, spendings' sums, incomes and earnings
-        self.ballance = [0, 0]
+        # 1. balances, spendings' sums, incomes and earnings
+        self.balance = [0, 0]
         self.sum_basic = 0
         self.sum_addit = 0
         self.sum_giftdon = 0
@@ -28,8 +28,8 @@ class MyWorkbook:
         self.earnings_dict = {}
 
         for sheet in self.sheets_list:
-            self.ballance = [self.ballance[0] + sheet.ballance[0],
-                             self.ballance[1] + sheet.ballance[1]]
+            self.balance = [self.balance[0] + sheet.balance[0],
+                             self.balance[1] + sheet.balance[1]]
             self.sum_basic += sheet.sum_basic
             self.sum_addit += sheet.sum_addit
             self.sum_giftdon += sheet.sum_giftdon
@@ -91,13 +91,13 @@ class MyWorkbook:
 
 
 class MyWorksheet:
-    def __init__(self, sheet_name, myWb):
+    def __init__(self, sheet_name, mywb):
         # Sheet itself:
-        self.myws = myWb[sheet_name]
+        self.myws = mywb[sheet_name]
 
         # -- ! Parsing the sheet ! --
-        # 1. Ballances, spendings' sums, incomes and earnings
-        self.ballance = [self.myws['B1'].value, self.myws['B2'].value]
+        # 1. balances, spendings' sums, incomes and earnings
+        self.balance = [self.myws['B1'].value, self.myws['B2'].value]
 
         self.sum_basic = self.myws['A6'].value
         self.sum_addit = self.myws['B6'].value

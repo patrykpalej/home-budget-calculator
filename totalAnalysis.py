@@ -102,18 +102,18 @@ for seq in top_spends_seqs:
 # i) Lineplot of cummulated spendings, incomes and savings
 line_incomes = []
 line_spendings = []
-line_ballance = []
+line_balance = []
 line_savings = []
 
 for month in myWorkbook.sheets_list:
     line_incomes.append(month.incomes)
     line_spendings.append(sum(month.cats_sums_list))
-    line_ballance.append(month.ballance[0])
+    line_balance.append(month.balance[0])
     line_savings.append(month.savings)
 
 line_incomes = np.cumsum(line_incomes)
 line_spendings = np.cumsum(line_spendings)
-line_ballance = np.cumsum(line_ballance)
+line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
 # j) Lineplot of average spendings for subsequent categories so far
@@ -183,8 +183,8 @@ values = incomes_values
 labels = incomes_labels
 title = total_label + ' - Podział przychodów na poszczególne źródła\n\n' \
         'Suma przychodów: ' + str(round(myWorkbook.incomes, 2)) + 'zł\n' \
-        'Nadwyżka przychodów: ' + str(round(myWorkbook.ballance[0], 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.ballance[0]
+        'Nadwyżka przychodów: ' + str(round(myWorkbook.balance[0], 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[0]
                                / myWorkbook.incomes, 2)) \
         + '%)\n'
 
@@ -225,8 +225,8 @@ title = total_label + ' - Podział przychodów na poszczególne źródła\n' \
         'w uśrednionym miesiącu\n\n' + 'Suma przychodów: ' \
         + str(round(myWorkbook.incomes/n_of_months, 2)) + 'zł\n' \
         + 'Nadwyżka przychodów: ' \
-        + str(round(myWorkbook.ballance[0]/n_of_months, 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.ballance[0] / n_of_months
+        + str(round(myWorkbook.balance[0]/n_of_months, 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[0] / n_of_months
                                / (myWorkbook.incomes/n_of_months), 2)) + '%)'
 
 fig_name = results_dir + '/plots/plot7.png'
@@ -245,7 +245,7 @@ fig = plotStack(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
 # i) Lineplot of cummulated spendings, incomes and savings
-values = [line_incomes, line_spendings, line_ballance, line_savings]
+values = [line_incomes, line_spendings, line_balance, line_savings]
 labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
           'Oszczędności\ndługoterminowe']
 title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
