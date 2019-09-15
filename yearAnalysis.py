@@ -6,9 +6,8 @@ import numpy as np
 from pptx import Presentation
 from pptx.util import Inches
 from openpyxl.styles import Alignment
-from openpyxl.styles.borders import Border, Side
-from openpyxl.styles import Color, PatternFill, Font, Border
-#from openpyxl.styles import Style
+from openpyxl.styles.borders import Side
+from openpyxl.styles import Border
 from openpyxl.styles import PatternFill
 
 
