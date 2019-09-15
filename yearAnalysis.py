@@ -7,6 +7,9 @@ from pptx import Presentation
 from pptx.util import Inches
 from openpyxl.styles import Alignment
 from openpyxl.styles.borders import Border, Side
+from openpyxl.styles import Color, PatternFill, Font, Border
+#from openpyxl.styles import Style
+from openpyxl.styles import PatternFill
 
 
 year_num = sys.argv[1]
@@ -458,9 +461,20 @@ def export_to_excel(cat_name, num_of_ws):
     row = 0
     for m, month_num in enumerate(np.unique(monthlabels)):
         row += 1
-        ws.cell(row, 1).value = mdict[month_num]
+        month_sum = str(sum(values_nested_list[m]))
+        ws.cell(row, 1).value = mdict[month_num] + '  - ' + month_sum + 'zł'
         ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=2)
         ws.cell(row, 1).alignment = Alignment(horizontal='center')
+        ws.cell(row, 1).fill = PatternFill(fgColor='93e1e6', fill_type='solid')
+
+        row += 1
+        ws.cell(row, 1).value = 'Co?'
+        ws.cell(row, 2).value = 'Kwota [zł]'
+        ws.cell(row, 1).alignment = Alignment(horizontal='center')
+        ws.cell(row, 2).alignment = Alignment(horizontal='center')
+        ws.cell(row, 1).fill = PatternFill(fgColor='daf6f7', fill_type='solid')
+        ws.cell(row, 2).fill = PatternFill(fgColor='daf6f7', fill_type='solid')
+
         for i, val in enumerate(values_nested_list[m]):
             row += 1
             ws.cell(row, 1).value = items_nested_list[m][i]
@@ -480,6 +494,8 @@ def export_to_excel(cat_name, num_of_ws):
 wb_to_export.remove_sheet(wb_to_export.active)
 wb_to_export = export_to_excel('Rzeczy i sprzęty', 0)
 wb_to_export = export_to_excel('Hobby i przyjemności', 1)
+wb_to_export = export_to_excel('Transport i noclegi', 2)
+wb_to_export = export_to_excel('Podróże', 3)
 
 wb_to_export.save(results_dir + '/20' + year_num
                   + ' - zestawienie wydatków.xlsx')
