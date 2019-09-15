@@ -6,13 +6,17 @@ import numpy as np
 from pptx import Presentation
 from pptx.util import Inches
 from openpyxl.styles import Alignment
-from openpyxl.styles.borders import Border, Side
+from openpyxl.styles.borders import Side
+from openpyxl.styles import Border
+from openpyxl.styles import PatternFill
+
+
+year_num = sys.argv[1]
+#year_num = '99'  # hardcoded if no arguments
 
 # 1. Loading the file with data for one year
-file_path = os.getcwd() + '/data/yearly/20' + sys.argv[1] + '.xlsx'
-#file_path = os.getcwd() + '/data/yearly/2099.xlsx'  # hardcoded if no args
-year_label = '20' + sys.argv[1]
-#year_label = '2099'  # hardcoded if no args
+file_path = os.getcwd() + '/data/yearly/20' + year_num + '.xlsx'
+year_label = '20' + year_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
@@ -376,7 +380,7 @@ slides = list()
 
 slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].shapes.title
-title.text = '20' + sys.argv[1] + ' - raport finansowy'
+title.text = '20' + year_num + ' - raport finansowy'
 
 # Year as a whole
 slides.append(prs.slides.add_slide(title_slide_layout))
@@ -389,7 +393,7 @@ for i in range(6):
     top = Inches(0.0)
     height = width = Inches(7.5)
 
-    pic_path = 'results/20' + sys.argv[1] + ' - wyniki/plots/plot' + \
+    pic_path = 'results/20' + year_num + ' - wyniki/plots/plot' + \
                str(i+1) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
@@ -404,7 +408,7 @@ for i in range(4):
     top = Inches(0.0)
     height = width = Inches(7.5)
 
-    pic_path = 'results/20' + sys.argv[1]+' - wyniki/plots/plot' \
+    pic_path = 'results/20' + year_num+' - wyniki/plots/plot' \
                + str(i+1+6) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
@@ -420,12 +424,12 @@ for i in range(4):
     height = Inches(10.5)
     width = Inches(7.0)
 
-    pic_path = 'results/20' + sys.argv[1] + ' - wyniki/plots/plot'\
+    pic_path = 'results/20' + year_num + ' - wyniki/plots/plot'\
                + str(i+1+10) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
 
-prs.save(results_dir + '/20' + sys.argv[1] + ' - raport finansowy.pptx')
+prs.save(results_dir + '/20' + year_num + ' - raport finansowy.pptx')
 
 # 5. Exporting spendings to a table in seprate excel workbook
 wb_to_export = openpyxl.Workbook()
@@ -456,9 +460,20 @@ def export_to_excel(cat_name, num_of_ws):
     row = 0
     for m, month_num in enumerate(np.unique(monthlabels)):
         row += 1
-        ws.cell(row, 1).value = mdict[month_num]
+        month_sum = str(sum(values_nested_list[m]))
+        ws.cell(row, 1).value = mdict[month_num] + '  - ' + month_sum + 'zł'
         ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=2)
         ws.cell(row, 1).alignment = Alignment(horizontal='center')
+        ws.cell(row, 1).fill = PatternFill(fgColor='93e1e6', fill_type='solid')
+
+        row += 1
+        ws.cell(row, 1).value = 'Co?'
+        ws.cell(row, 2).value = 'Kwota [zł]'
+        ws.cell(row, 1).alignment = Alignment(horizontal='center')
+        ws.cell(row, 2).alignment = Alignment(horizontal='center')
+        ws.cell(row, 1).fill = PatternFill(fgColor='daf6f7', fill_type='solid')
+        ws.cell(row, 2).fill = PatternFill(fgColor='daf6f7', fill_type='solid')
+
         for i, val in enumerate(values_nested_list[m]):
             row += 1
             ws.cell(row, 1).value = items_nested_list[m][i]
@@ -478,6 +493,8 @@ def export_to_excel(cat_name, num_of_ws):
 wb_to_export.remove_sheet(wb_to_export.active)
 wb_to_export = export_to_excel('Rzeczy i sprzęty', 0)
 wb_to_export = export_to_excel('Hobby i przyjemności', 1)
+wb_to_export = export_to_excel('Transport i noclegi', 2)
+wb_to_export = export_to_excel('Podróże', 3)
 
-wb_to_export.save(results_dir + '/20' + sys.argv[1]
+wb_to_export.save(results_dir + '/20' + year_num
                   + ' - zestawienie wydatków.xlsx')
