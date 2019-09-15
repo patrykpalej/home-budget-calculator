@@ -6,11 +6,16 @@ import numpy as np
 from pptx import Presentation
 from pptx.util import Inches
 
+
+month_num = sys.argv[1]
+year_num = sys.argv[2]
+#month_num = '01'  # hardcoded if no arguments
+#year_num = '99'  # hardcoded if no arguments
+
 # 1. Loading the file with data for one month
-#file_path = os.getcwd() + '/data/monthly/2099.02.xlsx' # hardcoded if no args
-file_path = os.getcwd()+'/data/monthly/20'+sys.argv[2]+'.'+sys.argv[1]+'.xlsx'
-#month_label = '01.2099' # hardcoded if no args
-month_label = sys.argv[1] + '.20' + sys.argv[2]
+file_path = os.getcwd()+'/data/monthly/20'+year_num+'.'+month_num+'.xlsx'
+month_label = month_num + '.20' + year_num
+
 myWorkbook = MyWorkbook(file_path)
 myWorksheet = myWorkbook.sheets_list[0]
 
@@ -233,8 +238,8 @@ month_dict = {'01': 'Styczeń', '02': 'Luty', '03': 'Marzec',
               '04': 'Kwiecień', '05': 'Maj', '06': 'Czerwiec',
               '07': 'Lipiec', '08': 'Sierpień', '09': 'Wrzesień',
               '10': 'Październik', '11': 'Listopad', '12': 'Grudzień'}
-title.text = month_dict[sys.argv[1]]+' 20' + sys.argv[2] + ' - raport finansowy'
-subtitle.text = sys.argv[1]+'.20'+sys.argv[2]
+title.text = month_dict[month_num]+' 20' + year_num + ' - raport finansowy'
+subtitle.text = month_num+'.20'+year_num
 
 for i in range(8):
     slides.append(prs.slides.add_slide(blank_slide_layout))
@@ -245,5 +250,5 @@ for i in range(8):
     pic_path = results_dir + '/plots/plot' + str(i+1) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
-prs.save(results_dir+'/20' + sys.argv[2] + '.' + sys.argv[1]
+prs.save(results_dir+'/20' + year_num + '.' + month_num
          + ' - raport finansowy.pptx')
