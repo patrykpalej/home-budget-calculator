@@ -42,6 +42,7 @@ def plotLine(values, labels, plot_title):
 
     plt.title(plot_title, fontsize=22, pad=15)
     plt.grid()
+    plt.ylim([-2, 1.1*max([max(v) for v in values])])
 
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])

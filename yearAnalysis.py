@@ -171,7 +171,11 @@ line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
 # m) Lineplot of spendings and incomes in subsequent months
-
+spendings_list = []
+incomes_list = []
+for month in myWorkbook.sheets_list:
+    spendings_list.append(month.sum_total)
+    incomes_list.append(month.incomes)
 
 # n) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
@@ -352,9 +356,9 @@ fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
 # m) Lineplot of spendings and incomes in subsequent months
-values = [[0, 1], [4, 2]]
-labels = ['a', 'b']
-title = 'Tytuł'
+values = [incomes_list, spendings_list]
+labels = ['Przychody', 'Wydatki']
+title = year_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot13.png'
 
 fig = plotLine(values, labels, title)

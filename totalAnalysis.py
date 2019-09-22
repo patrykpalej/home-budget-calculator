@@ -99,10 +99,7 @@ top_spends_seqs_cumsum = []
 for seq in top_spends_seqs:
     top_spends_seqs_cumsum.append(np.cumsum(seq))
 
-# i) Lineplot of spendings and incomes in subsequent months
-
-
-# j) Lineplot of cummulated spendings, incomes and savings
+# i) Lineplot of cummulated spendings, incomes and savings
 line_incomes = []
 line_spendings = []
 line_balance = []
@@ -118,6 +115,13 @@ line_incomes = np.cumsum(line_incomes)
 line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
+
+# j) Lineplot of spendings and incomes in subsequent months
+spendings_list = []
+incomes_list = []
+for month in myWorkbook.sheets_list:
+    spendings_list.append(month.sum_total)
+    incomes_list.append(month.incomes)
 
 # k) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
@@ -247,21 +251,21 @@ fig_name = results_dir + '/plots/plot8.png'
 fig = plotStack(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# i) Lineplot of spendings and incomes in subsequent months
-values = [[0, 1], [4, 2]]
-labels = ['a', 'b']
-title = 'Tytuł'
-fig_name = results_dir + '/plots/plot9.png'
-
-fig = plotLine(values, labels, title)
-plt.savefig(figure=fig, fname=fig_name)
-
-# j) Lineplot of cummulated spendings, incomes and savings
+# i) Lineplot of cummulated spendings, incomes and savings
 values = [line_incomes, line_spendings, line_balance, line_savings]
 labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
           'Oszczędności\ndługoterminowe']
 title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
         'i oszczędności na przestrzeni całego okresu'
+fig_name = results_dir + '/plots/plot9.png'
+
+fig = plotLine(values, labels, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# j) Lineplot of spendings and incomes in subsequent months
+values = [incomes_list, spendings_list]
+labels = ['Przychody', 'Wydatki']
+title = total_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot10.png'
 
 fig = plotLine(values, labels, title)
