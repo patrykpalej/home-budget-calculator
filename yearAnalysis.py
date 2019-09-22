@@ -20,6 +20,7 @@ year_label = '20' + year_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
+start_label = [1, int(year_num)]
 
 
 # 2. Preparing data from the parsed sheets for visualization
@@ -341,7 +342,7 @@ title = year_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
                      'kategorie na przestrzeni roku'
 fig_name = results_dir + '/plots/plot11.png'
 
-fig = plotStack(values, labels, title)
+fig = plotStack(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # l) Lineplot of cummulated spendings, incomes and savings
@@ -352,7 +353,7 @@ title = year_label + ' - Skumulowane wartości przychodów, \n wydatków ' \
         'i oszczędności na przestrzeni roku'
 fig_name = results_dir + '/plots/plot12.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # m) Lineplot of spendings and incomes in subsequent months
@@ -361,7 +362,7 @@ labels = ['Przychody', 'Wydatki']
 title = year_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot13.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # n) Lineplot of average spendings for subsequent categories so far
@@ -371,7 +372,7 @@ title = year_label + ' - Dotychczasowe średnie miesięczne wydatki na ' \
         '\nposzczególne kategorie'
 fig_name = results_dir + '/plots/plot14.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # o) Lineplot of the sources
@@ -381,7 +382,7 @@ title = year_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
         'przestrzeni roku'
 fig_name = results_dir + '/plots/plot15.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 

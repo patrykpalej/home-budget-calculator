@@ -14,6 +14,7 @@ total_label = 'Total'
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
 n_of_months = len(myWorkbook.sheets_list)
+start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
 
 
 # 2. Preparing data from the parsed sheets for visualization
@@ -248,7 +249,7 @@ title = total_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
                       'kategorie na przestrzeni całego okresu'
 fig_name = results_dir + '/plots/plot8.png'
 
-fig = plotStack(values, labels, title)
+fig = plotStack(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # i) Lineplot of cummulated spendings, incomes and savings
@@ -259,7 +260,7 @@ title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
         'i oszczędności na przestrzeni całego okresu'
 fig_name = results_dir + '/plots/plot9.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # j) Lineplot of spendings and incomes in subsequent months
@@ -268,7 +269,7 @@ labels = ['Przychody', 'Wydatki']
 title = total_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot10.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # k) Lineplot of average spendings for subsequent categories so far
@@ -279,7 +280,7 @@ title = total_label \
         'kategorie'
 fig_name = results_dir + '/plots/plot11.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # l) Lineplot of the sources
@@ -289,7 +290,7 @@ title = total_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' 
         'przestrzeni całego okresu'
 fig_name = results_dir + '/plots/plot12.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 plt.close('all')
