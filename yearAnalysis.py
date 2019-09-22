@@ -170,14 +170,17 @@ line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
-# m) Lineplot of average spendings for subsequent categories so far
+# m) Lineplot of spendings and incomes in subsequent months
+
+
+# n) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
 for c, cat in enumerate(top_spends_seqs):
     current_means_seqs.append([])
     for m, month in enumerate(cat):
         current_means_seqs[-1].append(np.mean(top_spends_seqs[c][:m+1]))
 
-# n) Lineplot of main sources
+# o) Lineplot of main sources
 #  choosing of the relevant sources
 incomes_main = []
 for inc in myWorkbook.incomes_dict:
@@ -348,22 +351,31 @@ fig_name = results_dir + '/plots/plot12.png'
 fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# m) Lineplot of average spendings for subsequent categories so far
-values = current_means_seqs
-labels = top_labels + ['Pozostałe']
-title = year_label + ' - Dotychczasowe średnie miesięczne wydatki na ' \
-        '\nposzczególne kategorie'
+# m) Lineplot of spendings and incomes in subsequent months
+values = [[0, 1], [4, 2]]
+labels = ['a', 'b']
+title = 'Tytuł'
 fig_name = results_dir + '/plots/plot13.png'
 
 fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# n) Lineplot of the sources
+# n) Lineplot of average spendings for subsequent categories so far
+values = current_means_seqs
+labels = top_labels + ['Pozostałe']
+title = year_label + ' - Dotychczasowe średnie miesięczne wydatki na ' \
+        '\nposzczególne kategorie'
+fig_name = results_dir + '/plots/plot14.png'
+
+fig = plotLine(values, labels, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# o) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
 title = year_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
         'przestrzeni roku'
-fig_name = results_dir + '/plots/plot14.png'
+fig_name = results_dir + '/plots/plot15.png'
 
 fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -417,7 +429,7 @@ slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '3. Rok jako sekwencja miesięcy'
 
-for i in range(4):
+for i in range(5):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
