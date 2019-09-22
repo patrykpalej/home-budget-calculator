@@ -99,7 +99,10 @@ top_spends_seqs_cumsum = []
 for seq in top_spends_seqs:
     top_spends_seqs_cumsum.append(np.cumsum(seq))
 
-# i) Lineplot of cummulated spendings, incomes and savings
+# i) Lineplot of spendings and incomes in subsequent months
+
+
+# j) Lineplot of cummulated spendings, incomes and savings
 line_incomes = []
 line_spendings = []
 line_balance = []
@@ -116,14 +119,14 @@ line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
-# j) Lineplot of average spendings for subsequent categories so far
+# k) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
 for c, cat in enumerate(top_spends_seqs):
     current_means_seqs.append([])
     for m, month in enumerate(cat):
         current_means_seqs[-1].append(np.mean(top_spends_seqs[c][:m+1]))
 
-# k) Lineplot of main sources
+# l) Lineplot of main sources
 #  choosing of the relevant sources
 incomes_main = []
 for inc in myWorkbook.incomes_dict:
@@ -244,34 +247,43 @@ fig_name = results_dir + '/plots/plot8.png'
 fig = plotStack(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# i) Lineplot of cummulated spendings, incomes and savings
-values = [line_incomes, line_spendings, line_balance, line_savings]
-labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
-          'Oszczędności\ndługoterminowe']
-title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
-        'i oszczędności na przestrzeni całego okresu'
+# i) Lineplot of spendings and incomes in subsequent months
+values = [[0, 1], [4, 2]]
+labels = ['a', 'b']
+title = 'Tytuł'
 fig_name = results_dir + '/plots/plot9.png'
 
 fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# j) Lineplot of average spendings for subsequent categories so far
-values = current_means_seqs
-labels = top_labels + ['Pozostałe']
-title = total_label \
-        + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
-        'kategorie'
+# j) Lineplot of cummulated spendings, incomes and savings
+values = [line_incomes, line_spendings, line_balance, line_savings]
+labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
+          'Oszczędności\ndługoterminowe']
+title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
+        'i oszczędności na przestrzeni całego okresu'
 fig_name = results_dir + '/plots/plot10.png'
 
 fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# k) Lineplot of the sources
+# k) Lineplot of average spendings for subsequent categories so far
+values = current_means_seqs
+labels = top_labels + ['Pozostałe']
+title = total_label \
+        + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
+        'kategorie'
+fig_name = results_dir + '/plots/plot11.png'
+
+fig = plotLine(values, labels, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# l) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
 title = total_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
         'przestrzeni całego okresu'
-fig_name = results_dir + '/plots/plot11.png'
+fig_name = results_dir + '/plots/plot12.png'
 
 fig = plotLine(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -318,13 +330,13 @@ for i in range(3):
                + str(i+1+4) + '.png'
     pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
-# Year as a sequence of months
+# Total as a sequence of months
 slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '3. Total jako sekwencja miesięcy'
 
 
-for i in range(4):
+for i in range(5):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
