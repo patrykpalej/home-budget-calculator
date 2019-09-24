@@ -80,8 +80,7 @@ def plotStack(values, labels, plot_title, start_label):
     fig = plt.stackplot(range(len(values[0])), values, labels=labels)
     plt.title(plot_title, fontsize=22, pad=15)
     ax.legend(loc=2, fontsize='x-large')
-    plt.xlabel('Miesiące', fontdict={'size': 18})
-    plt.ylabel('Wydatki[zł]', fontdict={'size': 18})
+    plt.ylabel('Kwota[zł]', fontdict={'size': 18})
 
     x_tick_labels = []
     month = start_label[0]
