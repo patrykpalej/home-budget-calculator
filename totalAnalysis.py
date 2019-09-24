@@ -4,8 +4,9 @@ from plotFuncs import *
 import numpy as np
 from pptx import Presentation
 from pptx.util import Inches
-from openpyxl.styles import Alignment, borders
+from openpyxl.styles import Alignment
 from openpyxl.styles.borders import Border, Side
+from openpyxl.styles import PatternFill
 
 # 1. Loading the file with data for total period
 file_path = os.getcwd() + '/data/total.xlsx'
@@ -14,6 +15,7 @@ total_label = 'Total'
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
 n_of_months = len(myWorkbook.sheets_list)
+start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
 
 
 # 2. Preparing data from the parsed sheets for visualization
@@ -116,14 +118,21 @@ line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
-# j) Lineplot of average spendings for subsequent categories so far
+# j) Lineplot of spendings and incomes in subsequent months
+spendings_list = []
+incomes_list = []
+for month in myWorkbook.sheets_list:
+    spendings_list.append(month.sum_total)
+    incomes_list.append(month.incomes)
+
+# k) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
 for c, cat in enumerate(top_spends_seqs):
     current_means_seqs.append([])
     for m, month in enumerate(cat):
         current_means_seqs[-1].append(np.mean(top_spends_seqs[c][:m+1]))
 
-# k) Lineplot of main sources
+# l) Lineplot of main sources
 #  choosing of the relevant sources
 incomes_main = []
 for inc in myWorkbook.incomes_dict:
@@ -241,7 +250,7 @@ title = total_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
                       'kategorie na przestrzeni całego okresu'
 fig_name = results_dir + '/plots/plot8.png'
 
-fig = plotStack(values, labels, title)
+fig = plotStack(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # i) Lineplot of cummulated spendings, incomes and savings
@@ -252,28 +261,37 @@ title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
         'i oszczędności na przestrzeni całego okresu'
 fig_name = results_dir + '/plots/plot9.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# j) Lineplot of average spendings for subsequent categories so far
+# j) Lineplot of spendings and incomes in subsequent months
+values = [incomes_list, spendings_list]
+labels = ['Przychody', 'Wydatki']
+title = total_label + ' - Przychody i wydatki w kolejnych miesiącach'
+fig_name = results_dir + '/plots/plot10.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
+# k) Lineplot of average spendings for subsequent categories so far
 values = current_means_seqs
 labels = top_labels + ['Pozostałe']
 title = total_label \
         + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
         'kategorie'
-fig_name = results_dir + '/plots/plot10.png'
+fig_name = results_dir + '/plots/plot11.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# k) Lineplot of the sources
+# l) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
 title = total_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
         'przestrzeni całego okresu'
-fig_name = results_dir + '/plots/plot11.png'
+fig_name = results_dir + '/plots/plot12.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 plt.close('all')
@@ -318,13 +336,13 @@ for i in range(3):
                + str(i+1+4) + '.png'
     pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
-# Year as a sequence of months
+# Total as a sequence of months
 slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '3. Total jako sekwencja miesięcy'
 
 
-for i in range(4):
+for i in range(5):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
@@ -337,3 +355,84 @@ for i in range(4):
 
 
 prs.save(results_dir + '/' + total_label + ' - raport finansowy.pptx')
+
+# 5. Exporting spendings to a table in seprate excel workbook
+wb_to_export = openpyxl.Workbook()
+
+
+def export_to_excel(cat_name, num_of_ws):
+    values = myWorkbook.spends_values_yr[cat_name]
+    items = myWorkbook.spends_items_yr[cat_name]
+    monthlabels = myWorkbook.spends_monthlabel_yr[cat_name]
+
+    mdict = {1: 'Styczeń', 2: 'Luty', 3: 'Marzec', 4: 'Kwiecień', 5: 'Maj',
+             6: 'Czerwiec', 7: 'Lipiec', 8: 'Sierpień', 9: 'Wrzesień',
+             10: 'Październik', 11: 'Listopad', 12: 'Grudzień'}
+
+    values_dict = dict()
+    items_dict = dict()
+
+    for month_num in np.unique(monthlabels):
+        _one_month_list = [values[i] for i, j in enumerate(monthlabels)
+                           if j == month_num]
+        values_dict[month_num] = _one_month_list
+
+        _one_month_list = [items[i] for i, j in enumerate(monthlabels)
+                           if j == month_num]
+        items_dict[month_num] = _one_month_list
+
+    ws = wb_to_export.create_sheet(cat_name, num_of_ws)
+    ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+
+    row = 0
+    month = start_label[0]
+    year = start_label[1]
+    for number in range(1, n_of_months+1):     # list(values_dict.keys()):
+        if number in monthlabels:
+            row += 1
+            ws.cell(row, 1).value = mdict[month] + '  ' + str(month) \
+                                                 + '.20' + str(year)
+            ws.merge_cells(start_row=row, start_column=1, end_row=row,
+                           end_column=2)
+            ws.cell(row, 1).alignment = Alignment(horizontal='center')
+            ws.cell(row, 1).fill = PatternFill(fgColor='93e1e6',
+                                               fill_type='solid')
+
+            row += 1
+            ws.cell(row, 1).value = 'Co?'
+            ws.cell(row, 2).value = 'Kwota [zł]'
+            ws.cell(row, 1).alignment = Alignment(horizontal='center')
+            ws.cell(row, 2).alignment = Alignment(horizontal='center')
+            ws.cell(row, 1).fill = PatternFill(fgColor='daf6f7',
+                                               fill_type='solid')
+            ws.cell(row, 2).fill = PatternFill(fgColor='daf6f7',
+                                               fill_type='solid')
+
+            for i, val in enumerate(values_dict[number]):
+                row += 1
+                ws.cell(row, 1).value = items_dict[number][i]
+                ws.cell(row, 2).value = val
+
+        month += 1
+        if month > 12:
+            month -= 12
+            year += 1
+
+    thin_border = Border(left=Side(style='thin'),
+                         right=Side(style='thin'),
+                         top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+    for r in range(row):
+        ws.cell(row=r + 1, column=1).border = thin_border
+        ws.cell(row=r + 1, column=2).border = thin_border
+
+    return wb_to_export
+
+
+wb_to_export.remove_sheet(wb_to_export.active)
+wb_to_export = export_to_excel('Rzeczy i sprzęty', 0)
+wb_to_export = export_to_excel('Hobby i przyjemności', 1)
+wb_to_export = export_to_excel('Transport i noclegi', 2)
+wb_to_export = export_to_excel('Podróże', 3)
+
+wb_to_export.save(results_dir + '/Total - zestawienie wydatków.xlsx')

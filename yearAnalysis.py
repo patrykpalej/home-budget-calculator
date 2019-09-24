@@ -6,16 +6,21 @@ import numpy as np
 from pptx import Presentation
 from pptx.util import Inches
 from openpyxl.styles import Alignment
-from openpyxl.styles.borders import Border, Side
+from openpyxl.styles.borders import Side
+from openpyxl.styles import Border
+from openpyxl.styles import PatternFill
+
+
+year_num = sys.argv[1]
+#year_num = '99'  # hardcoded if no arguments
 
 # 1. Loading the file with data for one year
-file_path = os.getcwd() + '/data/yearly/20' + sys.argv[1] + '.xlsx'
-#file_path = os.getcwd() + '/data/yearly/2099.xlsx'  # hardcoded if no args
-year_label = '20' + sys.argv[1]
-#year_label = '2099'  # hardcoded if no args
+file_path = os.getcwd() + '/data/yearly/20' + year_num + '.xlsx'
+year_label = '20' + year_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
+start_label = [1, int(year_num)]
 
 
 # 2. Preparing data from the parsed sheets for visualization
@@ -166,14 +171,21 @@ line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
-# m) Lineplot of average spendings for subsequent categories so far
+# m) Lineplot of spendings and incomes in subsequent months
+spendings_list = []
+incomes_list = []
+for month in myWorkbook.sheets_list:
+    spendings_list.append(month.sum_total)
+    incomes_list.append(month.incomes)
+
+# n) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
 for c, cat in enumerate(top_spends_seqs):
     current_means_seqs.append([])
     for m, month in enumerate(cat):
         current_means_seqs[-1].append(np.mean(top_spends_seqs[c][:m+1]))
 
-# n) Lineplot of main sources
+# o) Lineplot of main sources
 #  choosing of the relevant sources
 incomes_main = []
 for inc in myWorkbook.incomes_dict:
@@ -330,7 +342,7 @@ title = year_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
                      'kategorie na przestrzeni roku'
 fig_name = results_dir + '/plots/plot11.png'
 
-fig = plotStack(values, labels, title)
+fig = plotStack(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 # l) Lineplot of cummulated spendings, incomes and savings
@@ -341,27 +353,36 @@ title = year_label + ' - Skumulowane wartości przychodów, \n wydatków ' \
         'i oszczędności na przestrzeni roku'
 fig_name = results_dir + '/plots/plot12.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# m) Lineplot of average spendings for subsequent categories so far
+# m) Lineplot of spendings and incomes in subsequent months
+values = [incomes_list, spendings_list]
+labels = ['Przychody', 'Wydatki']
+title = year_label + ' - Przychody i wydatki w kolejnych miesiącach'
+fig_name = results_dir + '/plots/plot13.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
+# n) Lineplot of average spendings for subsequent categories so far
 values = current_means_seqs
 labels = top_labels + ['Pozostałe']
 title = year_label + ' - Dotychczasowe średnie miesięczne wydatki na ' \
         '\nposzczególne kategorie'
-fig_name = results_dir + '/plots/plot13.png'
+fig_name = results_dir + '/plots/plot14.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# n) Lineplot of the sources
+# o) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
 title = year_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
         'przestrzeni roku'
-fig_name = results_dir + '/plots/plot14.png'
+fig_name = results_dir + '/plots/plot15.png'
 
-fig = plotLine(values, labels, title)
+fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
 
@@ -376,7 +397,7 @@ slides = list()
 
 slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].shapes.title
-title.text = '20' + sys.argv[1] + ' - raport finansowy'
+title.text = '20' + year_num + ' - raport finansowy'
 
 # Year as a whole
 slides.append(prs.slides.add_slide(title_slide_layout))
@@ -389,7 +410,7 @@ for i in range(6):
     top = Inches(0.0)
     height = width = Inches(7.5)
 
-    pic_path = 'results/20' + sys.argv[1] + ' - wyniki/plots/plot' + \
+    pic_path = 'results/20' + year_num + ' - wyniki/plots/plot' + \
                str(i+1) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
@@ -404,7 +425,7 @@ for i in range(4):
     top = Inches(0.0)
     height = width = Inches(7.5)
 
-    pic_path = 'results/20' + sys.argv[1]+' - wyniki/plots/plot' \
+    pic_path = 'results/20' + year_num+' - wyniki/plots/plot' \
                + str(i+1+6) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
@@ -413,19 +434,19 @@ slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '3. Rok jako sekwencja miesięcy'
 
-for i in range(4):
+for i in range(5):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
     height = Inches(10.5)
     width = Inches(7.0)
 
-    pic_path = 'results/20' + sys.argv[1] + ' - wyniki/plots/plot'\
+    pic_path = 'results/20' + year_num + ' - wyniki/plots/plot'\
                + str(i+1+10) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
 
-prs.save(results_dir + '/20' + sys.argv[1] + ' - raport finansowy.pptx')
+prs.save(results_dir + '/20' + year_num + ' - raport finansowy.pptx')
 
 # 5. Exporting spendings to a table in seprate excel workbook
 wb_to_export = openpyxl.Workbook()
@@ -456,9 +477,20 @@ def export_to_excel(cat_name, num_of_ws):
     row = 0
     for m, month_num in enumerate(np.unique(monthlabels)):
         row += 1
-        ws.cell(row, 1).value = mdict[month_num]
+        month_sum = str(sum(values_nested_list[m]))
+        ws.cell(row, 1).value = mdict[month_num] + '  - ' + month_sum + 'zł'
         ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=2)
         ws.cell(row, 1).alignment = Alignment(horizontal='center')
+        ws.cell(row, 1).fill = PatternFill(fgColor='93e1e6', fill_type='solid')
+
+        row += 1
+        ws.cell(row, 1).value = 'Co?'
+        ws.cell(row, 2).value = 'Kwota [zł]'
+        ws.cell(row, 1).alignment = Alignment(horizontal='center')
+        ws.cell(row, 2).alignment = Alignment(horizontal='center')
+        ws.cell(row, 1).fill = PatternFill(fgColor='daf6f7', fill_type='solid')
+        ws.cell(row, 2).fill = PatternFill(fgColor='daf6f7', fill_type='solid')
+
         for i, val in enumerate(values_nested_list[m]):
             row += 1
             ws.cell(row, 1).value = items_nested_list[m][i]
@@ -478,6 +510,8 @@ def export_to_excel(cat_name, num_of_ws):
 wb_to_export.remove_sheet(wb_to_export.active)
 wb_to_export = export_to_excel('Rzeczy i sprzęty', 0)
 wb_to_export = export_to_excel('Hobby i przyjemności', 1)
+wb_to_export = export_to_excel('Transport i noclegi', 2)
+wb_to_export = export_to_excel('Podróże', 3)
 
-wb_to_export.save(results_dir + '/20' + sys.argv[1]
+wb_to_export.save(results_dir + '/20' + year_num
                   + ' - zestawienie wydatków.xlsx')

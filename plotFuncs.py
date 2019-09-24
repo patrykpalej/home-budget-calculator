@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+from math import floor
 
 
 def plotPie(values, labels, plot_title):
@@ -32,7 +33,7 @@ def plotBar(values, labels, plot_title):
     return fig
 
 
-def plotLine(values, labels, plot_title):
+def plotLine(values, labels, plot_title, start_label):
 
     plt.style.use('default')
 
@@ -42,20 +43,36 @@ def plotLine(values, labels, plot_title):
 
     plt.title(plot_title, fontsize=22, pad=15)
     plt.grid()
+    plt.ylim([-2, 1.1*max([max(v) for v in values])])
 
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
     ax.legend(loc='center right', bbox_to_anchor=(1.3, 0.5), fontsize='x-large')
-    plt.xlabel('Miesiące', fontdict={'size': 18})
     plt.ylabel('Kwota [zł]', fontdict={'size': 18})
-    plt.xticks(range(len(values[0])),
-               [str(i+1) for i in range(len(values[0]))])
+
+    x_tick_labels = []
+    month = start_label[0]
+    year = start_label[1]
+    for i in range(1+floor(len(values[0])/2)):
+        # to prevent xticklabels exceeding the actual time period
+        if 2*i+1 > len(values[0]):
+            break
+
+        x_tick_labels.append(str(month)+'.20'+str(year))
+        month += 2
+
+        if month > 12:
+            month -= 12
+            year += 1
+
+    plt.xticks([2*i for i in range(1+round(len(values[0])/2))],
+               x_tick_labels, rotation=15)
     ax.tick_params(labelsize=16)
 
     return fig
 
 
-def plotStack(values, labels, plot_title):
+def plotStack(values, labels, plot_title, start_label):
 
     plt.style.use('default')
 
@@ -63,10 +80,26 @@ def plotStack(values, labels, plot_title):
     fig = plt.stackplot(range(len(values[0])), values, labels=labels)
     plt.title(plot_title, fontsize=22, pad=15)
     ax.legend(loc=2, fontsize='x-large')
-    plt.xlabel('Miesiące', fontdict={'size': 18})
-    plt.ylabel('Wydatki[zł]', fontdict={'size': 18})
+    plt.ylabel('Kwota[zł]', fontdict={'size': 18})
 
-    plt.xticks(range(len(values[0])), [str(i+1) for i in range(len(values[0]))])
+    x_tick_labels = []
+    month = start_label[0]
+    year = start_label[1]
+    for i in range(1 + round(len(values[0]) / 2)):
+        # to prevent xticklabels exceeding the actual time period
+        if 2*i+1 > len(values[0]):
+            break
+
+        x_tick_labels.append(str(month) + '.20' + str(year))
+        month += 2
+
+        if month > 12:
+            month -= 12
+            year += 1
+
+    plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
+               x_tick_labels, rotation=15)
+
     ax.tick_params(labelsize=16)
 
     return fig
