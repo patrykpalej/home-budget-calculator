@@ -1,4 +1,5 @@
 import os
+import sys
 from classes import *
 from plotFuncs import *
 import numpy as np
@@ -184,7 +185,7 @@ plt.savefig(figure=fig, fname=fig_name)
 values = top_plus_others_values
 labels = top_plus_others_labels
 title = part_label \
-        + ' - Struktura całkowitych wydatków\n z podziałem na kategorie\n\n' \
+        + ' - Struktura wydatków z podziałem na kategorie\n\n' \
         'Suma wydatków: ' + str(round(myWorkbook.sum_total, 2)) + 'zł\n'
 fig_name = results_dir + '/plots/plot2.png'
 
@@ -293,7 +294,7 @@ plt.savefig(figure=fig, fname=fig_name)
 values = top_spends_seqs_cumsum
 labels = top_labels + ['Pozostałe']
 title = part_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
-                      'kategorie na przestrzeni całego okresu'
+                      'kategorie'
 fig_name = results_dir + '/plots/plot10.png'
 
 fig = plotStack(values, labels, title, start_label)
@@ -304,7 +305,7 @@ values = [line_incomes, line_spendings, line_balance, line_savings]
 labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
           'Oszczędności\ndługoterminowe']
 title = part_label + ' - Skumulowane wartości przychodów, wydatków \n' \
-        'i oszczędności na przestrzeni całego okresu'
+        'i oszczędności'
 fig_name = results_dir + '/plots/plot11.png'
 
 fig = plotLine(values, labels, title, start_label)
@@ -333,8 +334,7 @@ plt.savefig(figure=fig, fname=fig_name)
 # n) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
-title = part_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
-        'przestrzeni całego okresu'
+title = part_label + ' - Kwoty przychodów z najważniejszych \n źrodeł'
 fig_name = results_dir + '/plots/plot14.png'
 
 fig = plotLine(values, labels, title, start_label)
