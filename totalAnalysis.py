@@ -387,7 +387,7 @@ def export_to_excel(cat_name, num_of_ws):
     row = 0
     month = start_label[0]
     year = start_label[1]
-    for number in range(1, n_of_months+1):     # list(values_dict.keys()):
+    for number in range(1, n_of_months+1):
         if number in monthlabels:
             row += 1
             ws.cell(row, 1).value = mdict[month] + '  ' + str(month) \
