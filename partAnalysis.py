@@ -21,10 +21,10 @@ if (start_year > end_year) or \
 else:
     # generating list of sheetnames for a given range
     list_of_sheetnames = []
-    how_long = 12*(end_year-start_year) + end_month-start_month + 1
+    n_of_months = 12*(end_year-start_year) + end_month-start_month + 1
     month = start_month
     year = start_year
-    for i in range(how_long):
+    for i in range(n_of_months):
         name_of_sheet = ('0'+str(month) if month < 9 else str(month)) \
                         + '.' + str(year)
         list_of_sheetnames.append(name_of_sheet)
@@ -92,33 +92,33 @@ earnings_labels = [ear + ' - ' + str(_values_list_ear[i])+'zł' for i, ear in
 
 # -- Averaged month --
 # f) Piechart of spendings for the main categories
-top_plus_others_values_avg = [i/how_long for i in top_plus_others_values]
+top_plus_others_values_avg = [i/n_of_months for i in top_plus_others_values]
 top_plus_others_labels_avg = [top_plus_others_labels_0[i] + ' - '
                               + str(round(top_plus_others_values[i]
-                                          / how_long, 2)) + ' zł'
+                                          / n_of_months, 2)) + ' zł'
                               for i in range(len(top_plus_others_values))]
 
 # g) Piechart of the metacategories
-metacats_values_avg = [i/how_long for i in metacats_values]
+metacats_values_avg = [i/n_of_months for i in metacats_values]
 metacats_labels_avg = ['Podstawowe - '
-                       + str(round(myWorkbook.sum_basic/how_long, 2))
+                       + str(round(myWorkbook.sum_basic/n_of_months, 2))
                        + 'zł', 'Dodatkowe - '
-                       + str(round(myWorkbook.sum_addit/how_long, 2))
+                       + str(round(myWorkbook.sum_addit/n_of_months, 2))
                        + 'zł', 'Prezenty i donacje - '
-                       + str(round(myWorkbook.sum_giftdon/how_long, 2))
+                       + str(round(myWorkbook.sum_giftdon/n_of_months, 2))
                        + 'zł']
 
 # h) Piechart of incomes
-incomes_values_avg = [i/how_long for i in incomes_values]
+incomes_values_avg = [i/n_of_months for i in incomes_values]
 incomes_labels_avg = [inc + ' - ' + str(round(_values_list_inc[i]
-                      / how_long, 2)) + 'zł'
+                      / n_of_months, 2)) + 'zł'
                       for i, inc in enumerate(_labels_list_inc)
                       if _values_list_inc[i] > 0]
 
 # i) Piechart of earnings
-earnings_values_avg = [i/how_long for i in earnings_values]
+earnings_values_avg = [i/n_of_months for i in earnings_values]
 earnings_labels_avg = [ear + ' - '
-                       + str(round(_values_list_ear[i]/how_long, 2))
+                       + str(round(_values_list_ear[i]/n_of_months, 2))
                        + 'zł'
                        for i, ear in enumerate(_labels_list_ear)
                        if _values_list_ear[i] > 0]
@@ -263,7 +263,7 @@ labels = top_plus_others_labels_avg
 title = part_label \
         + ' - Struktura wydatków w uśrednionym \nmiesiącu z podziałem na ' \
         'kategorie\n\n'+'Suma wydatków: ' \
-        + str(round(myWorkbook.sum_total/how_long, 2)) + 'zł\n'
+        + str(round(myWorkbook.sum_total/n_of_months, 2)) + 'zł\n'
 fig_name = results_dir + '/plots/plot6.png'
 
 fig = plotPie(values, labels, title)
@@ -275,7 +275,7 @@ labels = metacats_labels_avg
 title = part_label + ' - Podział wydatków na: ' \
         + 'Podstawowe, \nDodatkowe i Prezenty/Donacje ' \
         'w uśrednionym miesiącu\n\n' \
-        'Suma wydatków: ' + str(round(myWorkbook.sum_total/how_long, 2)) \
+        'Suma wydatków: ' + str(round(myWorkbook.sum_total/n_of_months, 2)) \
         + 'zł\n'
 fig_name = results_dir + '/plots/plot7.png'
 
@@ -287,11 +287,11 @@ values = incomes_values_avg
 labels = incomes_labels_avg
 title = part_label + ' - Podział przychodów na poszczególne \nźródła ' \
         'w uśrednionym miesiącu\n\n' + 'Suma przychodów: ' \
-        + str(round(myWorkbook.incomes/how_long, 2)) + 'zł\n' \
+        + str(round(myWorkbook.incomes/n_of_months, 2)) + 'zł\n' \
         + 'Nadwyżka przychodów: ' \
-        + str(round(myWorkbook.balance[0]/how_long, 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.balance[0] / how_long
-                               / (myWorkbook.incomes/how_long), 2)) + '%)'
+        + str(round(myWorkbook.balance[0]/n_of_months, 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[0] / n_of_months
+                               / (myWorkbook.incomes/n_of_months), 2)) + '%)'
 
 fig_name = results_dir + '/plots/plot8.png'
 
@@ -303,11 +303,11 @@ values = earnings_values_avg
 labels = earnings_labels_avg
 title = part_label + ' - Podział zarobków na poszczególne \nźródła ' \
         'w uśrednionym miesiącu\n\nSuma zarobków: ' \
-        + str(round(myWorkbook.earnings/how_long, 2)) + 'zł\n' \
+        + str(round(myWorkbook.earnings/n_of_months, 2)) + 'zł\n' \
         'Nadwyżka zarobków: ' \
-        + str(round(myWorkbook.balance[1]/how_long, 2)) \
-        + 'zł  (' + str(round(100*myWorkbook.balance[1]/how_long
-                               / (myWorkbook.earnings/how_long), 2)) \
+        + str(round(myWorkbook.balance[1]/n_of_months, 2)) \
+        + 'zł  (' + str(round(100*myWorkbook.balance[1]/n_of_months
+                               / (myWorkbook.earnings/n_of_months), 2)) \
         + '%)'
 
 fig_name = results_dir + '/plots/plot9.png'
@@ -463,7 +463,7 @@ def export_to_excel(cat_name, num_of_ws):
     row = 0
     month = start_label[0]
     year = start_label[1]
-    for number in range(1, how_long+1):     # list(values_dict.keys()):
+    for number in range(1, n_of_months+1):     # list(values_dict.keys()):
         if number in monthlabels:
             row += 1
             ws.cell(row, 1).value = mdict[month] + '  ' + str(month) \
