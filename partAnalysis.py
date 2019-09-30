@@ -9,14 +9,39 @@ from openpyxl.styles import Alignment
 from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import PatternFill
 
+start_month = int(sys.argv[1])
+start_year = int(sys.argv[2])
+end_month = int(sys.argv[3])
+end_year = int(sys.argv[4])
+
+if (start_year > end_year) or \
+   (start_year == end_year and start_month > end_month):
+    print('Podany zakres dat jest błędny')
+    sys.exit()
+else:
+    # generating list of sheetnames for a given range
+    list_of_sheetnames = []
+    how_long = 12*(end_year-start_year) + end_month-start_month + 1
+    month = start_month
+    year = start_year
+    for i in range(how_long):
+        name_of_sheet = ('0'+str(month) if month < 9 else str(month)) \
+                        + '.' + str(year)
+        list_of_sheetnames.append(name_of_sheet)
+
+        month += 1
+        if month > 12:
+            month -= 12
+            year += 1
+
 # 1. Loading the file with data for total period
 file_path = os.getcwd() + '/data/total.xlsx'
-part_label = 'Part'
+part_label = str(start_month) + '.20' + str(start_year) + '-' \
+             + str(end_month) + '.20' + str(end_year)
 
-myWorkbook = MyWorkbook(file_path)
-myWorksheets = myWorkbook.mywb.sheetnames
-n_of_months = len(myWorkbook.sheets_list)
-start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
+myWorkbook = MyWorkbook(file_path, list_of_sheetnames)
+
+start_label = [int(list_of_sheetnames[0][:2]), int(list_of_sheetnames[0][-2:])]
 
 
 # 2. Preparing data from the parsed sheets for visualization
