@@ -79,6 +79,8 @@ def plotStack(values, labels, plot_title, start_label):
     fig, ax = plt.subplots(figsize=(14, 9))
     fig = plt.stackplot(range(len(values[0])), values, labels=labels)
     plt.title(plot_title, fontsize=22, pad=15)
+    plt.grid()
+    ax.set_axisbelow(True)
     ax.legend(loc=2, fontsize='x-large')
     plt.ylabel('Kwota[zł]', fontdict={'size': 18})
 
