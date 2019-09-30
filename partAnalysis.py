@@ -453,12 +453,17 @@ def export_to_excel(cat_name, num_of_ws):
         items_dict[month_num] = _one_month_list
 
     ws = wb_to_export.create_sheet(cat_name, num_of_ws)
-    ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+
+    # 'try' becase doesn't work when no spendings
+    try:
+        ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+    except:
+        pass
 
     row = 0
     month = start_label[0]
     year = start_label[1]
-    for number in range(1, n_of_months+1):     # list(values_dict.keys()):
+    for number in range(1, how_long+1):     # list(values_dict.keys()):
         if number in monthlabels:
             row += 1
             ws.cell(row, 1).value = mdict[month] + '  ' + str(month) \
@@ -506,4 +511,5 @@ wb_to_export = export_to_excel('Hobby i przyjemności', 1)
 wb_to_export = export_to_excel('Transport i noclegi', 2)
 wb_to_export = export_to_excel('Podróże', 3)
 
-wb_to_export.save(results_dir + '/Part - zestawienie wydatków.xlsx')
+wb_to_export.save(results_dir + '/' + part_label
+                  + ' - zestawienie wydatków.xlsx')
