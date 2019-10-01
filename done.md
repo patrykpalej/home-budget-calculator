@@ -24,21 +24,21 @@ v.1.3
 
 v.1.4
 
-YearSpendingsTable
-• Changed way of using sys.argv
-• Better description of the columns in spendings table in year scenario
-• Colors and monthly sums added to the table
+_YearSpendingsTable_
+ - Changed way of using sys.argv
+ - Better description of the columns in spendings table in year scenario
+ - Colors and monthly sums added to the table
 
-PlotsModification
-• New plot added for year and total scenario - incomes and spendings in subsequent months (not cummulated)
-• For lineplots x tick labels changed to dates
+_PlotsModification_
+ - New plot added for year and total scenario - incomes and spendings in subsequent months (not cummulated)
+ - For lineplots x tick labels changed to dates
 
-TotalTable
-• Spendings table for the total scenario added
+_TotalTable_
+ - Spendings table for the total scenario added
 
 v.1.5
 
-PartAnalysis
+_PartAnalysis_
 - Created new file: partAnalysis.py, code from totalAnalysis.py copied
 - Additional plots added
 - Choosing the period to analyse implemented
