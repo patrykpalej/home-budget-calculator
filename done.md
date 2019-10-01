@@ -21,3 +21,26 @@ v.1.3
  - small changes in year- and month analysis
  - totalAnalysis created
  - piechart design changed
+
+v.1.4
+
+YearSpendingsTable
+• Changed way of using sys.argv
+• Better description of the columns in spendings table in year scenario
+• Colors and monthly sums added to the table
+
+PlotsModification
+• New plot added for year and total scenario - incomes and spendings in subsequent months (not cummulated)
+• For lineplots x tick labels changed to dates
+
+TotalTable
+• Spendings table for the total scenario added
+
+v.1.5
+
+PartAnalysis
+- Created new file: partAnalysis.py, code from totalAnalysis.py copied
+- Additional plots added
+- Choosing the period to analyse implemented
+- Readme updated
+- Variables names adjusted 
