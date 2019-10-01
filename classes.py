@@ -2,17 +2,20 @@ import openpyxl
 
 
 class MyWorkbook:
-    def __init__(self, file_path):
+    def __init__(self, file_path, list_of_sheetnames=[]):
         # Loads excel file and divides it into the sheets
         self.mywb = openpyxl.load_workbook(filename=file_path,
                                            data_only=True)
-
         self.sheets_list = []  # list of parsed sheets objects
-        self.sheets_dict = dict()  # dict of parsed sheets objects
-        for ws in self.mywb.sheetnames:
-            _myWs = MyWorksheet(ws, self.mywb)
-            self.sheets_list.append(_myWs)
-            self.sheets_dict[ws] = _myWs
+
+        if not list_of_sheetnames:
+            for ws in self.mywb.sheetnames:
+                _myWs = MyWorksheet(ws, self.mywb)
+                self.sheets_list.append(_myWs)
+        else:
+            for ws in list_of_sheetnames:
+                _myWs = MyWorksheet(ws, self.mywb)
+                self.sheets_list.append(_myWs)
 
         # -- ! Sums up all sheets of the workbook into one structure ! --
         # 1. balances, spendings' sums, incomes and earnings
@@ -29,7 +32,7 @@ class MyWorkbook:
 
         for sheet in self.sheets_list:
             self.balance = [self.balance[0] + sheet.balance[0],
-                             self.balance[1] + sheet.balance[1]]
+                            self.balance[1] + sheet.balance[1]]
             self.sum_basic += sheet.sum_basic
             self.sum_addit += sheet.sum_addit
             self.sum_giftdon += sheet.sum_giftdon

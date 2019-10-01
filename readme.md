@@ -7,6 +7,7 @@ This is a project of a home budget calculator. Data is stored in excel worksheet
 - monthAnalysis.py	- main script for a single month analysis scenario
 - yearAnalysis.py 	- main script for a single year analysis scenario
 - totalAnalysis.py      - main script for the analysis of the whole period
+- partAnalysis.py       - main script for the analysis of a chosen period
 - classes.py 		- contains classes such as MyWorksheet or MyWorkbook whose instances are single worksheets/workbooks
 - plotFuncs.py		- file with functions for plotting data
 
@@ -25,6 +26,10 @@ There is sample data attached to the code for Jan, Feb and Mar 2099.
 To run the year analysis enter "python yearAnalysis.py yy" 
 - - -
 To run the total analysis enter "python totalAnalysis.py" without arguments
+- - -
+To run the partial analysis enter "python partAnalysis.py mm_start yy_year mm_end yy_end"
+
+For example "python partAnalysis.py 02 18 10 19" is for the period from Feb 2018 to Oct 2018
  
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
