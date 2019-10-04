@@ -96,8 +96,9 @@ for i, sc_f in enumerate(_subcats_fractions):
     else:
         others_sum += subcats_values[i]
 
-subcats_values_with_others.append(others_sum)
-subcats_labels_with_others.append('inne - '+str(others_sum)+'zł')
+if others_sum > 0:
+    subcats_values_with_others.append(others_sum)
+    subcats_labels_with_others.append('inne - '+str(others_sum)+'zł')
 
 # ---
 
