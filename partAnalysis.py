@@ -25,7 +25,7 @@ else:
     month = start_month
     year = start_year
     for i in range(n_of_months):
-        name_of_sheet = ('0'+str(month) if month < 9 else str(month)) \
+        name_of_sheet = ('0'+str(month) if month <= 9 else str(month)) \
                         + '.' + str(year)
         list_of_sheetnames.append(name_of_sheet)
 
@@ -90,15 +90,46 @@ earnings_values = [ear for ear in _values_list_ear if ear > 0]
 earnings_labels = [ear + ' - ' + str(_values_list_ear[i])+'zł' for i, ear in
                    enumerate(_labels_list_ear) if _values_list_ear[i] > 0]
 
+# f) Piechart of food subcategories
+amounts = myWorkbook.spends_values_yr['Jedzenie']
+subcats = myWorkbook.spends_items_yr['Jedzenie']
+subcats_dict = {}
+
+for i, subcat in enumerate(subcats):
+    if subcat in list(subcats_dict.keys()):
+        subcats_dict[subcat] += amounts[i]
+    else:
+        subcats_dict[subcat] = amounts[i]
+
+subcats_values = list(subcats_dict.values())
+subcats_labels = [list(subcats_dict.keys())[i]+' - '
+                  + str(round(list(subcats_dict.values())[i], 2)) + 'zł'
+                  for i, sc in enumerate(list(subcats_dict.keys()))]
+# ----
+_subcats_fractions = [sc/sum(subcats_values) for sc in subcats_values]
+subcats_values_with_others = []
+subcats_labels_with_others = []
+others_sum = 0
+for i, sc_f in enumerate(_subcats_fractions):
+    if sc_f > 0.02:
+        subcats_values_with_others.append(subcats_values[i])
+        subcats_labels_with_others.append(subcats_labels[i])
+    else:
+        others_sum += subcats_values[i]
+
+if others_sum > 0:
+    subcats_values_with_others.append(others_sum)
+    subcats_labels_with_others.append('inne - '+str(others_sum)+'zł')
+
 # -- Averaged month --
-# f) Piechart of spendings for the main categories
+# g) Piechart of spendings for the main categories
 top_plus_others_values_avg = [i/n_of_months for i in top_plus_others_values]
 top_plus_others_labels_avg = [top_plus_others_labels_0[i] + ' - '
                               + str(round(top_plus_others_values[i]
                                           / n_of_months, 2)) + ' zł'
                               for i in range(len(top_plus_others_values))]
 
-# g) Piechart of the metacategories
+# h) Piechart of the metacategories
 metacats_values_avg = [i/n_of_months for i in metacats_values]
 metacats_labels_avg = ['Podstawowe - '
                        + str(round(myWorkbook.sum_basic/n_of_months, 2))
@@ -108,14 +139,14 @@ metacats_labels_avg = ['Podstawowe - '
                        + str(round(myWorkbook.sum_giftdon/n_of_months, 2))
                        + 'zł']
 
-# h) Piechart of incomes
+# i) Piechart of incomes
 incomes_values_avg = [i/n_of_months for i in incomes_values]
 incomes_labels_avg = [inc + ' - ' + str(round(_values_list_inc[i]
                       / n_of_months, 2)) + 'zł'
                       for i, inc in enumerate(_labels_list_inc)
                       if _values_list_inc[i] > 0]
 
-# i) Piechart of earnings
+# j) Piechart of earnings
 earnings_values_avg = [i/n_of_months for i in earnings_values]
 earnings_labels_avg = [ear + ' - '
                        + str(round(_values_list_ear[i]/n_of_months, 2))
@@ -124,7 +155,7 @@ earnings_labels_avg = [ear + ' - '
                        if _values_list_ear[i] > 0]
 
 # -- Part as a sequence of months --
-# j) Stackplot of cummulated spendings for the top categories
+# k) Stackplot of cummulated spendings for the top categories
 top_spends_seqs = []
 # top categories
 for c, cat in enumerate(top_labels):
@@ -142,7 +173,7 @@ top_spends_seqs_cumsum = []
 for seq in top_spends_seqs:
     top_spends_seqs_cumsum.append(np.cumsum(seq))
 
-# k) Lineplot of cummulated spendings, incomes and savings
+# l) Lineplot of cummulated spendings, incomes and savings
 line_incomes = []
 line_spendings = []
 line_balance = []
@@ -159,21 +190,21 @@ line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
-# l) Lineplot of spendings and incomes in subsequent months
+# m) Lineplot of spendings and incomes in subsequent months
 spendings_list = []
 incomes_list = []
 for month in myWorkbook.sheets_list:
     spendings_list.append(month.sum_total)
     incomes_list.append(month.incomes)
 
-# m) Lineplot of average spendings for subsequent categories so far
+# n) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
 for c, cat in enumerate(top_spends_seqs):
     current_means_seqs.append([])
     for m, month in enumerate(cat):
         current_means_seqs[-1].append(np.mean(top_spends_seqs[c][:m+1]))
 
-# n) Lineplot of main sources
+# o) Lineplot of main sources
 #  choosing of the relevant sources
 incomes_main = []
 for inc in myWorkbook.incomes_dict:
@@ -196,6 +227,7 @@ if not os.path.exists(results_dir):
     os.mkdir(results_dir)
     os.mkdir(results_dir + '/plots')
 
+# -- Part as a whole
 # a) Barplot for all categories
 values = values_desc
 labels = labels_desc
@@ -257,19 +289,30 @@ fig_name = results_dir + '/plots/plot5.png'
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# f) Piechart of spendings for the main categories
+# f) Piechart of food subcategories
+values = subcats_values_with_others
+labels = subcats_labels_with_others
+title = part_label + ' - Podział wydatków spożywczych\n\nCałkowita kwota: ' \
+        + str(round(myWorkbook.cats_sums['Jedzenie'], 2)) + ' zł\n'
+fig_name = results_dir + '/plots/plot6.png'
+
+fig = plotPie(values, labels, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# -- Averaged month
+# g) Piechart of spendings for the main categories
 values = top_plus_others_values_avg
 labels = top_plus_others_labels_avg
 title = part_label \
         + ' - Struktura wydatków w uśrednionym \nmiesiącu z podziałem na ' \
         'kategorie\n\n'+'Suma wydatków: ' \
         + str(round(myWorkbook.sum_total/n_of_months, 2)) + 'zł\n'
-fig_name = results_dir + '/plots/plot6.png'
+fig_name = results_dir + '/plots/plot7.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# g) Piechart of metacategories
+# h) Piechart of metacategories
 values = metacats_values_avg
 labels = metacats_labels_avg
 title = part_label + ' - Podział wydatków na: ' \
@@ -277,12 +320,12 @@ title = part_label + ' - Podział wydatków na: ' \
         'w uśrednionym miesiącu\n\n' \
         'Suma wydatków: ' + str(round(myWorkbook.sum_total/n_of_months, 2)) \
         + 'zł\n'
-fig_name = results_dir + '/plots/plot7.png'
+fig_name = results_dir + '/plots/plot8.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# h) Piechart of incomes
+# i) Piechart of incomes
 values = incomes_values_avg
 labels = incomes_labels_avg
 title = part_label + ' - Podział przychodów na poszczególne \nźródła ' \
@@ -293,12 +336,12 @@ title = part_label + ' - Podział przychodów na poszczególne \nźródła ' \
         + 'zł  (' + str(round(100*myWorkbook.balance[0] / n_of_months
                                / (myWorkbook.incomes/n_of_months), 2)) + '%)'
 
-fig_name = results_dir + '/plots/plot8.png'
+fig_name = results_dir + '/plots/plot9.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# i) Piechart of earnings
+# j) Piechart of earnings
 values = earnings_values_avg
 labels = earnings_labels_avg
 title = part_label + ' - Podział zarobków na poszczególne \nźródła ' \
@@ -310,57 +353,57 @@ title = part_label + ' - Podział zarobków na poszczególne \nźródła ' \
                                / (myWorkbook.earnings/n_of_months), 2)) \
         + '%)'
 
-fig_name = results_dir + '/plots/plot9.png'
+fig_name = results_dir + '/plots/plot10.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# j) Stackplot of cummulated spendings for the top categories
+# k) Stackplot of cummulated spendings for the top categories
 values = top_spends_seqs_cumsum
 labels = top_labels + ['Pozostałe']
 title = part_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
                       'kategorie'
-fig_name = results_dir + '/plots/plot10.png'
+fig_name = results_dir + '/plots/plot11.png'
 
 fig = plotStack(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# k) Lineplot of cummulated spendings, incomes and savings
+# l) Lineplot of cummulated spendings, incomes and savings
 values = [line_incomes, line_spendings, line_balance, line_savings]
 labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
           'Oszczędności\ndługoterminowe']
 title = part_label + ' - Skumulowane wartości przychodów, wydatków \n' \
         'i oszczędności'
-fig_name = results_dir + '/plots/plot11.png'
-
-fig = plotLine(values, labels, title, start_label)
-plt.savefig(figure=fig, fname=fig_name)
-
-# l) Lineplot of spendings and incomes in subsequent months
-values = [incomes_list, spendings_list]
-labels = ['Przychody', 'Wydatki']
-title = part_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot12.png'
 
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# m) Lineplot of average spendings for subsequent categories so far
-values = current_means_seqs
-labels = top_labels + ['Pozostałe']
-title = part_label \
-        + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
-        'kategorie'
+# m) Lineplot of spendings and incomes in subsequent months
+values = [incomes_list, spendings_list]
+labels = ['Przychody', 'Wydatki']
+title = part_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot13.png'
 
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# n) Lineplot of the sources
+# n) Lineplot of average spendings for subsequent categories so far
+values = current_means_seqs
+labels = top_labels + ['Pozostałe']
+title = part_label \
+        + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
+        'kategorie'
+fig_name = results_dir + '/plots/plot14.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
+# o) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
 title = part_label + ' - Kwoty przychodów z najważniejszych \n źrodeł'
-fig_name = results_dir + '/plots/plot14.png'
+fig_name = results_dir + '/plots/plot15.png'
 
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
@@ -382,7 +425,7 @@ slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '1. Cały przedział'
 
-for i in range(5):
+for i in range(6):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(1.5)
     top = Inches(0.0)
@@ -404,7 +447,7 @@ for i in range(4):
     height = width = Inches(7.5)
 
     pic_path = 'results/' + part_label + ' - wyniki/plots/plot' \
-               + str(i+1+5) + '.png'
+               + str(i+1+6) + '.png'
     pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
 # Part as a sequence of months
@@ -421,7 +464,7 @@ for i in range(5):
     width = Inches(7.0)
 
     pic_path = 'results/' + part_label + ' - wyniki/plots/plot' \
-               + str(i+1+9) + '.png'
+               + str(i+1+10) + '.png'
     pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
 
