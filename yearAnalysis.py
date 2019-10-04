@@ -58,16 +58,47 @@ metacats_labels = ['Podstawowe - ' + str(round(myWorkbook.sum_basic, 2))+'zł',
 # d) Piechart of incomes
 _values_list_inc = list(myWorkbook.incomes_dict.values())
 _labels_list_inc = list(myWorkbook.incomes_dict.keys())
-incomes_values = [inc for inc in _values_list_inc if inc > 0]
+# marks which incomes are 'others'
+others_markers_inc = [1 if i < 0.02*sum(_values_list_inc) else 0
+                      for i in _values_list_inc]
+
+incomes_values = [inc for i, inc in enumerate(_values_list_inc)
+                  if inc > 0 and others_markers_inc[i] == 0]
 incomes_labels = [inc+' - '+str(_values_list_inc[i])+'zł' for i, inc in
-                  enumerate(_labels_list_inc) if _values_list_inc[i] > 0]
+                  enumerate(_labels_list_inc)
+                  if _values_list_inc[i] > 0 and others_markers_inc[i] == 0]
+
+if sum(others_markers_inc) > 0:
+    sum_others = 0
+    for i, inc in enumerate(_values_list_inc):
+        if others_markers_inc[i] == 1:
+            sum_others += inc
+
+    incomes_values.append(sum_others)
+    incomes_labels.append('Inne - ' + str(incomes_values[-1]) + 'zł')
 
 # e) Piechart of earnings
 _values_list_ear = list(myWorkbook.earnings_dict.values())
 _labels_list_ear = list(myWorkbook.earnings_dict.keys())
-earnings_values = [ear for ear in _values_list_ear if ear > 0]
-earnings_labels = [ear+' - ' + str(_values_list_ear[i])+'zł' for i, ear in
-                   enumerate(_labels_list_ear) if _values_list_ear[i] > 0]
+
+# marks which earnings are 'others'
+others_markers_ear = [1 if e < 0.02*sum(_values_list_ear) else 0
+                      for e in _values_list_ear]
+
+earnings_values = [ear for e, ear in enumerate(_values_list_ear)
+                   if ear > 0 and others_markers_ear[e] == 0]
+earnings_labels = [ear + ' - ' + str(_values_list_ear[e])+'zł' for e, ear in
+                   enumerate(_labels_list_ear)
+                   if _values_list_ear[e] > 0 and others_markers_ear[e] == 0]
+
+if sum(others_markers_ear) > 0:
+    sum_others = 0
+    for e, ear in enumerate(_values_list_ear):
+        if others_markers_ear[e] == 1:
+            sum_others += ear
+
+    earnings_values.append(sum_others)
+    earnings_labels.append('Inne - ' + str(earnings_values[-1]) + 'zł')
 
 # f) Piechart of food subcategories
 amounts = myWorkbook.spends_values_yr['Jedzenie']
@@ -126,7 +157,11 @@ incomes_values_avg = [i/len(myWorksheets) for i in incomes_values]
 incomes_labels_avg = [inc + ' - ' + str(round(_values_list_inc[i]
                       / len(myWorksheets), 2)) + 'zł'
                       for i, inc in enumerate(_labels_list_inc)
-                      if _values_list_inc[i] > 0]
+                      if others_markers_inc[i] == 0]
+if sum(others_markers_inc) > 0:
+    incomes_labels_avg.append('Inne - ' + str(round(incomes_values[-1]
+                                                    / len(myWorksheets), 2))
+                              + 'zł')
 
 # j) Piechart of earnings
 earnings_values_avg = [i/len(myWorksheets) for i in earnings_values]
@@ -134,7 +169,11 @@ earnings_labels_avg = [ear + ' - '
                        + str(round(_values_list_ear[i]/len(myWorksheets), 2))
                        + 'zł'
                        for i, ear in enumerate(_labels_list_ear)
-                       if _values_list_ear[i] > 0]
+                       if others_markers_ear[i] == 0]
+if sum(others_markers_ear) > 0:
+    earnings_labels_avg.append('Inne - ' + str(round(earnings_values[-1]
+                                                     / len(myWorksheets), 2))
+                               + 'zł')
 
 # -- Year as a sequence of months --
 # k) Stackplot of cummulated spendings for the top categories
