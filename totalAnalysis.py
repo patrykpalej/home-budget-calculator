@@ -53,9 +53,24 @@ metacats_labels = ['Podstawowe - ' + str(round(myWorkbook.sum_basic, 2))
 # d) Piechart of incomes
 _values_list_inc = list(myWorkbook.incomes_dict.values())
 _labels_list_inc = list(myWorkbook.incomes_dict.keys())
-incomes_values = [inc for inc in _values_list_inc if inc > 0]
+# marks which incomes are 'others'
+others_markers_inc = [1 if i < 0.02*sum(_values_list_inc) else 0
+                      for i in _values_list_inc]
+
+incomes_values = [inc for i, inc in enumerate(_values_list_inc)
+                  if inc > 0 and others_markers_inc[i] == 0]
 incomes_labels = [inc+' - '+str(_values_list_inc[i])+'zł' for i, inc in
-                  enumerate(_labels_list_inc) if _values_list_inc[i] > 0]
+                  enumerate(_labels_list_inc)
+                  if _values_list_inc[i] > 0 and others_markers_inc[i] == 0]
+
+if sum(others_markers_inc) > 0:
+    sum_others = 0
+    for i, inc in enumerate(_values_list_inc):
+        if others_markers_inc[i] == 1:
+            sum_others += inc
+
+    incomes_values.append(sum_others)
+    incomes_labels.append('Inne - ' + str(incomes_values[-1]) + 'zł')
 
 # e) Piechart of food subcategories
 amounts = myWorkbook.spends_values_yr['Jedzenie']
@@ -107,11 +122,15 @@ metacats_labels_avg = ['Podstawowe - '
                        + 'zł']
 
 # h) Piechart of incomes
-incomes_values_avg = [i/n_of_months for i in incomes_values]
+incomes_values_avg = [i/len(myWorksheets) for i in incomes_values]
 incomes_labels_avg = [inc + ' - ' + str(round(_values_list_inc[i]
-                      / n_of_months, 2)) + 'zł'
+                      / len(myWorksheets), 2)) + 'zł'
                       for i, inc in enumerate(_labels_list_inc)
-                      if _values_list_inc[i] > 0]
+                      if others_markers_inc[i] == 0]
+if sum(others_markers_inc) > 0:
+    incomes_labels_avg.append('Inne - ' + str(round(incomes_values[-1]
+                                                    / len(myWorksheets), 2))
+                              + 'zł')
 
 # -- Total as a sequence of months --
 # i) Stackplot of cummulated spendings for the top categories
