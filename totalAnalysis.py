@@ -198,6 +198,10 @@ for p, inc in enumerate(incomes_main):
         except:
             incomes_seqs[p].append(0)
 
+# n) Scatterplot incomes vs. spendings
+scatter_incomes = [sheet.incomes for sheet in myWorkbook.sheets_list]
+scatter_spendings = [sheet.sum_total for sheet in myWorkbook.sheets_list]
+
 
 # 3. Visualization and saving the plots
 results_dir = os.getcwd() + '/results/' + total_label + ' - wyniki'
@@ -356,6 +360,15 @@ fig_name = results_dir + '/plots/plot13.png'
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
+# n) Scatterplot incomes vs. spendings
+values = [scatter_incomes, scatter_spendings]
+title = total_label + ' - Przychody vs. wydatki'
+fig_name = results_dir + '/plots/plot14.png'
+
+fig = plotScatter(values, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+
 plt.close('all')
 
 # 4. Pptx presentation
@@ -404,7 +417,7 @@ title = slides[-1].placeholders[1]
 title.text = '3. Total jako sekwencja miesięcy'
 
 
-for i in range(5):
+for i in range(6):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
