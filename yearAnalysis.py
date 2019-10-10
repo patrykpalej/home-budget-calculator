@@ -581,3 +581,9 @@ wb_to_export = export_to_excel('Podróże', 3)
 
 wb_to_export.save(results_dir + '/20' + year_num
                   + ' - zestawienie wydatków.xlsx')
+
+
+# 6. Exporting a summary table
+wb_summary = openpyxl.Workbook()
+
+wb_summary.save(results_dir + '/20' + year_num + ' - podsumowanie.xlsx')
