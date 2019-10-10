@@ -514,7 +514,7 @@ for i in range(7):
 
 prs.save(results_dir + '/20' + year_num + ' - raport finansowy.pptx')
 
-# 5. Exporting spendings to a table in seprate excel workbook
+# 5. Exporting spendings to a table in separate excel workbook
 wb_to_export = openpyxl.Workbook()
 
 
