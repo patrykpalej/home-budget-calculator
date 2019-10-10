@@ -245,6 +245,11 @@ for i, inc in enumerate(incomes_main):
 scatter_incomes = [sheet.incomes for sheet in myWorkbook.sheets_list]
 scatter_spendings = [sheet.sum_total for sheet in myWorkbook.sheets_list]
 
+# q) Lineplot of basic and additional spendings
+basic_array = [s.sum_basic for s in myWorkbook.sheets_list]
+addit_array = [s.sum_addit for s in myWorkbook.sheets_list]
+giftdon_array = [s.sum_giftdon for s in myWorkbook.sheets_list]
+
 
 # 3. Visualization and saving the plots
 results_dir = os.getcwd() + '/results/' + year_label + ' - wyniki'
@@ -437,6 +442,15 @@ fig_name = results_dir + '/plots/plot16.png'
 fig = plotScatter(values, title)
 plt.savefig(figure=fig, fname=fig_name)
 
+# q) Lineplot of basic and additional spendings
+values = [basic_array, addit_array, giftdon_array]
+labels = ['Wydatki\npodstawowe', 'Wydatki\ndodatkowe', 'Prezenty\ni donacje']
+title = year_label + ' - Metakategorie wydatków na przestrzeni czasu'
+fig_name = results_dir + '/plots/plot17.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
 
 plt.close('all')
 
@@ -486,7 +500,7 @@ slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '3. Rok jako sekwencja miesięcy'
 
-for i in range(6):
+for i in range(7):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
