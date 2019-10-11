@@ -213,9 +213,11 @@ line_savings = np.cumsum(line_savings)
 
 # m) Lineplot of spendings and incomes in subsequent months
 spendings_list = []
+earnings_list = []
 incomes_list = []
 for month in myWorkbook.sheets_list:
     spendings_list.append(month.sum_total)
+    earnings_list.append(month.earnings)
     incomes_list.append(month.incomes)
 
 # n) Lineplot of average spendings for subsequent categories so far
@@ -240,6 +242,15 @@ for i, inc in enumerate(incomes_main):
             incomes_seqs[i].append(month.incomes_dict[inc])
         except:
             incomes_seqs[i].append(0)
+
+# p) Scatterplot incomes vs. spendings
+scatter_incomes = [sheet.incomes for sheet in myWorkbook.sheets_list]
+scatter_spendings = [sheet.sum_total for sheet in myWorkbook.sheets_list]
+
+# q) Lineplot of basic and additional spendings
+basic_array = [s.sum_basic for s in myWorkbook.sheets_list]
+addit_array = [s.sum_addit for s in myWorkbook.sheets_list]
+giftdon_array = [s.sum_giftdon for s in myWorkbook.sheets_list]
 
 
 # 3. Visualization and saving the plots
@@ -425,6 +436,23 @@ fig_name = results_dir + '/plots/plot15.png'
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
+# p) Scatterplot incomes vs. spendings
+values = [scatter_incomes, scatter_spendings]
+title = year_label + ' - Przychody vs. wydatki'
+fig_name = results_dir + '/plots/plot16.png'
+
+fig = plotScatter(values, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# q) Lineplot of basic and additional spendings
+values = [basic_array, addit_array, giftdon_array]
+labels = ['Wydatki\npodstawowe', 'Wydatki\ndodatkowe', 'Prezenty\ni donacje']
+title = year_label + ' - Metakategorie wydatków na przestrzeni czasu'
+fig_name = results_dir + '/plots/plot17.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
 
 plt.close('all')
 
@@ -474,7 +502,7 @@ slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '3. Rok jako sekwencja miesięcy'
 
-for i in range(5):
+for i in range(7):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
@@ -488,11 +516,62 @@ for i in range(5):
 
 prs.save(results_dir + '/20' + year_num + ' - raport finansowy.pptx')
 
-# 5. Exporting spendings to a table in seprate excel workbook
-wb_to_export = openpyxl.Workbook()
+# 5. Exporting a summary to a table in separate excel workbook
+summary_wb = openpyxl.Workbook()
 
 
 def export_to_excel(cat_name, num_of_ws):
+    # 1. Summary of the period
+    ws = summary_wb.active
+    ws.title = 'Ogólne'
+
+    ws.cell(1, 2).value = 'Wydatki [zł]:'
+    ws.cell(1, 3).value = 'Zarobki [zł]:'
+    ws.cell(1, 4).value = 'Przychody [zł]:'
+
+    ws.cell(2, 1).value = 'Średnia: '
+    ws.cell(3, 1).value = 'Mediana: '
+    ws.cell(4, 1).value = 'Std: '
+
+    spendings_mms = [np.mean(spendings_list), np.median(spendings_list),
+                     np.std(spendings_list)]
+    earnings_mms = [np.mean(earnings_list), np.median(earnings_list),
+                    np.std(earnings_list)]
+    incomes_mms = [np.mean(incomes_list), np.median(incomes_list),
+                   np.std(incomes_list)]
+
+    ws.cell(2, 2).value = round(spendings_mms[0], 2)
+    ws.cell(3, 2).value = round(spendings_mms[1], 2)
+    ws.cell(4, 2).value = round(spendings_mms[2], 2)
+
+    ws.cell(2, 3).value = round(earnings_mms[0], 2)
+    ws.cell(3, 3).value = round(earnings_mms[1], 2)
+    ws.cell(4, 3).value = round(earnings_mms[2], 2)
+
+    ws.cell(2, 4).value = round(incomes_mms[0], 2)
+    ws.cell(3, 4).value = round(incomes_mms[1], 2)
+    ws.cell(4, 4).value = round(incomes_mms[2], 2)
+
+    ws.column_dimensions['B'].width = 14
+    ws.column_dimensions['C'].width = 14
+    ws.column_dimensions['D'].width = 14
+
+    for r in range(2, 5):
+        ws.cell(r, 1).alignment = Alignment(horizontal='right')
+
+    for c in range(2, 5):
+        ws.cell(1, c).alignment = Alignment(horizontal='center')
+
+    thin_border = Border(left=Side(style='thin'),
+                         right=Side(style='thin'),
+                         top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+
+    for r in range(4):
+        for c in range(4):
+            ws.cell(r + 1, c + 1).border = thin_border
+
+    # 2. Listing the spendings
     values = myWorkbook.spends_values_yr[cat_name]
     items = myWorkbook.spends_items_yr[cat_name]
     monthlabels = myWorkbook.spends_monthlabel_yr[cat_name]
@@ -511,7 +590,7 @@ def export_to_excel(cat_name, num_of_ws):
                            if j == month_num]
         items_nested_list.append(_one_month_list)
 
-    ws = wb_to_export.create_sheet(cat_name, num_of_ws)
+    ws = summary_wb.create_sheet(cat_name, num_of_ws)
     ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
 
     row = 0
@@ -536,22 +615,64 @@ def export_to_excel(cat_name, num_of_ws):
             ws.cell(row, 1).value = items_nested_list[m][i]
             ws.cell(row, 2).value = val
 
-    thin_border = Border(left=Side(style='thin'),
-                         right=Side(style='thin'),
-                         top=Side(style='thin'),
-                         bottom=Side(style='thin'))
     for r in range(row):
         ws.cell(row=r+1, column=1).border = thin_border
         ws.cell(row=r+1, column=2).border = thin_border
 
-    return wb_to_export
+        # 2a) Summary of the category (mean, median, std)
+        # For monthly sums
+    cat_spends_list = [sheet.cats_sums[cat_name]
+                       for sheet in myWorkbook.sheets_list]
+
+    ws.merge_cells(start_row=1, start_column=7, end_row=1,
+                   end_column=9)
+    ws.cell(1, 7).value = 'Dla sum miesięcznych:'
+    ws.cell(2, 7).value = 'Średnia [zł]:'
+    ws.cell(3, 7).value = round(np.mean(cat_spends_list), 2)
+    ws.column_dimensions['G'].width = 14
+    ws.cell(2, 8).value = 'Mediana [zł]:'
+    ws.cell(3, 8).value = round(np.median(cat_spends_list), 2)
+    ws.column_dimensions['H'].width = 14
+    ws.cell(2, 9).value = 'Std [zł]:'
+    ws.cell(3, 9).value = round(np.std(cat_spends_list), 2)
+
+    for r in range(1, 4):
+        for c in range(7, 10):
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
+
+    for r in range(1, 4):
+        for c in range(7, 10):
+            ws.cell(r, c).border = thin_border
+
+    # For individual spendings
+    all_values = [v for sublist in values_nested_list for v in sublist]
+
+    ws.merge_cells(start_row=1, start_column=12, end_row=1,
+                   end_column=14)
+    ws.cell(1, 12).value = 'Dla wydatków indywidualnych:'
+    ws.cell(2, 12).value = 'Średnia [zł]:'
+    ws.cell(3, 12).value = round(np.mean(all_values), 2)
+    ws.column_dimensions['L'].width = 14
+    ws.cell(2, 13).value = 'Mediana [zł]:'
+    ws.cell(3, 13).value = round(np.median(all_values), 2)
+    ws.column_dimensions['M'].width = 14
+    ws.cell(2, 14).value = 'Std [zł]:'
+    ws.cell(3, 14).value = round(np.std(all_values), 2)
+
+    for r in range(1, 4):
+        for c in range(12, 15):
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
+
+    for r in range(1, 4):
+        for c in range(12, 15):
+            ws.cell(r, c).border = thin_border
+
+    return summary_wb
 
 
-wb_to_export.remove_sheet(wb_to_export.active)
-wb_to_export = export_to_excel('Rzeczy i sprzęty', 0)
-wb_to_export = export_to_excel('Hobby i przyjemności', 1)
-wb_to_export = export_to_excel('Transport i noclegi', 2)
-wb_to_export = export_to_excel('Podróże', 3)
+summary_wb = export_to_excel('Rzeczy i sprzęty', 1)
+summary_wb = export_to_excel('Hobby i przyjemności', 2)
+summary_wb = export_to_excel('Transport i noclegi', 3)
+summary_wb = export_to_excel('Podróże', 4)
 
-wb_to_export.save(results_dir + '/20' + year_num
-                  + ' - zestawienie wydatków.xlsx')
+summary_wb.save(results_dir + '/20' + year_num + ' - podsumowanie.xlsx')

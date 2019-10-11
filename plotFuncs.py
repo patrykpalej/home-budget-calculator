@@ -105,3 +105,23 @@ def plotStack(values, labels, plot_title, start_label):
     ax.tick_params(labelsize=16)
 
     return fig
+
+
+def plotScatter(values, plot_title):
+
+    plt.style.use('default')
+
+    fig, ax = plt.subplots(figsize=(14, 9))
+    fig = plt.scatter(values[0], values[1], marker='.', s=100)
+    fig = plt.plot([0.95 * min(min(values[0]), min(values[1])),
+                   1.05 * max(max(values[0]), max(values[1]))],
+                   [0.95 * min(min(values[0]), min(values[1])),
+                   1.05 * max(max(values[0]), max(values[1]))], color='red',
+                   linewidth=2)
+    plt.title(plot_title, fontsize=22, pad=15)
+    ax.axis('equal')
+    plt.xlabel('Przychody [zł]', fontdict={'size': 18})
+    plt.ylabel('Wydatki [zł]', fontdict={'size': 18})
+    ax.tick_params(labelsize=16)
+
+    return fig
