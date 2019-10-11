@@ -171,9 +171,11 @@ line_savings = np.cumsum(line_savings)
 # k) Lineplot of spendings and incomes in subsequent months
 spendings_list = []
 incomes_list = []
+earnings_list = []
 for month in myWorkbook.sheets_list:
     spendings_list.append(month.sum_total)
     incomes_list.append(month.incomes)
+    earnings_list.append(month.earnings)
 
 # l) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
@@ -478,8 +480,9 @@ def export_to_excel(cat_name, num_of_ws):
     for number in range(1, n_of_months+1):
         if number in monthlabels:
             row += 1
-            ws.cell(row, 1).value = mdict[month] + '  ' + str(month) \
-                                                 + '.20' + str(year)
+            ws.cell(row, 1).value = \
+                mdict[month] + ' ' + '20' + str(year) + ' - ' \
+                                   + str(sum(values_dict[number])) + 'zł'
             ws.merge_cells(start_row=row, start_column=1, end_row=row,
                            end_column=2)
             ws.cell(row, 1).alignment = Alignment(horizontal='center')
@@ -528,5 +531,19 @@ wb_to_export.save(results_dir + '/Total - zestawienie wydatków.xlsx')
 
 # 6. Exporting a summary table
 wb_summary = openpyxl.Workbook()
+
+# Calculating the mean, median and std for spendings, earnings and incomes
+spendings_mms = [np.mean(spendings_list), np.median(spendings_list),
+                 np.std(spendings_list)]
+earnings_mms = [np.mean(earnings_list), np.median(earnings_list),
+                np.std(earnings_list)]
+incomes_mms = [np.mean(incomes_list), np.median(incomes_list),
+               np.std(incomes_list)]
+
+ws = wb_summary.active
+ws.cell(2, 1).value = 'Średnia'
+ws.cell(3, 1).value = 'Mediana'
+ws.cell(4, 1).value = 'Std'
+
 
 wb_summary.save(results_dir + '/Total - podsumowanie.xlsx')
