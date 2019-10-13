@@ -674,5 +674,8 @@ summary_wb = export_to_excel('Rzeczy i sprzęty', 1)
 summary_wb = export_to_excel('Hobby i przyjemności', 2)
 summary_wb = export_to_excel('Transport i noclegi', 3)
 summary_wb = export_to_excel('Podróże', 4)
+summary_wb = export_to_excel('Abonamenty i usługi', 5)
+summary_wb = export_to_excel('Leki i zdrowie', 6)
+summary_wb = export_to_excel('Książki i nauka', 7)
 
 summary_wb.save(results_dir + '/20' + year_num + ' - podsumowanie.xlsx')
