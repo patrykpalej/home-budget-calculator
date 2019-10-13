@@ -53,7 +53,7 @@ _BugFix_
 
 _ResultsGeneration_
 - Scatterplot of spendings vs. incomes for the subsequent months in year and total scenarios
-- For year and total scenario a summary table added to xlsx file. The table contains mean, median and std for spendings, earnings and incomes
+- For year and total scenario summary tables added to xlsx file. The first table contains mean, median and std for spendings, earnings, incomes and surplus. The second table contains total surplus during the period
 - Lineplot of basic, additional and giftdon spendings for the whole period added to year and total scenario
 
 
