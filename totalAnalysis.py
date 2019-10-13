@@ -171,11 +171,13 @@ line_savings = np.cumsum(line_savings)
 # k) Lineplot of spendings and incomes in subsequent months
 spendings_list = []
 incomes_list = []
-earnings_list = []
+earnings_list = []  # for the need of later xlsx summary
+surplus_list = []  # for the need of later xlsx summary
 for month in myWorkbook.sheets_list:
     spendings_list.append(month.sum_total)
     incomes_list.append(month.incomes)
     earnings_list.append(month.earnings)
+    surplus_list.append(month.incomes-month.sum_total)
 
 # l) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
@@ -458,6 +460,7 @@ def export_to_excel(cat_name, num_of_ws):
     ws.cell(1, 2).value = 'Wydatki [zł]:'
     ws.cell(1, 3).value = 'Zarobki [zł]:'
     ws.cell(1, 4).value = 'Przychody [zł]:'
+    ws.cell(1, 5).value = 'Nadwyżki [zł]:'
 
     ws.cell(2, 1).value = 'Średnia: '
     ws.cell(3, 1).value = 'Mediana: '
@@ -469,6 +472,8 @@ def export_to_excel(cat_name, num_of_ws):
                     np.std(earnings_list)]
     incomes_mms = [np.mean(incomes_list), np.median(incomes_list),
                    np.std(incomes_list)]
+    surplus_mms = [np.mean(surplus_list), np.median(surplus_list),
+                   np.std(surplus_list)]
 
     ws.cell(2, 2).value = round(spendings_mms[0], 2)
     ws.cell(3, 2).value = round(spendings_mms[1], 2)
@@ -482,14 +487,19 @@ def export_to_excel(cat_name, num_of_ws):
     ws.cell(3, 4).value = round(incomes_mms[1], 2)
     ws.cell(4, 4).value = round(incomes_mms[2], 2)
 
+    ws.cell(2, 5).value = round(surplus_mms[0], 2)
+    ws.cell(3, 5).value = round(surplus_mms[1], 2)
+    ws.cell(4, 5).value = round(surplus_mms[2], 2)
+
     ws.column_dimensions['B'].width = 14
     ws.column_dimensions['C'].width = 14
     ws.column_dimensions['D'].width = 14
+    ws.column_dimensions['E'].width = 14
 
-    for r in range(2, 5):
+    for r in range(2, 6):
         ws.cell(r, 1).alignment = Alignment(horizontal='right')
 
-    for c in range(2, 5):
+    for c in range(2, 6):
         ws.cell(1, c).alignment = Alignment(horizontal='center')
 
     thin_border = Border(left=Side(style='thin'),
@@ -498,7 +508,7 @@ def export_to_excel(cat_name, num_of_ws):
                          bottom=Side(style='thin'))
 
     for r in range(4):
-        for c in range(4):
+        for c in range(5):
             ws.cell(r+1, c+1).border = thin_border
 
     # 2. Listing the spendings
