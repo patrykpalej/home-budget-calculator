@@ -454,6 +454,7 @@ summary_wb = openpyxl.Workbook()
 
 def export_to_excel(cat_name, num_of_ws):
     # 1. Summary of the period
+    # a) first table
     ws = summary_wb.active
     ws.title = 'Ogólne'
 
@@ -495,6 +496,8 @@ def export_to_excel(cat_name, num_of_ws):
     ws.column_dimensions['C'].width = 14
     ws.column_dimensions['D'].width = 14
     ws.column_dimensions['E'].width = 14
+    ws.column_dimensions['H'].width = 10
+    ws.column_dimensions['I'].width = 18
 
     for r in range(2, 6):
         ws.cell(r, 1).alignment = Alignment(horizontal='right')
@@ -510,6 +513,19 @@ def export_to_excel(cat_name, num_of_ws):
     for r in range(4):
         for c in range(5):
             ws.cell(r+1, c+1).border = thin_border
+
+    # b) second table
+    ws.merge_cells(start_row=1, start_column=8, end_row=1, end_column=9)
+    ws.cell(1, 8).value = 'Całkowita nadwyżka przychodów:'
+    ws.cell(2, 8).value = '[zł]'
+    ws.cell(2, 9).value = '[% przychodów]'
+    ws.cell(3, 8).value = sum(surplus_list)
+    ws.cell(3, 9).value = round(sum(surplus_list)/sum(incomes_list)*100, 2)
+
+    for r in range(1, 4):
+        for c in range(8, 10):
+            ws.cell(r, c).border = thin_border
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
 
     # 2. Listing the spendings
     values = myWorkbook.spends_values_yr[cat_name]
