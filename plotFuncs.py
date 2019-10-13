@@ -6,7 +6,7 @@ from math import floor
 def plotPie(values, labels, plot_title):
 
     plt.style.use('default')
-    fig = plt.figure(figsize=(12, 12))
+    fig = plt.figure(figsize=(13, 13))
     plt.pie(x=values, autopct='%1.0f%%', textprops={'fontsize': 20},
             startangle=0)
 
