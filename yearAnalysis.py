@@ -213,12 +213,14 @@ line_savings = np.cumsum(line_savings)
 
 # m) Lineplot of spendings and incomes in subsequent months
 spendings_list = []
-earnings_list = []
 incomes_list = []
+earnings_list = []  # for the need of later xlsx summary
+surplus_list = []  # for the need of later xlsx summary
 for month in myWorkbook.sheets_list:
     spendings_list.append(month.sum_total)
-    earnings_list.append(month.earnings)
     incomes_list.append(month.incomes)
+    earnings_list.append(month.earnings)
+    surplus_list.append(month.incomes - month.sum_total)
 
 # n) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
@@ -522,12 +524,14 @@ summary_wb = openpyxl.Workbook()
 
 def export_to_excel(cat_name, num_of_ws):
     # 1. Summary of the period
+    # a) first table
     ws = summary_wb.active
     ws.title = 'Ogólne'
 
     ws.cell(1, 2).value = 'Wydatki [zł]:'
     ws.cell(1, 3).value = 'Zarobki [zł]:'
     ws.cell(1, 4).value = 'Przychody [zł]:'
+    ws.cell(1, 5).value = 'Nadwyżki [zł]:'
 
     ws.cell(2, 1).value = 'Średnia: '
     ws.cell(3, 1).value = 'Mediana: '
@@ -539,6 +543,8 @@ def export_to_excel(cat_name, num_of_ws):
                     np.std(earnings_list)]
     incomes_mms = [np.mean(incomes_list), np.median(incomes_list),
                    np.std(incomes_list)]
+    surplus_mms = [np.mean(surplus_list), np.median(surplus_list),
+                   np.std(surplus_list)]
 
     ws.cell(2, 2).value = round(spendings_mms[0], 2)
     ws.cell(3, 2).value = round(spendings_mms[1], 2)
@@ -552,14 +558,21 @@ def export_to_excel(cat_name, num_of_ws):
     ws.cell(3, 4).value = round(incomes_mms[1], 2)
     ws.cell(4, 4).value = round(incomes_mms[2], 2)
 
+    ws.cell(2, 5).value = round(surplus_mms[0], 2)
+    ws.cell(3, 5).value = round(surplus_mms[1], 2)
+    ws.cell(4, 5).value = round(surplus_mms[2], 2)
+
     ws.column_dimensions['B'].width = 14
     ws.column_dimensions['C'].width = 14
     ws.column_dimensions['D'].width = 14
+    ws.column_dimensions['E'].width = 14
+    ws.column_dimensions['H'].width = 10
+    ws.column_dimensions['I'].width = 18
 
-    for r in range(2, 5):
+    for r in range(2, 6):
         ws.cell(r, 1).alignment = Alignment(horizontal='right')
 
-    for c in range(2, 5):
+    for c in range(2, 6):
         ws.cell(1, c).alignment = Alignment(horizontal='center')
 
     thin_border = Border(left=Side(style='thin'),
@@ -568,8 +581,21 @@ def export_to_excel(cat_name, num_of_ws):
                          bottom=Side(style='thin'))
 
     for r in range(4):
-        for c in range(4):
+        for c in range(5):
             ws.cell(r + 1, c + 1).border = thin_border
+
+    # b) second table
+    ws.merge_cells(start_row=1, start_column=8, end_row=1, end_column=9)
+    ws.cell(1, 8).value = 'Całkowita nadwyżka przychodów:'
+    ws.cell(2, 8).value = '[zł]'
+    ws.cell(2, 9).value = '[% przychodów]'
+    ws.cell(3, 8).value = sum(surplus_list)
+    ws.cell(3, 9).value = round(sum(surplus_list) / sum(incomes_list) * 100, 2)
+
+    for r in range(1, 4):
+        for c in range(8, 10):
+            ws.cell(r, c).border = thin_border
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
 
     # 2. Listing the spendings
     values = myWorkbook.spends_values_yr[cat_name]
@@ -674,5 +700,8 @@ summary_wb = export_to_excel('Rzeczy i sprzęty', 1)
 summary_wb = export_to_excel('Hobby i przyjemności', 2)
 summary_wb = export_to_excel('Transport i noclegi', 3)
 summary_wb = export_to_excel('Podróże', 4)
+summary_wb = export_to_excel('Abonamenty i usługi', 5)
+summary_wb = export_to_excel('Leki i zdrowie', 6)
+summary_wb = export_to_excel('Książki i nauka', 7)
 
 summary_wb.save(results_dir + '/20' + year_num + ' - podsumowanie.xlsx')
