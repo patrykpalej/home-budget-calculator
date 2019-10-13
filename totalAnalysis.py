@@ -53,19 +53,65 @@ metacats_labels = ['Podstawowe - ' + str(round(myWorkbook.sum_basic, 2))
 # d) Piechart of incomes
 _values_list_inc = list(myWorkbook.incomes_dict.values())
 _labels_list_inc = list(myWorkbook.incomes_dict.keys())
-incomes_values = [inc for inc in _values_list_inc if inc > 0]
+# marks which incomes are 'others'
+others_markers_inc = [1 if i < 0.02*sum(_values_list_inc) else 0
+                      for i in _values_list_inc]
+
+incomes_values = [inc for i, inc in enumerate(_values_list_inc)
+                  if inc > 0 and others_markers_inc[i] == 0]
 incomes_labels = [inc+' - '+str(_values_list_inc[i])+'zł' for i, inc in
-                  enumerate(_labels_list_inc) if _values_list_inc[i] > 0]
+                  enumerate(_labels_list_inc)
+                  if _values_list_inc[i] > 0 and others_markers_inc[i] == 0]
+
+if sum(others_markers_inc) > 0:
+    sum_others = 0
+    for i, inc in enumerate(_values_list_inc):
+        if others_markers_inc[i] == 1:
+            sum_others += inc
+
+    incomes_values.append(sum_others)
+    incomes_labels.append('Inne - ' + str(incomes_values[-1]) + 'zł')
+
+# e) Piechart of food subcategories
+amounts = myWorkbook.spends_values_yr['Jedzenie']
+subcats = myWorkbook.spends_items_yr['Jedzenie']
+subcats_dict = {}
+
+for i, subcat in enumerate(subcats):
+    if subcat in list(subcats_dict.keys()):
+        subcats_dict[subcat] += amounts[i]
+    else:
+        subcats_dict[subcat] = amounts[i]
+
+subcats_values = list(subcats_dict.values())
+subcats_labels = [list(subcats_dict.keys())[i]+' - '
+                  + str(round(list(subcats_dict.values())[i], 2)) + 'zł'
+                  for i, sc in enumerate(list(subcats_dict.keys()))]
+# ----
+_subcats_fractions = [sc/sum(subcats_values) for sc in subcats_values]
+subcats_values_with_others = []
+subcats_labels_with_others = []
+others_sum = 0
+for i, sc_f in enumerate(_subcats_fractions):
+    if sc_f > 0.02:
+        subcats_values_with_others.append(subcats_values[i])
+        subcats_labels_with_others.append(subcats_labels[i])
+    else:
+        others_sum += subcats_values[i]
+
+if others_sum > 0:
+    subcats_values_with_others.append(others_sum)
+    subcats_labels_with_others.append('inne - '+str(others_sum)+'zł')
 
 # -- Averaged month --
-# e) Piechart of spendings for the main categories
+# f) Piechart of spendings for the main categories
 top_plus_others_values_avg = [i/n_of_months for i in top_plus_others_values]
 top_plus_others_labels_avg = [top_plus_others_labels_0[i] + ' - '
                               + str(round(top_plus_others_values[i]
                                           / n_of_months, 2)) + ' zł'
                               for i in range(len(top_plus_others_values))]
 
-# f) Piechart of the metacategories
+# g) Piechart of the metacategories
 metacats_values_avg = [i/n_of_months for i in metacats_values]
 metacats_labels_avg = ['Podstawowe - '
                        + str(round(myWorkbook.sum_basic/n_of_months, 2))
@@ -75,15 +121,19 @@ metacats_labels_avg = ['Podstawowe - '
                        + str(round(myWorkbook.sum_giftdon/n_of_months, 2))
                        + 'zł']
 
-# g) Piechart of incomes
-incomes_values_avg = [i/n_of_months for i in incomes_values]
+# h) Piechart of incomes
+incomes_values_avg = [i/len(myWorksheets) for i in incomes_values]
 incomes_labels_avg = [inc + ' - ' + str(round(_values_list_inc[i]
-                      / n_of_months, 2)) + 'zł'
+                      / len(myWorksheets), 2)) + 'zł'
                       for i, inc in enumerate(_labels_list_inc)
-                      if _values_list_inc[i] > 0]
+                      if others_markers_inc[i] == 0]
+if sum(others_markers_inc) > 0:
+    incomes_labels_avg.append('Inne - ' + str(round(incomes_values[-1]
+                                                    / len(myWorksheets), 2))
+                              + 'zł')
 
 # -- Total as a sequence of months --
-# h) Stackplot of cummulated spendings for the top categories
+# i) Stackplot of cummulated spendings for the top categories
 top_spends_seqs = []
 # top categories
 for c, cat in enumerate(top_labels):
@@ -101,7 +151,7 @@ top_spends_seqs_cumsum = []
 for seq in top_spends_seqs:
     top_spends_seqs_cumsum.append(np.cumsum(seq))
 
-# i) Lineplot of cummulated spendings, incomes and savings
+# j) Lineplot of cummulated spendings, incomes and savings
 line_incomes = []
 line_spendings = []
 line_balance = []
@@ -118,21 +168,25 @@ line_spendings = np.cumsum(line_spendings)
 line_balance = np.cumsum(line_balance)
 line_savings = np.cumsum(line_savings)
 
-# j) Lineplot of spendings and incomes in subsequent months
+# k) Lineplot of spendings and incomes in subsequent months
 spendings_list = []
 incomes_list = []
+earnings_list = []  # for the need of later xlsx summary
+surplus_list = []  # for the need of later xlsx summary
 for month in myWorkbook.sheets_list:
     spendings_list.append(month.sum_total)
     incomes_list.append(month.incomes)
+    earnings_list.append(month.earnings)
+    surplus_list.append(month.incomes-month.sum_total)
 
-# k) Lineplot of average spendings for subsequent categories so far
+# l) Lineplot of average spendings for subsequent categories so far
 current_means_seqs = []
 for c, cat in enumerate(top_spends_seqs):
     current_means_seqs.append([])
     for m, month in enumerate(cat):
         current_means_seqs[-1].append(np.mean(top_spends_seqs[c][:m+1]))
 
-# l) Lineplot of main sources
+# m) Lineplot of main sources
 #  choosing of the relevant sources
 incomes_main = []
 for inc in myWorkbook.incomes_dict:
@@ -148,6 +202,15 @@ for p, inc in enumerate(incomes_main):
         except:
             incomes_seqs[p].append(0)
 
+# n) Scatterplot incomes vs. spendings
+scatter_incomes = [sheet.incomes for sheet in myWorkbook.sheets_list]
+scatter_spendings = [sheet.sum_total for sheet in myWorkbook.sheets_list]
+
+# o) Lineplot of basic and additional spendings
+basic_array = [s.sum_basic for s in myWorkbook.sheets_list]
+addit_array = [s.sum_addit for s in myWorkbook.sheets_list]
+giftdon_array = [s.sum_giftdon for s in myWorkbook.sheets_list]
+
 
 # 3. Visualization and saving the plots
 results_dir = os.getcwd() + '/results/' + total_label + ' - wyniki'
@@ -155,6 +218,7 @@ if not os.path.exists(results_dir):
     os.mkdir(results_dir)
     os.mkdir(results_dir + '/plots')
 
+# -- Total as a whole
 # a) Barplot for all categories
 values = values_desc
 labels = labels_desc
@@ -202,19 +266,30 @@ fig_name = results_dir + '/plots/plot4.png'
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# e) Piechart of spendings for the main categories
+# e) Piechart of food subcategories
+values = subcats_values_with_others
+labels = subcats_labels_with_others
+title = total_label + ' - Podział wydatków spożywczych\n\nCałkowita kwota: ' \
+        + str(round(myWorkbook.cats_sums['Jedzenie'], 2)) + ' zł\n'
+fig_name = results_dir + '/plots/plot5.png'
+
+fig = plotPie(values, labels, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# -- Averaged month
+# f) Piechart of spendings for the main categories
 values = top_plus_others_values_avg
 labels = top_plus_others_labels_avg
 title = total_label \
         + ' - Struktura wydatków w uśrednionym miesiącu\n z podziałem na ' \
         'kategorie\n\n'+'Suma wydatków: ' \
         + str(round(myWorkbook.sum_total/n_of_months, 2)) + 'zł'
-fig_name = results_dir + '/plots/plot5.png'
+fig_name = results_dir + '/plots/plot6.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# f) Piechart of metacategories
+# g) Piechart of metacategories
 values = metacats_values_avg
 labels = metacats_labels_avg
 title = total_label + ' - Podział wydatków na: ' \
@@ -222,12 +297,12 @@ title = total_label + ' - Podział wydatków na: ' \
         'w uśrednionym miesiącu\n\n' \
         'Suma wydatków: ' + str(round(myWorkbook.sum_total/n_of_months, 2)) \
         + 'zł\n'
-fig_name = results_dir + '/plots/plot6.png'
+fig_name = results_dir + '/plots/plot7.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# g) Piechart of incomes
+# h) Piechart of incomes
 values = incomes_values_avg
 labels = incomes_labels_avg
 title = total_label + ' - Podział przychodów na poszczególne źródła\n' \
@@ -238,58 +313,75 @@ title = total_label + ' - Podział przychodów na poszczególne źródła\n' \
         + 'zł  (' + str(round(100*myWorkbook.balance[0] / n_of_months
                                / (myWorkbook.incomes/n_of_months), 2)) + '%)'
 
-fig_name = results_dir + '/plots/plot7.png'
+fig_name = results_dir + '/plots/plot8.png'
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# h) Stackplot of cummulated spendings for the top categories
+# i) Stackplot of cummulated spendings for the top categories
 values = top_spends_seqs_cumsum
 labels = top_labels + ['Pozostałe']
 title = total_label + ' - Skumulowane wartości wydatków na\n poszczególne ' \
                       'kategorie na przestrzeni całego okresu'
-fig_name = results_dir + '/plots/plot8.png'
+fig_name = results_dir + '/plots/plot9.png'
 
 fig = plotStack(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# i) Lineplot of cummulated spendings, incomes and savings
+# j) Lineplot of cummulated spendings, incomes and savings
 values = [line_incomes, line_spendings, line_balance, line_savings]
 labels = ['Przychody', 'Wydatki', 'Nadwyżka\nprzychodów',
           'Oszczędności\ndługoterminowe']
 title = total_label + ' - Skumulowane wartości przychodów, wydatków \n' \
         'i oszczędności na przestrzeni całego okresu'
-fig_name = results_dir + '/plots/plot9.png'
-
-fig = plotLine(values, labels, title, start_label)
-plt.savefig(figure=fig, fname=fig_name)
-
-# j) Lineplot of spendings and incomes in subsequent months
-values = [incomes_list, spendings_list]
-labels = ['Przychody', 'Wydatki']
-title = total_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot10.png'
 
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# k) Lineplot of average spendings for subsequent categories so far
-values = current_means_seqs
-labels = top_labels + ['Pozostałe']
-title = total_label \
-        + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
-        'kategorie'
+# k) Lineplot of spendings and incomes in subsequent months
+values = [incomes_list, spendings_list]
+labels = ['Przychody', 'Wydatki']
+title = total_label + ' - Przychody i wydatki w kolejnych miesiącach'
 fig_name = results_dir + '/plots/plot11.png'
 
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
 
-# l) Lineplot of the sources
+# l) Lineplot of average spendings for subsequent categories so far
+values = current_means_seqs
+labels = top_labels + ['Pozostałe']
+title = total_label \
+        + ' - Dotychczasowe średnie miesięczne wydatki na \nposzczególne ' \
+        'kategorie'
+fig_name = results_dir + '/plots/plot12.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
+# m) Lineplot of the sources
 values = incomes_seqs
 labels = incomes_main
 title = total_label + ' - Kwoty przychodów z najważniejszych \n źrodeł na ' \
         'przestrzeni całego okresu'
-fig_name = results_dir + '/plots/plot12.png'
+fig_name = results_dir + '/plots/plot13.png'
+
+fig = plotLine(values, labels, title, start_label)
+plt.savefig(figure=fig, fname=fig_name)
+
+# n) Scatterplot incomes vs. spendings
+values = [scatter_incomes, scatter_spendings]
+title = total_label + ' - Przychody vs. wydatki'
+fig_name = results_dir + '/plots/plot14.png'
+
+fig = plotScatter(values, title)
+plt.savefig(figure=fig, fname=fig_name)
+
+# o) Lineplot of basic and additional spendings
+values = [basic_array, addit_array, giftdon_array]
+labels = ['Wydatki\npodstawowe', 'Wydatki\ndodatkowe', 'Prezenty\ni donacje']
+title = total_label + ' - Metakategorie wydatków na przestrzeni czasu'
+fig_name = results_dir + '/plots/plot15.png'
 
 fig = plotLine(values, labels, title, start_label)
 plt.savefig(figure=fig, fname=fig_name)
@@ -311,7 +403,7 @@ slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].placeholders[1]
 title.text = '1. Total jako całość'
 
-for i in range(4):
+for i in range(5):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(1.5)
     top = Inches(0.0)
@@ -333,7 +425,7 @@ for i in range(3):
     height = width = Inches(7.5)
 
     pic_path = 'results/' + total_label + ' - wyniki/plots/plot' \
-               + str(i+1+4) + '.png'
+               + str(i+1+5) + '.png'
     pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
 # Total as a sequence of months
@@ -342,7 +434,7 @@ title = slides[-1].placeholders[1]
 title.text = '3. Total jako sekwencja miesięcy'
 
 
-for i in range(5):
+for i in range(7):
     slides.append(prs.slides.add_slide(blank_slide_layout))
     left = Inches(0.0)
     top = Inches(0.1)
@@ -350,17 +442,92 @@ for i in range(5):
     width = Inches(7.0)
 
     pic_path = 'results/' + total_label + ' - wyniki/plots/plot' \
-               + str(i+1+7) + '.png'
+               + str(i+1+8) + '.png'
     pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
 
 prs.save(results_dir + '/' + total_label + ' - raport finansowy.pptx')
 
-# 5. Exporting spendings to a table in seprate excel workbook
-wb_to_export = openpyxl.Workbook()
+# 5. Exporting a summary to a table in separate excel workbook
+summary_wb = openpyxl.Workbook()
 
 
 def export_to_excel(cat_name, num_of_ws):
+    # 1. Summary of the period
+    # a) first table
+    ws = summary_wb.active
+    ws.title = 'Ogólne'
+
+    ws.cell(1, 2).value = 'Wydatki [zł]:'
+    ws.cell(1, 3).value = 'Zarobki [zł]:'
+    ws.cell(1, 4).value = 'Przychody [zł]:'
+    ws.cell(1, 5).value = 'Nadwyżki [zł]:'
+
+    ws.cell(2, 1).value = 'Średnia: '
+    ws.cell(3, 1).value = 'Mediana: '
+    ws.cell(4, 1).value = 'Std: '
+
+    spendings_mms = [np.mean(spendings_list), np.median(spendings_list),
+                     np.std(spendings_list)]
+    earnings_mms = [np.mean(earnings_list), np.median(earnings_list),
+                    np.std(earnings_list)]
+    incomes_mms = [np.mean(incomes_list), np.median(incomes_list),
+                   np.std(incomes_list)]
+    surplus_mms = [np.mean(surplus_list), np.median(surplus_list),
+                   np.std(surplus_list)]
+
+    ws.cell(2, 2).value = round(spendings_mms[0], 2)
+    ws.cell(3, 2).value = round(spendings_mms[1], 2)
+    ws.cell(4, 2).value = round(spendings_mms[2], 2)
+
+    ws.cell(2, 3).value = round(earnings_mms[0], 2)
+    ws.cell(3, 3).value = round(earnings_mms[1], 2)
+    ws.cell(4, 3).value = round(earnings_mms[2], 2)
+
+    ws.cell(2, 4).value = round(incomes_mms[0], 2)
+    ws.cell(3, 4).value = round(incomes_mms[1], 2)
+    ws.cell(4, 4).value = round(incomes_mms[2], 2)
+
+    ws.cell(2, 5).value = round(surplus_mms[0], 2)
+    ws.cell(3, 5).value = round(surplus_mms[1], 2)
+    ws.cell(4, 5).value = round(surplus_mms[2], 2)
+
+    ws.column_dimensions['B'].width = 14
+    ws.column_dimensions['C'].width = 14
+    ws.column_dimensions['D'].width = 14
+    ws.column_dimensions['E'].width = 14
+    ws.column_dimensions['H'].width = 10
+    ws.column_dimensions['I'].width = 18
+
+    for r in range(2, 6):
+        ws.cell(r, 1).alignment = Alignment(horizontal='right')
+
+    for c in range(2, 6):
+        ws.cell(1, c).alignment = Alignment(horizontal='center')
+
+    thin_border = Border(left=Side(style='thin'),
+                         right=Side(style='thin'),
+                         top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+
+    for r in range(4):
+        for c in range(5):
+            ws.cell(r+1, c+1).border = thin_border
+
+    # b) second table
+    ws.merge_cells(start_row=1, start_column=8, end_row=1, end_column=9)
+    ws.cell(1, 8).value = 'Całkowita nadwyżka przychodów:'
+    ws.cell(2, 8).value = '[zł]'
+    ws.cell(2, 9).value = '[% przychodów]'
+    ws.cell(3, 8).value = sum(surplus_list)
+    ws.cell(3, 9).value = round(sum(surplus_list)/sum(incomes_list)*100, 2)
+
+    for r in range(1, 4):
+        for c in range(8, 10):
+            ws.cell(r, c).border = thin_border
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
+
+    # 2. Listing the spendings
     values = myWorkbook.spends_values_yr[cat_name]
     items = myWorkbook.spends_items_yr[cat_name]
     monthlabels = myWorkbook.spends_monthlabel_yr[cat_name]
@@ -381,7 +548,7 @@ def export_to_excel(cat_name, num_of_ws):
                            if j == month_num]
         items_dict[month_num] = _one_month_list
 
-    ws = wb_to_export.create_sheet(cat_name, num_of_ws)
+    ws = summary_wb.create_sheet(cat_name, num_of_ws)
     ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
 
     row = 0
@@ -390,8 +557,9 @@ def export_to_excel(cat_name, num_of_ws):
     for number in range(1, n_of_months+1):
         if number in monthlabels:
             row += 1
-            ws.cell(row, 1).value = mdict[month] + '  ' + str(month) \
-                                                 + '.20' + str(year)
+            ws.cell(row, 1).value = \
+                mdict[month] + ' ' + '20' + str(year) + ' - ' \
+                                   + str(sum(values_dict[number])) + 'zł'
             ws.merge_cells(start_row=row, start_column=1, end_row=row,
                            end_column=2)
             ws.cell(row, 1).alignment = Alignment(horizontal='center')
@@ -418,21 +586,67 @@ def export_to_excel(cat_name, num_of_ws):
             month -= 12
             year += 1
 
-    thin_border = Border(left=Side(style='thin'),
-                         right=Side(style='thin'),
-                         top=Side(style='thin'),
-                         bottom=Side(style='thin'))
     for r in range(row):
         ws.cell(row=r + 1, column=1).border = thin_border
         ws.cell(row=r + 1, column=2).border = thin_border
 
-    return wb_to_export
+    # 2a) Summary of the category (mean, median, std)
+    # For monthly sums
+    cat_spends_list = [sheet.cats_sums[cat_name]
+                       for sheet in myWorkbook.sheets_list]
+
+    ws.merge_cells(start_row=1, start_column=7, end_row=1,
+                   end_column=9)
+    ws.cell(1, 7).value = 'Dla sum miesięcznych:'
+    ws.cell(2, 7).value = 'Średnia [zł]:'
+    ws.cell(3, 7).value = round(np.mean(cat_spends_list), 2)
+    ws.column_dimensions['G'].width = 14
+    ws.cell(2, 8).value = 'Mediana [zł]:'
+    ws.cell(3, 8).value = round(np.median(cat_spends_list), 2)
+    ws.column_dimensions['H'].width = 14
+    ws.cell(2, 9).value = 'Std [zł]:'
+    ws.cell(3, 9).value = round(np.std(cat_spends_list), 2)
+
+    for r in range(1, 4):
+        for c in range(7, 10):
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
+
+    for r in range(1, 4):
+        for c in range(7, 10):
+            ws.cell(r, c).border = thin_border
+
+    # For individual spendings
+    all_values = [v for sublist in values_dict.values() for v in sublist]
+
+    ws.merge_cells(start_row=1, start_column=12, end_row=1,
+                   end_column=14)
+    ws.cell(1, 12).value = 'Dla wydatków indywidualnych:'
+    ws.cell(2, 12).value = 'Średnia [zł]:'
+    ws.cell(3, 12).value = round(np.mean(all_values), 2)
+    ws.column_dimensions['L'].width = 14
+    ws.cell(2, 13).value = 'Mediana [zł]:'
+    ws.cell(3, 13).value = round(np.median(all_values), 2)
+    ws.column_dimensions['M'].width = 14
+    ws.cell(2, 14).value = 'Std [zł]:'
+    ws.cell(3, 14).value = round(np.std(all_values), 2)
+
+    for r in range(1, 4):
+        for c in range(12, 15):
+            ws.cell(r, c).alignment = Alignment(horizontal='center')
+
+    for r in range(1, 4):
+        for c in range(12, 15):
+            ws.cell(r, c).border = thin_border
+
+    return summary_wb
 
 
-wb_to_export.remove_sheet(wb_to_export.active)
-wb_to_export = export_to_excel('Rzeczy i sprzęty', 0)
-wb_to_export = export_to_excel('Hobby i przyjemności', 1)
-wb_to_export = export_to_excel('Transport i noclegi', 2)
-wb_to_export = export_to_excel('Podróże', 3)
+summary_wb = export_to_excel('Rzeczy i sprzęty', 1)
+summary_wb = export_to_excel('Hobby i przyjemności', 2)
+summary_wb = export_to_excel('Transport i noclegi', 3)
+summary_wb = export_to_excel('Podróże', 4)
+summary_wb = export_to_excel('Abonamenty i usługi', 5)
+summary_wb = export_to_excel('Leki i zdrowie', 6)
+summary_wb = export_to_excel('Książki i nauka', 7)
 
-wb_to_export.save(results_dir + '/Total - zestawienie wydatków.xlsx')
+summary_wb.save(results_dir + '/Total - podsumowanie.xlsx')

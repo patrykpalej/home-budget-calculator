@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 from math import floor
 
 
 def plotPie(values, labels, plot_title):
 
     plt.style.use('default')
-    fig = plt.figure(figsize=(12, 12))
+    fig = plt.figure(figsize=(13, 13))
     plt.pie(x=values, autopct='%1.0f%%', textprops={'fontsize': 20},
             startangle=0)
 
@@ -103,5 +104,34 @@ def plotStack(values, labels, plot_title, start_label):
                x_tick_labels, rotation=15)
 
     ax.tick_params(labelsize=16)
+
+    return fig
+
+
+def plotScatter(values, plot_title):
+
+    plt.style.use('default')
+
+    fig, ax = plt.subplots(figsize=(14, 9))
+    fig = plt.scatter(values[0], values[1], marker='.', s=100,
+                      label='Wartości zarejestrowane')
+    trend = np.polyfit(values[0], values[1], 1)
+    p = np.poly1d(trend)
+    x1 = 0.95 * min(min(values[0]), min(values[1]))
+    x2 = 1.05 * max(max(values[0]), max(values[1]))
+    plt.plot([x1, x2], [p[1]*x1+p[0], p[1]*x2+p[0]], 'k--',
+             label='Linia trendu')
+
+    fig = plt.plot([x1, x2],
+                   [0.95 * min(min(values[0]), min(values[1])),
+                   1.05 * max(max(values[0]), max(values[1]))], color='red',
+                   linewidth=2, label='y=x')
+    plt.title(plot_title, fontsize=22, pad=15)
+    ax.axis('equal')
+    plt.xlabel('Przychody [zł]', fontdict={'size': 18})
+    plt.ylabel('Wydatki [zł]', fontdict={'size': 18})
+    ax.tick_params(labelsize=16)
+    plt.grid()
+    plt.legend()
 
     return fig

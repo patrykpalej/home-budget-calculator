@@ -44,3 +44,16 @@ _PartAnalysis_
 - Choosing the period to analyse implemented
 - Readme updated
 - Variables names adjusted 
+
+v.1.6
+
+_BugFix_
+- Limitting number of incomes and earnings on a piechart for a total and year scenario
+- adding food subcategories structure for part and total analysis
+
+_ResultsGeneration_
+- Scatterplot of spendings vs. incomes for the subsequent months in year and total scenarios
+- For year and total scenario summary tables added to xlsx file. The first table contains mean, median and std for spendings, earnings, incomes and surplus. The second table contains total surplus during the period
+- Lineplot of basic, additional and giftdon spendings for the whole period added to year and total scenario
+
+
