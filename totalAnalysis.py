@@ -610,32 +610,24 @@ def export_to_excel(cat_name, num_of_ws):
     for r in range(1, 4):
         for c in range(7, 10):
             ws.cell(r, c).alignment = Alignment(horizontal='center')
-
-    for r in range(1, 4):
-        for c in range(7, 10):
             ws.cell(r, c).border = thin_border
 
     # For individual spendings
     all_values = [v for sublist in values_dict.values() for v in sublist]
 
-    ws.merge_cells(start_row=1, start_column=12, end_row=1,
-                   end_column=14)
-    ws.cell(1, 12).value = 'Dla wydatków indywidualnych:'
-    ws.cell(2, 12).value = 'Średnia [zł]:'
-    ws.cell(3, 12).value = round(np.mean(all_values), 2)
-    ws.column_dimensions['L'].width = 14
-    ws.cell(2, 13).value = 'Mediana [zł]:'
-    ws.cell(3, 13).value = round(np.median(all_values), 2)
-    ws.column_dimensions['M'].width = 14
-    ws.cell(2, 14).value = 'Std [zł]:'
-    ws.cell(3, 14).value = round(np.std(all_values), 2)
+    ws.merge_cells(start_row=7, start_column=7, end_row=7,
+                   end_column=9)
+    ws.cell(7, 7).value = 'Dla wydatków indywidualnych:'
+    ws.cell(8, 7).value = 'Średnia [zł]:'
+    ws.cell(9, 7).value = round(np.mean(all_values), 2)
+    ws.cell(8, 8).value = 'Mediana [zł]:'
+    ws.cell(9, 8).value = round(np.median(all_values), 2)
+    ws.cell(8, 9).value = 'Std [zł]:'
+    ws.cell(9, 9).value = round(np.std(all_values), 2)
 
-    for r in range(1, 4):
-        for c in range(12, 15):
+    for r in range(7, 10):
+        for c in range(7, 10):
             ws.cell(r, c).alignment = Alignment(horizontal='center')
-
-    for r in range(1, 4):
-        for c in range(12, 15):
             ws.cell(r, c).border = thin_border
 
     return summary_wb
