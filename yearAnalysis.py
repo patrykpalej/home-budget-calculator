@@ -20,7 +20,7 @@ year_label = '20' + year_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
-start_label = [1, int(year_num)]
+start_label = [int(myWorksheets[0][:2]), int(year_num)]
 
 
 # 2. Preparing data from the parsed sheets for visualization
@@ -627,7 +627,8 @@ def export_to_excel(cat_name, num_of_ws):
     for m, month_num in enumerate(np.unique(monthlabels)):
         row += 1
         month_sum = str(sum(values_nested_list[m]))
-        ws.cell(row, 1).value = mdict[month_num] + '  - ' + month_sum + 'zł'
+        ws.cell(row, 1).value = mdict[month_num + start_label[0] - 1] \
+                                + '  - ' + month_sum + 'zł'
         ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=2)
         ws.cell(row, 1).alignment = Alignment(horizontal='center')
         ws.cell(row, 1).fill = PatternFill(fgColor='93e1e6', fill_type='solid')
