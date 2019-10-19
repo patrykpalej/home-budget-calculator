@@ -549,7 +549,10 @@ def export_to_excel(cat_name, num_of_ws):
         items_dict[month_num] = _one_month_list
 
     ws = summary_wb.create_sheet(cat_name, num_of_ws)
-    ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+    try:
+        ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+    except:
+        return summary_wb
 
     row = 0
     month = start_label[0]
