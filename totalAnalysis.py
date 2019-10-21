@@ -10,13 +10,16 @@ from openpyxl.styles import PatternFill
 
 # 1. Loading the file with data for total period
 file_path = os.getcwd() + '/data/total.xlsx'
-total_label = 'Total'
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
 n_of_months = len(myWorkbook.sheets_list)
 start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
+end_label = [start_label[0] + n_of_months%12 - 1,
+             start_label[1] + floor(n_of_months/12)]
 
+total_label = 'Total (' + str(start_label[0]) + '.' + str(start_label[1]) \
+               + ' - ' + str(end_label[0]) + '.' + str(end_label[1]) + ')'
 
 # 2. Preparing data from the parsed sheets for visualization
 # -- Total as a whole
@@ -254,7 +257,7 @@ plt.savefig(figure=fig, fname=fig_name)
 # d) Piechart of incomes
 values = incomes_values
 labels = incomes_labels
-title = total_label + ' - Podział przychodów na poszczególne źródła\n\n' \
+title = total_label + ' - Podział przychodów na \nposzczególne źródła\n\n' \
         'Suma przychodów: ' + str(round(myWorkbook.incomes, 2)) + 'zł\n' \
         'Nadwyżka przychodów: ' + str(round(myWorkbook.balance[0], 2)) \
         + 'zł  (' + str(round(100*myWorkbook.balance[0]
@@ -281,7 +284,7 @@ plt.savefig(figure=fig, fname=fig_name)
 values = top_plus_others_values_avg
 labels = top_plus_others_labels_avg
 title = total_label \
-        + ' - Struktura wydatków w uśrednionym miesiącu\n z podziałem na ' \
+        + ' - Struktura wydatków w uśrednionym \nmiesiącu z podziałem na ' \
         'kategorie\n\n'+'Suma wydatków: ' \
         + str(round(myWorkbook.sum_total/n_of_months, 2)) + 'zł'
 fig_name = results_dir + '/plots/plot6.png'
@@ -293,7 +296,7 @@ plt.savefig(figure=fig, fname=fig_name)
 values = metacats_values_avg
 labels = metacats_labels_avg
 title = total_label + ' - Podział wydatków na: ' \
-        + 'Podstawowe, Dodatkowe\n i Prezenty/Donacje ' \
+        + 'Podstawowe, \nDodatkowe i Prezenty/Donacje ' \
         'w uśrednionym miesiącu\n\n' \
         'Suma wydatków: ' + str(round(myWorkbook.sum_total/n_of_months, 2)) \
         + 'zł\n'
@@ -305,7 +308,7 @@ plt.savefig(figure=fig, fname=fig_name)
 # h) Piechart of incomes
 values = incomes_values_avg
 labels = incomes_labels_avg
-title = total_label + ' - Podział przychodów na poszczególne źródła\n' \
+title = total_label + ' - Podział przychodów na poszczególne \nźródła' \
         'w uśrednionym miesiącu\n\n' + 'Suma przychodów: ' \
         + str(round(myWorkbook.incomes/n_of_months, 2)) + 'zł\n' \
         + 'Nadwyżka przychodów: ' \
@@ -644,4 +647,5 @@ summary_wb = export_to_excel('Abonamenty i usługi', 5)
 summary_wb = export_to_excel('Leki i zdrowie', 6)
 summary_wb = export_to_excel('Książki i nauka', 7)
 
-summary_wb.save(results_dir + '/Total - podsumowanie.xlsx')
+summary_wb.save(results_dir + '/' + total_label + ' - podsumowanie.xlsx')
+
