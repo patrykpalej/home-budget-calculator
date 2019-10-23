@@ -18,8 +18,10 @@ start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
 end_label = [start_label[0] + n_of_months%12 - 1,
              start_label[1] + floor(n_of_months/12)]
 
-total_label = 'Total (' + str(start_label[0]) + '.' + str(start_label[1]) \
-               + ' - ' + str(end_label[0]) + '.' + str(end_label[1]) + ')'
+total_label = 'Total (' + ('0' if start_label[0] <= 9 else '') \
+              + str(start_label[0]) + '.' + str(start_label[1]) + ' - ' \
+              + ('0' if end_label[0] <= 9 else '') + str(end_label[0]) + '.' \
+              + str(end_label[1]) + ')'
 
 # 2. Preparing data from the parsed sheets for visualization
 # -- Total as a whole
