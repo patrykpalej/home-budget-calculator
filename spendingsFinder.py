@@ -13,7 +13,19 @@ spend_values = myWorkbook.spends_values_yr
 spend_items = myWorkbook.spends_items_yr
 
 # 2. Preparation of list of encoded dictionaries of spendings
-
+spends_dicts_list = list()
+trial_dict = {"cat_sums": [["Mieszk", 250], ["Podróże", 20], ["Ubrania", 150]],
+			  "date_spends": {"Styczeń 2053": [["szermierka", 12],
+											   ["spodnie", 120],
+											   ["audiobook", 40]],
+							  "Marzec 2053": [["herbaciarnia", 12],
+											  ["teatr", 34]],
+							  "Lipiec 2053": [["Wyjście na piwo", 20]],
+							  "Luty 20154": [["katowice, przejazd", 1],
+											 ["wydatki", 14]]
+							  }
+			  }
+spends_dicts_list.append(trial_dict)
 
 # 3. Creating xlsx file for the results
 output_xlsx = openpyxl.Workbook()
