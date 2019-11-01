@@ -1,4 +1,4 @@
-import pandas as pd
+import json
 import os
 from classes import *
 from openpyxl.styles import Alignment
@@ -7,8 +7,11 @@ from openpyxl.styles import PatternFill
 
 
 # 1. Importing config file and total data
-config_txt = pd.read_csv("config/spends_to_find.txt", header=None)
-config_list = list(config_txt[0])
+with open('spendings_finder/config.json') as handle:
+    config_json = json.loads(handle.read())
+
+config_list = config_json["keywords"]
+period = config_json["period"]
 
 spendings_file_path = os.getcwd() + "/data/total.xlsx"
 myWorkbook = MyWorkbook(spendings_file_path)
