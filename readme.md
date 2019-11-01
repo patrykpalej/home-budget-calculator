@@ -8,6 +8,7 @@ This is a project of a home budget calculator. Data is stored in excel worksheet
 - yearAnalysis.py 	- main script for a single year analysis scenario
 - totalAnalysis.py      - main script for the analysis of the whole period
 - partAnalysis.py       - main script for the analysis of a chosen period
+- spendingsFinder.py    - script which searches for a phrase in all spendings for a given period and presents them in tables
 - classes.py 		- contains classes such as MyWorksheet or MyWorkbook whose instances are single worksheets/workbooks
 - plotFuncs.py		- file with functions for plotting data
 
@@ -30,6 +31,8 @@ To run the total analysis enter "python totalAnalysis.py" without arguments
 To run the partial analysis enter "python partAnalysis.py mm_start yy_year mm_end yy_end"
 
 For example "python partAnalysis.py 02 18 10 19" is for the period from Feb 2018 to Oct 2018
+- - -
+To run a spendings finder enter "python spendingsFinder.py" without arguments. Edit config.json before.
  
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
