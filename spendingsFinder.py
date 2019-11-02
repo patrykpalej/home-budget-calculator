@@ -34,6 +34,12 @@ for cat in spend_items.keys():
             else:
                 good_dict["cat_sums"][cat] = spend_values[cat][i]
 
+            if spend_monthlabels[cat][i] in good_dict["date_spends"].keys():
+                good_dict["date_spends"][spend_monthlabels[cat][i]]\
+                    .append([spend_items[cat][i], spend_values[cat][i]])
+            else:
+                good_dict["date_spends"][spend_monthlabels[cat][i]] \
+                    = [[spend_items[cat][i], spend_values[cat][i]]]
 
 # -----
 trial_dict = {"cat_sums": {"Mieszkanie i przyjemności": 250, "Podróże": 20,
