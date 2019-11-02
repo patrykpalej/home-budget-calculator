@@ -21,10 +21,17 @@ spend_items = myWorkbook.spends_items_yr
 
 # 2. Preparation of list of encoded dictionaries of spendings
 spends_dicts_list = list()
+phrase = "test"
 # -----
-good_dict = {"cat_sums": [], "date_spends": []}
+good_dict = {"cat_sums": {}, "date_spends": {}}
 
-
+for cat in spend_items.keys():
+    for i, item in enumerate(spend_items[cat]):
+        if phrase.lower() in item.lower():
+            if cat in good_dict["cat_sums"].keys():
+                good_dict["cat_sums"][cat] += spend_values[cat][i]
+            else:
+                good_dict["cat_sums"][cat] = spend_values[cat][i]
 
 
 # -----
