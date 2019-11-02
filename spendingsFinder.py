@@ -62,16 +62,15 @@ thin_border = Border(left=Side(style='thin'),
 
 # a) cat_sums table
 try:
-    ws.column_dimensions["A"].width = 2 + max([len(cat[0])
-                                               for cat in
-                                               trial_dict["cat_sums"]])
+    ws.column_dimensions["A"].width = 2 + max([len(cat) for cat in
+                                               trial_dict["cat_sums"].keys()])
 except:
     pass
 
 row = 1
-for cat in trial_dict["cat_sums"]:
-    ws.cell(row, 1).value = cat[0]
-    ws.cell(row, 2).value = cat[1]
+for cat in trial_dict["cat_sums"].keys():
+    ws.cell(row, 1).value = cat
+    ws.cell(row, 2).value = trial_dict["cat_sums"][cat]
 
     ws.cell(row, 1).border = thin_border
     ws.cell(row, 2).border = thin_border
