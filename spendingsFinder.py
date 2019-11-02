@@ -17,6 +17,7 @@ spendings_file_path = os.getcwd() + "/data/total_test.xlsx"
 myWorkbook = MyWorkbook(spendings_file_path)
 spend_values = myWorkbook.spends_values_yr
 spend_items = myWorkbook.spends_items_yr
+spend_monthlabels = myWorkbook.spends_monthlabel_yr
 
 
 # 2. Preparation of list of encoded dictionaries of spendings
