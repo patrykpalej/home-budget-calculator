@@ -35,8 +35,8 @@ for cat in spend_items.keys():
 
 
 # -----
-trial_dict = {"cat_sums": [["Mieszkanie i przyjemności", 250], ["Podróże",
-                                                        20], ["Ubrania", 150]],
+trial_dict = {"cat_sums": {"Mieszkanie i przyjemności": 250, "Podróże": 20,
+                           "Ubrania": 150},
               "date_spends": {"Styczeń 2053": [["szermierka", 12],
                                                ["spodnie", 120],
                                                ["audiobook", 40]],
