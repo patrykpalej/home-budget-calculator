@@ -7,8 +7,8 @@ from openpyxl.styles import PatternFill
 
 
 # 1. Importing config file and total data
-with open('spendings_finder/config.json') as handle:
-    config_json = json.loads(handle.read())
+with open("spendings_finder/config.json", encoding='utf-8') as file:
+    config_json = json.load(file)
 
 config_list = config_json["keywords"]
 period = config_json["period"]
