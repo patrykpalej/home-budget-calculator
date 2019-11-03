@@ -154,4 +154,6 @@ results_dir = os.getcwd() + "/spendings_finder"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
 
-output_xlsx.save(results_dir + "/Przedział czasu.xlsx")
+time_range = "(" + str(start_date.month) + ".20" + str(start_date.year) \
+             + " - " + str(end_date.month) + ".20" + str(end_date.year) + ")"
+output_xlsx.save(results_dir + "/Słowa kluczowe " + time_range + ".xlsx")
