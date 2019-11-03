@@ -1,6 +1,7 @@
 import json
 import os
 import datetime
+import numpy as np
 from classes import *
 from openpyxl.styles import Alignment
 from openpyxl.styles.borders import Border, Side
@@ -35,6 +36,22 @@ myWorkbook = MyWorkbook(spendings_file_path, sheetnames_in_range)
 spend_values = myWorkbook.spends_values_yr
 spend_items = myWorkbook.spends_items_yr
 spend_monthlabels = myWorkbook.spends_monthlabel_yr
+
+month_year_label_dict = {}
+for month in range(len(sheetnames_in_range)):
+    month_int = start_date.month + month \
+                    if start_date.month + month <= 12 \
+                    else (start_date.month + month) % 12
+    month_dict = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień",
+                  5: "Maj", 6: "Czerwiec", 7: "Lipiec", 8: "Sierpień",
+                  9: "Wrzesień", 10: "Październik", 11: "Listopad",
+                  12: "Grudzień"}
+
+    year_label = " 20" + str(start_date.year
+                             + int(format((np.floor(
+                                    (start_date.month + month-1)/12)), '.0f')))
+
+    month_year_label_dict[month+1] = month_dict[month_int] + year_label
 
 
 # 2. Preparation of list of encoded dictionaries of spendings
@@ -99,7 +116,7 @@ for p, phrase in enumerate(config_list):
     for date in sorted(phrase_dict["date_spends"].keys()):
         # !!! convert number of month into {Month yyyy} format
         ws.merge_cells(None, row, 8, row, 9)
-        ws.cell(row, 8).value = date
+        ws.cell(row, 8).value = month_year_label_dict[date]
         ws.cell(row, 8).alignment = Alignment(horizontal='center')
         ws.cell(row, 8).fill = PatternFill(fgColor='93e1e6', fill_type='solid')
         ws.cell(row, 8).border = thin_border
