@@ -9,7 +9,7 @@ from openpyxl.styles import PatternFill
 
 
 # 1. Importing total data and config, choosing data in range
-spendings_file_path = os.getcwd() + "/data/total_test.xlsx"
+spendings_file_path = os.getcwd() + "/data/total.xlsx"
 
 with open("spendings_finder/config.json", encoding='utf-8') as file:
     config_json = json.load(file)
