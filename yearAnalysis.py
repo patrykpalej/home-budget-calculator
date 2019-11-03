@@ -20,7 +20,7 @@ year_label = '20' + year_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
-start_label = [1, int(year_num)]
+start_label = [int(myWorksheets[0][:2]), int(year_num)]
 
 
 # 2. Preparing data from the parsed sheets for visualization
@@ -617,13 +617,18 @@ def export_to_excel(cat_name, num_of_ws):
         items_nested_list.append(_one_month_list)
 
     ws = summary_wb.create_sheet(cat_name, num_of_ws)
-    ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+
+    try:
+        ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+    except:
+        return summary_wb
 
     row = 0
     for m, month_num in enumerate(np.unique(monthlabels)):
         row += 1
         month_sum = str(sum(values_nested_list[m]))
-        ws.cell(row, 1).value = mdict[month_num] + '  - ' + month_sum + 'zł'
+        ws.cell(row, 1).value = mdict[month_num + start_label[0] - 1] \
+                                + '  - ' + month_sum + 'zł'
         ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=2)
         ws.cell(row, 1).alignment = Alignment(horizontal='center')
         ws.cell(row, 1).fill = PatternFill(fgColor='93e1e6', fill_type='solid')
@@ -645,8 +650,8 @@ def export_to_excel(cat_name, num_of_ws):
         ws.cell(row=r+1, column=1).border = thin_border
         ws.cell(row=r+1, column=2).border = thin_border
 
-        # 2a) Summary of the category (mean, median, std)
-        # For monthly sums
+    # 2a) Summary of the category (mean, median, std)
+    # For monthly sums
     cat_spends_list = [sheet.cats_sums[cat_name]
                        for sheet in myWorkbook.sheets_list]
 
@@ -665,32 +670,24 @@ def export_to_excel(cat_name, num_of_ws):
     for r in range(1, 4):
         for c in range(7, 10):
             ws.cell(r, c).alignment = Alignment(horizontal='center')
-
-    for r in range(1, 4):
-        for c in range(7, 10):
             ws.cell(r, c).border = thin_border
 
     # For individual spendings
     all_values = [v for sublist in values_nested_list for v in sublist]
 
-    ws.merge_cells(start_row=1, start_column=12, end_row=1,
-                   end_column=14)
-    ws.cell(1, 12).value = 'Dla wydatków indywidualnych:'
-    ws.cell(2, 12).value = 'Średnia [zł]:'
-    ws.cell(3, 12).value = round(np.mean(all_values), 2)
-    ws.column_dimensions['L'].width = 14
-    ws.cell(2, 13).value = 'Mediana [zł]:'
-    ws.cell(3, 13).value = round(np.median(all_values), 2)
-    ws.column_dimensions['M'].width = 14
-    ws.cell(2, 14).value = 'Std [zł]:'
-    ws.cell(3, 14).value = round(np.std(all_values), 2)
+    ws.merge_cells(start_row=7, start_column=7, end_row=7,
+                   end_column=9)
+    ws.cell(7, 7).value = 'Dla wydatków indywidualnych:'
+    ws.cell(8, 7).value = 'Średnia [zł]:'
+    ws.cell(9, 7).value = round(np.mean(all_values), 2)
+    ws.cell(8, 8).value = 'Mediana [zł]:'
+    ws.cell(9, 8).value = round(np.median(all_values), 2)
+    ws.cell(8, 9).value = 'Std [zł]:'
+    ws.cell(9, 9).value = round(np.std(all_values), 2)
 
-    for r in range(1, 4):
-        for c in range(12, 15):
+    for r in range(7, 10):
+        for c in range(7, 10):
             ws.cell(r, c).alignment = Alignment(horizontal='center')
-
-    for r in range(1, 4):
-        for c in range(12, 15):
             ws.cell(r, c).border = thin_border
 
     return summary_wb

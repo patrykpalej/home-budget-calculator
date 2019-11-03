@@ -10,13 +10,18 @@ from openpyxl.styles import PatternFill
 
 # 1. Loading the file with data for total period
 file_path = os.getcwd() + '/data/total.xlsx'
-total_label = 'Total'
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
 n_of_months = len(myWorkbook.sheets_list)
 start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
+end_label = [start_label[0] + n_of_months%12 - 1,
+             start_label[1] + floor(n_of_months/12)]
 
+total_label = 'Total (' + ('0' if start_label[0] <= 9 else '') \
+              + str(start_label[0]) + '.' + str(start_label[1]) + ' - ' \
+              + ('0' if end_label[0] <= 9 else '') + str(end_label[0]) + '.' \
+              + str(end_label[1]) + ')'
 
 # 2. Preparing data from the parsed sheets for visualization
 # -- Total as a whole
@@ -254,7 +259,7 @@ plt.savefig(figure=fig, fname=fig_name)
 # d) Piechart of incomes
 values = incomes_values
 labels = incomes_labels
-title = total_label + ' - Podział przychodów na poszczególne źródła\n\n' \
+title = total_label + ' - Podział przychodów na \nposzczególne źródła\n\n' \
         'Suma przychodów: ' + str(round(myWorkbook.incomes, 2)) + 'zł\n' \
         'Nadwyżka przychodów: ' + str(round(myWorkbook.balance[0], 2)) \
         + 'zł  (' + str(round(100*myWorkbook.balance[0]
@@ -281,7 +286,7 @@ plt.savefig(figure=fig, fname=fig_name)
 values = top_plus_others_values_avg
 labels = top_plus_others_labels_avg
 title = total_label \
-        + ' - Struktura wydatków w uśrednionym miesiącu\n z podziałem na ' \
+        + ' - Struktura wydatków w uśrednionym \nmiesiącu z podziałem na ' \
         'kategorie\n\n'+'Suma wydatków: ' \
         + str(round(myWorkbook.sum_total/n_of_months, 2)) + 'zł'
 fig_name = results_dir + '/plots/plot6.png'
@@ -293,7 +298,7 @@ plt.savefig(figure=fig, fname=fig_name)
 values = metacats_values_avg
 labels = metacats_labels_avg
 title = total_label + ' - Podział wydatków na: ' \
-        + 'Podstawowe, Dodatkowe\n i Prezenty/Donacje ' \
+        + 'Podstawowe, \nDodatkowe i Prezenty/Donacje ' \
         'w uśrednionym miesiącu\n\n' \
         'Suma wydatków: ' + str(round(myWorkbook.sum_total/n_of_months, 2)) \
         + 'zł\n'
@@ -305,7 +310,7 @@ plt.savefig(figure=fig, fname=fig_name)
 # h) Piechart of incomes
 values = incomes_values_avg
 labels = incomes_labels_avg
-title = total_label + ' - Podział przychodów na poszczególne źródła\n' \
+title = total_label + ' - Podział przychodów na poszczególne \nźródła' \
         'w uśrednionym miesiącu\n\n' + 'Suma przychodów: ' \
         + str(round(myWorkbook.incomes/n_of_months, 2)) + 'zł\n' \
         + 'Nadwyżka przychodów: ' \
@@ -549,7 +554,10 @@ def export_to_excel(cat_name, num_of_ws):
         items_dict[month_num] = _one_month_list
 
     ws = summary_wb.create_sheet(cat_name, num_of_ws)
-    ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+    try:
+        ws.column_dimensions['A'].width = max([len(i) for i in items]) + 2
+    except:
+        return summary_wb
 
     row = 0
     month = start_label[0]
@@ -610,32 +618,24 @@ def export_to_excel(cat_name, num_of_ws):
     for r in range(1, 4):
         for c in range(7, 10):
             ws.cell(r, c).alignment = Alignment(horizontal='center')
-
-    for r in range(1, 4):
-        for c in range(7, 10):
             ws.cell(r, c).border = thin_border
 
     # For individual spendings
     all_values = [v for sublist in values_dict.values() for v in sublist]
 
-    ws.merge_cells(start_row=1, start_column=12, end_row=1,
-                   end_column=14)
-    ws.cell(1, 12).value = 'Dla wydatków indywidualnych:'
-    ws.cell(2, 12).value = 'Średnia [zł]:'
-    ws.cell(3, 12).value = round(np.mean(all_values), 2)
-    ws.column_dimensions['L'].width = 14
-    ws.cell(2, 13).value = 'Mediana [zł]:'
-    ws.cell(3, 13).value = round(np.median(all_values), 2)
-    ws.column_dimensions['M'].width = 14
-    ws.cell(2, 14).value = 'Std [zł]:'
-    ws.cell(3, 14).value = round(np.std(all_values), 2)
+    ws.merge_cells(start_row=7, start_column=7, end_row=7,
+                   end_column=9)
+    ws.cell(7, 7).value = 'Dla wydatków indywidualnych:'
+    ws.cell(8, 7).value = 'Średnia [zł]:'
+    ws.cell(9, 7).value = round(np.mean(all_values), 2)
+    ws.cell(8, 8).value = 'Mediana [zł]:'
+    ws.cell(9, 8).value = round(np.median(all_values), 2)
+    ws.cell(8, 9).value = 'Std [zł]:'
+    ws.cell(9, 9).value = round(np.std(all_values), 2)
 
-    for r in range(1, 4):
-        for c in range(12, 15):
+    for r in range(7, 10):
+        for c in range(7, 10):
             ws.cell(r, c).alignment = Alignment(horizontal='center')
-
-    for r in range(1, 4):
-        for c in range(12, 15):
             ws.cell(r, c).border = thin_border
 
     return summary_wb
@@ -649,4 +649,5 @@ summary_wb = export_to_excel('Abonamenty i usługi', 5)
 summary_wb = export_to_excel('Leki i zdrowie', 6)
 summary_wb = export_to_excel('Książki i nauka', 7)
 
-summary_wb.save(results_dir + '/Total - podsumowanie.xlsx')
+summary_wb.save(results_dir + '/' + total_label + ' - podsumowanie.xlsx')
+

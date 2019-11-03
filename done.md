@@ -56,4 +56,10 @@ _ResultsGeneration_
 - For year and total scenario summary tables added to xlsx file. The first table contains mean, median and std for spendings, earnings, incomes and surplus. The second table contains total surplus during the period
 - Lineplot of basic, additional and giftdon spendings for the whole period added to year and total scenario
 
+v.1.7
 
+_BugFix_
+- Dates range added to total output xlsx
+
+_SpendingsFinder_
+- for the set of given phrases script generates a report of when spendings with that phrase occured and what was the category

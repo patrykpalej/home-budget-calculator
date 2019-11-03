@@ -14,7 +14,7 @@ year_num = sys.argv[2]
 
 # 1. Loading the file with data for one month
 file_path = os.getcwd()+'/data/monthly/20'+year_num+'.'+month_num+'.xlsx'
-month_label = month_num + '.20' + year_num
+month_label = '20' + year_num + '.' + month_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheet = myWorkbook.sheets_list[0]
@@ -250,5 +250,5 @@ for i in range(8):
     pic_path = results_dir + '/plots/plot' + str(i+1) + '.png'
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
-prs.save(results_dir+'/20' + year_num + '.' + month_num
+prs.save(results_dir + '/' + month_num + '.20' + year_num
          + ' - raport finansowy.pptx')
