@@ -1,20 +1,37 @@
 import json
 import os
+import datetime
 from classes import *
 from openpyxl.styles import Alignment
 from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import PatternFill
 
 
-# 1. Importing config file and total data
+# 1. Importing total data and config, choosing data in range
+spendings_file_path = os.getcwd() + "/data/total_test.xlsx"
+
 with open("spendings_finder/config.json", encoding='utf-8') as file:
     config_json = json.load(file)
 
 config_list = config_json["keywords"]
 period = config_json["period"]
 
-spendings_file_path = os.getcwd() + "/data/total_test.xlsx"
-myWorkbook = MyWorkbook(spendings_file_path)
+start_date = datetime.date(year=int(config_json["period"][1]),
+                           month=int(config_json["period"][0]), day=1)
+
+end_date = datetime.date(year=int(config_json["period"][3]),
+                         month=int(config_json["period"][2]), day=1)
+
+all_sheetnames = MyWorkbook(spendings_file_path).mywb.sheetnames
+sheetnames_in_range = []
+
+for date_label in all_sheetnames:
+    current_date = datetime.date(int(date_label[-2:]), int(date_label[:2]), 1)
+    if (current_date >= start_date) and (current_date <= end_date):
+        sheetnames_in_range.append(date_label)
+
+myWorkbook = MyWorkbook(spendings_file_path, sheetnames_in_range)
+
 spend_values = myWorkbook.spends_values_yr
 spend_items = myWorkbook.spends_items_yr
 spend_monthlabels = myWorkbook.spends_monthlabel_yr
@@ -81,7 +98,6 @@ for p, phrase in enumerate(config_list):
     row = 1
     for date in sorted(phrase_dict["date_spends"].keys()):
         # !!! convert number of month into {Month yyyy} format
-
         ws.merge_cells(None, row, 8, row, 9)
         ws.cell(row, 8).value = date
         ws.cell(row, 8).alignment = Alignment(horizontal='center')
