@@ -13,7 +13,11 @@ year_num = sys.argv[2]
 #year_num = '99'  # hardcoded if no arguments
 
 # 1. Loading the file with data for one month
-file_path = os.getcwd()+'/data/monthly/20'+year_num+'.'+month_num+'.xlsx'
+folder_path_file = open("path.txt", "r")
+folder_path = folder_path_file.read()
+folder_path_file.close()
+
+file_path = folder_path + "/monthly/20" + year_num + "." + month_num + ".xlsx"
 month_label = '20' + year_num + '.' + month_num
 
 myWorkbook = MyWorkbook(file_path)
