@@ -133,7 +133,8 @@ subcats_labels_2 = [list(subcats_dict.keys())[i]+' - '
                     for i in range(len(list(subcats_dict.keys())))]
 
 # 3. Visualization and saving the plots
-results_dir = os.getcwd() + '/results/' + month_label + ' - wyniki'
+results_dir = folder_path + "/!Raporty/month_results/" + month_label \
+              + " - wyniki"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
     os.mkdir(results_dir + '/plots/')
