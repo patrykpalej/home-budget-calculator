@@ -9,8 +9,8 @@ from pptx.util import Inches
 
 month_num = sys.argv[1]
 year_num = sys.argv[2]
-#month_num = '01'  # hardcoded if no arguments
-#year_num = '99'  # hardcoded if no arguments
+#month_num = "01"  # hardcoded if no arguments
+#year_num = "99"  # hardcoded if no arguments
 
 # 1. Loading the file with data for one month
 folder_path_file = open("path.txt", "r")
@@ -18,7 +18,7 @@ folder_path = folder_path_file.read()
 folder_path_file.close()
 
 file_path = folder_path + "/monthly/20" + year_num + "." + month_num + ".xlsx"
-month_label = '20' + year_num + '.' + month_num
+month_label = "20" + year_num + "." + month_num
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheet = myWorkbook.sheets_list[0]
@@ -42,36 +42,36 @@ top_values = [myWorksheet.cats_sums_list[i] for i in _top_indices]
 others_values = [myWorksheet.cats_sums_list[i] for i in _low_indices]
 
 top_plus_others_values = top_values + [sum(others_values)]
-top_plus_others_labels = top_labels + ['Pozostałe']
-top_plus_others_labels = [top_plus_others_labels[i] + ' - '
-                          + str(round(top_plus_others_values[i], 2)) + ' zł'
+top_plus_others_labels = top_labels + ["Pozostałe"]
+top_plus_others_labels = [top_plus_others_labels[i] + " - "
+                          + str(round(top_plus_others_values[i], 2)) + " zł"
                           for i in range(len(top_plus_others_values))]
 
 # c) Piechart of the metacategories
 metacats_values = [myWorksheet.sum_basic, myWorksheet.sum_addit,
                    myWorksheet.sum_giftdon]
-metacats_labels = ['Podstawowe - ' + str(round(myWorksheet.sum_basic, 2)) + 'zł',
-                   'Dodatkowe - ' + str(round(myWorksheet.sum_addit, 2)) + 'zł',
-                   'Prezenty i donacje - '
-                   + str(round(myWorksheet.sum_giftdon, 2)) + 'zł']
+metacats_labels = ["Podstawowe - " + str(round(myWorksheet.sum_basic, 2)) + "zł",
+                   "Dodatkowe - " + str(round(myWorksheet.sum_addit, 2)) + "zł",
+                   "Prezenty i donacje - "
+                   + str(round(myWorksheet.sum_giftdon, 2)) + "zł"]
 
 # d) Piechart of incomes
 _values_list = list(myWorksheet.incomes_dict.values())
 _labels_list = list(myWorksheet.incomes_dict.keys())
 incomes_values = [inc for inc in _values_list if inc > 0]
-incomes_labels = [inc + ' - ' + str(_values_list[i])+'zł' for i, inc in
+incomes_labels = [inc + " - " + str(_values_list[i])+"zł" for i, inc in
                   enumerate(_labels_list) if _values_list[i] > 0]
 
 # e) Piechart of earnings
 _values_list = list(myWorksheet.earnings_dict.values())
 _labels_list = list(myWorksheet.earnings_dict.keys())
 earnings_values = [ear for ear in _values_list if ear > 0]
-earnings_labels = [ear + ' - ' + str(_values_list[i])+'zł' for i, ear in
+earnings_labels = [ear + " - " + str(_values_list[i])+"zł" for i, ear in
                    enumerate(_labels_list) if _values_list[i] > 0]
 
 # f) Piechart of food subcategories
-amounts = myWorksheet.spends_values['Jedzenie']
-subcats = myWorksheet.spends_items['Jedzenie']
+amounts = myWorksheet.spends_values["Jedzenie"]
+subcats = myWorksheet.spends_items["Jedzenie"]
 subcats_dict = {}
 
 for i, subcat in enumerate(subcats):
@@ -81,8 +81,8 @@ for i, subcat in enumerate(subcats):
         subcats_dict[subcat] = amounts[i]
 
 subcats_values = list(subcats_dict.values())
-subcats_labels = [list(subcats_dict.keys())[i] + ' - '
-                  + str(round(list(subcats_dict.values())[i], 2)) + 'zł'
+subcats_labels = [list(subcats_dict.keys())[i] + " - "
+                  + str(round(list(subcats_dict.values())[i], 2)) + "zł"
                   for i, sc in enumerate(list(subcats_dict.keys()))]
 
 _subcats_fractions = [sc/sum(subcats_values) for sc in subcats_values]
@@ -98,11 +98,11 @@ for i, sc_f in enumerate(_subcats_fractions):
 
 if others_sum > 0:
     subcats_values_with_others.append(others_sum)
-    subcats_labels_with_others.append('inne - '+str(others_sum)+'zł')
+    subcats_labels_with_others.append("inne - "+str(others_sum)+"zł")
 
-# g) Piechart of 'Hobby i przyjemności' items
-amounts = myWorksheet.spends_values['Hobby i przyjemności']
-subcats = myWorksheet.spends_items['Hobby i przyjemności']
+# g) Piechart of "Hobby i przyjemności" items
+amounts = myWorksheet.spends_values["Hobby i przyjemności"]
+subcats = myWorksheet.spends_items["Hobby i przyjemności"]
 subcats_dict = {}
 
 for i, subcat in enumerate(subcats):
@@ -112,13 +112,13 @@ for i, subcat in enumerate(subcats):
         subcats_dict[subcat] = amounts[i]
 
 subcats_values_1 = list(subcats_dict.values())
-subcats_labels_1 = [list(subcats_dict.keys())[i] + ' - '
-                    + str(round(list(subcats_dict.values())[i], 2)) + 'zł'
+subcats_labels_1 = [list(subcats_dict.keys())[i] + " - "
+                    + str(round(list(subcats_dict.values())[i], 2)) + "zł"
                     for i in range(len(list(subcats_dict.keys())))]
 
-# h) Piechart of 'Rzeczy i sprzęty' items
-amounts = myWorksheet.spends_values['Rzeczy i sprzęty']
-subcats = myWorksheet.spends_items['Rzeczy i sprzęty']
+# h) Piechart of "Rzeczy i sprzęty" items
+amounts = myWorksheet.spends_values["Rzeczy i sprzęty"]
+subcats = myWorksheet.spends_items["Rzeczy i sprzęty"]
 subcats_dict = {}
 
 for i, subcat in enumerate(subcats):
@@ -128,8 +128,8 @@ for i, subcat in enumerate(subcats):
         subcats_dict[subcat] = amounts[i]
 
 subcats_values_2 = list(subcats_dict.values())
-subcats_labels_2 = [list(subcats_dict.keys())[i]+' - '
-                    + str(round(list(subcats_dict.values())[i], 2)) + 'zł'
+subcats_labels_2 = [list(subcats_dict.keys())[i]+" - "
+                    + str(round(list(subcats_dict.values())[i], 2)) + "zł"
                     for i in range(len(list(subcats_dict.keys())))]
 
 # 3. Visualization and saving the plots
@@ -137,13 +137,13 @@ results_dir = folder_path + "/!Raporty/monthly_reports/" + month_label \
               + " - wyniki"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
-    os.mkdir(results_dir + '/plots/')
+    os.mkdir(results_dir + "/plots/")
 
 # a) Barplot for all categories
 values = values_desc
 labels = labels_desc
-title = month_label + ' - Kwoty wydawane miesięcznie \n na kolejne kategorie\n'
-fig_name = results_dir + '/plots/plot1.png'
+title = month_label + " - Kwoty wydawane miesięcznie \n na kolejne kategorie\n"
+fig_name = results_dir + "/plots/plot1.png"
 
 fig = plotBar(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -152,9 +152,9 @@ plt.savefig(figure=fig, fname=fig_name)
 values = top_plus_others_values
 labels = top_plus_others_labels
 title = month_label + \
-        ' - Struktura miesięcznych wydatków\n z podziałem na kategorie\n\n' \
-        + 'Suma wydatków: ' + str(round(myWorksheet.sum_total, 2)) + 'zł\n'
-fig_name = results_dir + '/plots/plot2.png'
+        " - Struktura miesięcznych wydatków\n z podziałem na kategorie\n\n" \
+        + "Suma wydatków: " + str(round(myWorksheet.sum_total, 2)) + "zł\n"
+fig_name = results_dir + "/plots/plot2.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -162,10 +162,10 @@ plt.savefig(figure=fig, fname=fig_name)
 # c) Piechart of the metacategories
 values = metacats_values
 labels = metacats_labels
-title = month_label + ' - Podział wydatków na: \n' \
-        + 'Podstawowe, Dodatkowe i Prezenty/Donacje\n\n' + 'Suma wydatków: ' \
-        + str(round(myWorksheet.sum_total, 2)) + 'zł\n'
-fig_name = results_dir + '/plots/plot3.png'
+title = month_label + " - Podział wydatków na: \n" \
+        + "Podstawowe, Dodatkowe i Prezenty/Donacje\n\n" + "Suma wydatków: " \
+        + str(round(myWorksheet.sum_total, 2)) + "zł\n"
+fig_name = results_dir + "/plots/plot3.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -173,12 +173,12 @@ plt.savefig(figure=fig, fname=fig_name)
 # d) Piechart of incomes
 values = incomes_values
 labels = incomes_labels
-title = month_label + ' - Podział przychodów na poszczególne źródła\n\n' \
-        + 'Suma przychodów: ' + str(myWorksheet.incomes) + 'zł\n' \
-        + 'Nadwyżka przychodów: ' + str(round(myWorksheet.balance[0], 2)) \
-        + 'zł (' + str(round(100*myWorksheet.balance[0] /
-        myWorksheet.incomes, 2)) + '%)\n'
-fig_name = results_dir + '/plots/plot4.png'
+title = month_label + " - Podział przychodów na poszczególne źródła\n\n" \
+        + "Suma przychodów: " + str(myWorksheet.incomes) + "zł\n" \
+        + "Nadwyżka przychodów: " + str(round(myWorksheet.balance[0], 2)) \
+        + "zł (" + str(round(100*myWorksheet.balance[0] /
+        myWorksheet.incomes, 2)) + "%)\n"
+fig_name = results_dir + "/plots/plot4.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -186,12 +186,12 @@ plt.savefig(figure=fig, fname=fig_name)
 # e) Piechart of earnings
 values = earnings_values
 labels = earnings_labels
-title = month_label + ' - Podział zarobków na poszczególne źródła\n\n' \
-        + 'Suma zarobków: ' + str(myWorksheet.earnings) + 'zł\n' \
-        + 'Nadwyżka zarobków: ' + str(round(myWorksheet.balance[1], 2)) \
-        + 'zł (' + str(round(100*myWorksheet.balance[1] /
-        myWorksheet.earnings, 2)) + '%)\n'
-fig_name = results_dir + '/plots/plot5.png'
+title = month_label + " - Podział zarobków na poszczególne źródła\n\n" \
+        + "Suma zarobków: " + str(myWorksheet.earnings) + "zł\n" \
+        + "Nadwyżka zarobków: " + str(round(myWorksheet.balance[1], 2)) \
+        + "zł (" + str(round(100*myWorksheet.balance[1] /
+        myWorksheet.earnings, 2)) + "%)\n"
+fig_name = results_dir + "/plots/plot5.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
@@ -199,36 +199,36 @@ plt.savefig(figure=fig, fname=fig_name)
 # f) Piechart of food subcategories
 values = subcats_values_with_others
 labels = subcats_labels_with_others
-title = month_label + ' - Podział wydatków spożywczych\n\nCałkowita kwota: ' \
-        + str(myWorksheet.cats_sums['Jedzenie']) + ' zł\n'
-fig_name = results_dir + '/plots/plot6.png'
+title = month_label + " - Podział wydatków spożywczych\n\nCałkowita kwota: " \
+        + str(myWorksheet.cats_sums["Jedzenie"]) + " zł\n"
+fig_name = results_dir + "/plots/plot6.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# g) Piechart of 'Hobby i przyjemności' items
+# g) Piechart of "Hobby i przyjemności" items
 values = subcats_values_1
 labels = subcats_labels_1
-title = month_label + ' - Podział wydatków kategorii\n Hobby i przyjemności\n\n'\
-        + 'Całkowita kwota: ' \
-        + str(myWorksheet.cats_sums['Hobby i przyjemności']) + ' zł\n'
-fig_name = results_dir + '/plots/plot7.png'
+title = month_label + " - Podział wydatków kategorii\n Hobby i przyjemności\n\n"\
+        + "Całkowita kwota: " \
+        + str(myWorksheet.cats_sums["Hobby i przyjemności"]) + " zł\n"
+fig_name = results_dir + "/plots/plot7.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-# h) Piechart of 'Rzeczy i sprzęty' items
+# h) Piechart of "Rzeczy i sprzęty" items
 values = subcats_values_2
 labels = subcats_labels_2
-title = month_label + ' - Podział wydatków kategorii\n Rzeczy i sprzęty\n\n'\
-        'Całkowita kwota: ' \
-        + str(myWorksheet.cats_sums['Rzeczy i sprzęty']) + ' zł\n'
-fig_name = results_dir + '/plots/plot8.png'
+title = month_label + " - Podział wydatków kategorii\n Rzeczy i sprzęty\n\n"\
+        "Całkowita kwota: " \
+        + str(myWorksheet.cats_sums["Rzeczy i sprzęty"]) + " zł\n"
+fig_name = results_dir + "/plots/plot8.png"
 
 fig = plotPie(values, labels, title)
 plt.savefig(figure=fig, fname=fig_name)
 
-plt.close('all')
+plt.close("all")
 
 # 4. Pptx presentation
 prs = Presentation()
@@ -239,12 +239,12 @@ slides = list()
 slides.append(prs.slides.add_slide(title_slide_layout))
 title = slides[-1].shapes.title
 subtitle = slides[-1].placeholders[1]
-month_dict = {'01': 'Styczeń', '02': 'Luty', '03': 'Marzec',
-              '04': 'Kwiecień', '05': 'Maj', '06': 'Czerwiec',
-              '07': 'Lipiec', '08': 'Sierpień', '09': 'Wrzesień',
-              '10': 'Październik', '11': 'Listopad', '12': 'Grudzień'}
-title.text = month_dict[month_num]+' 20' + year_num + ' - raport finansowy'
-subtitle.text = month_num+'.20'+year_num
+month_dict = {"01": "Styczeń", "02": "Luty", "03": "Marzec",
+              "04": "Kwiecień", "05": "Maj", "06": "Czerwiec",
+              "07": "Lipiec", "08": "Sierpień", "09": "Wrzesień",
+              "10": "Październik", "11": "Listopad", "12": "Grudzień"}
+title.text = month_dict[month_num]+" 20" + year_num + " - raport finansowy"
+subtitle.text = month_num+".20"+year_num
 
 for i in range(8):
     slides.append(prs.slides.add_slide(blank_slide_layout))
@@ -252,8 +252,8 @@ for i in range(8):
     top = Inches(0.0)
     height = width = Inches(7.5)
 
-    pic_path = results_dir + '/plots/plot' + str(i+1) + '.png'
+    pic_path = results_dir + "/plots/plot" + str(i+1) + ".png"
     slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
-prs.save(results_dir + '/' + month_num + '.20' + year_num
-         + ' - raport finansowy.pptx')
+prs.save(results_dir + "/" + month_num + ".20" + year_num
+         + " - raport finansowy.pptx")
