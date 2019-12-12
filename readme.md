@@ -23,14 +23,14 @@ This is a project of a home budget calculator. Data is stored in excel worksheet
 
 ### 2. How to run
 
-#### 2.1. Month 
+#### 2.1. Month analysis
 
 To run the month analysis enter "python monthAnalysis.py mm yy" to the console where mm and yy stand for month and year respectively. 
 
 For example "python monthAnalysis.py 04 18" is for April 2018. 
 
 There is sample data attached to the code for Jan, Feb and Mar 2099 in data/monthly directory.
-#### 2.2. Year 
+#### 2.2. Year  analysis
 
 To run the year analysis enter "python yearAnalysis.py yy" 
 
@@ -38,13 +38,13 @@ For example "python yearAnalysis 19" is for 2019.
 
 There is sample data attached to the code for 2099 in data/yearly directory.
 
-#### 2.3. Total  
+#### 2.3. Total  analysis 
 
 To run the total analysis enter "python totalAnalysis.py" without any arguments.
 
 There is sample data attached to the code in data/ directory.
 
-#### 2.4 Part
+#### 2.4 Partial analysis
 
 To run the partial analysis enter "python partAnalysis.py mm_start yy_year mm_end yy_end"
 
