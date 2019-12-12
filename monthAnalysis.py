@@ -1,5 +1,5 @@
 from classes import *
-from plotFuncs import *
+from functions.plotFuncs import *
 import os
 import sys
 import numpy as np
