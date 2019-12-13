@@ -2,8 +2,10 @@ import os
 import sys
 
 from classes import MyWorkbook
-from functions.partFuncs import create_all_plots, create_pptx_presentation, \
-    create_xlsx_report
+from functions.part_funcs.create_all_plots import create_all_plots
+from functions.part_funcs.create_pptx_presentation \
+    import create_pptx_presentation
+from functions.part_funcs.create_xlsx_report import create_xlsx_report
 
 
 start_month = int(sys.argv[1])
