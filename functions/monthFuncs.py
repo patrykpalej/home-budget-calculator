@@ -1,7 +1,9 @@
-from functions.plotFuncs import *
 import numpy as np
-from pptx import Presentation
 from pptx.util import Inches
+from pptx import Presentation
+import matplotlib.pyplot as plt
+
+from functions.plotFuncs import plotPie, plotBar
 
 
 def create_all_plots(myWorksheet, month_label, results_dir):

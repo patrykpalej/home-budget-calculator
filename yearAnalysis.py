@@ -1,8 +1,9 @@
+import os
+import sys
+
 from classes import MyWorkbook
 from functions.yearFuncs import create_all_plots, create_pptx_presentation, \
     create_xlsx_report
-import os
-import sys
 
 
 year_num = sys.argv[1]

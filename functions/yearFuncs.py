@@ -1,15 +1,15 @@
+import openpyxl
+import numpy as np
+from pptx.util import Inches
+from pptx import Presentation
+import matplotlib.pyplot as plt
+from openpyxl.styles import Border
+from openpyxl.styles import Alignment
+from openpyxl.styles import PatternFill
+from openpyxl.styles.borders import Side
+
 from functions.plotFuncs import plotPie, plotBar, plotLine, plotStack, \
     plotScatter
-
-import matplotlib.pyplot as plt
-import numpy as np
-from pptx import Presentation
-from pptx.util import Inches
-from openpyxl.styles import Alignment
-from openpyxl.styles.borders import Side
-from openpyxl.styles import Border
-from openpyxl.styles import PatternFill
-import openpyxl
 
 
 def create_all_plots(myWorkbook, myWorksheets, year_label, results_dir,

@@ -1,7 +1,7 @@
 import os
 import sys
-from classes import *
 
+from classes import MyWorkbook
 from functions.partFuncs import create_all_plots, create_pptx_presentation, \
     create_xlsx_report
 

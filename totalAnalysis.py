@@ -1,8 +1,7 @@
 import os
-from classes import *
-from functions.plotFuncs import *
+import math
 
-
+from classes import MyWorkbook
 from functions.totalFuncs import create_all_plots, create_pptx_presentation, \
     create_xlsx_report
 
@@ -15,7 +14,7 @@ myWorksheets = myWorkbook.mywb.sheetnames
 n_of_months = len(myWorkbook.sheets_list)
 start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
 end_label = [start_label[0] + n_of_months%12 - 1,
-             start_label[1] + floor(n_of_months/12)]
+             start_label[1] + math.floor(n_of_months/12)]
 
 total_label = "Total (" + ("0" if start_label[0] <= 9 else "") \
               + str(start_label[0]) + "." + str(start_label[1]) + " - " \
