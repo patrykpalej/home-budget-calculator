@@ -2,7 +2,9 @@ import os
 import sys
 
 from classes import MyWorkbook
-from functions.monthFuncs import create_all_plots, create_pptx_presentation
+from functions.month_funcs.create_all_plots import create_all_plots
+from functions.month_funcs.create_pptx_presentation \
+    import create_pptx_presentation
 
 
 month_num = sys.argv[1]
