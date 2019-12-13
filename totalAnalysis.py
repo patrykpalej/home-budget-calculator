@@ -2,8 +2,10 @@ import os
 import math
 
 from classes import MyWorkbook
-from functions.totalFuncs import create_all_plots, create_pptx_presentation, \
-    create_xlsx_report
+from functions.total_funcs.create_all_plots import create_all_plots
+from functions.total_funcs.create_pptx_presentation \
+    import create_pptx_presentation
+from functions.total_funcs.create_xlsx_report import create_xlsx_report
 
 
 # Preparing the analysis
