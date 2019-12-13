@@ -12,7 +12,6 @@ end_month = int(sys.argv[3])
 end_year = int(sys.argv[4])
 
 # Preparing the analysis
-
 if (start_year > end_year) or \
    (start_year == end_year and start_month > end_month):
     print("Podany zakres dat jest błędny")
@@ -33,7 +32,11 @@ else:
             month -= 12
             year += 1
 
-file_path = os.getcwd() + "/data/total.xlsx"
+folder_path_file = open("path.txt", "r")
+folder_path = folder_path_file.read()
+folder_path_file.close()
+
+file_path = folder_path + "/total/total.xlsx"
 part_label = str(start_month) + ".20" + str(start_year) + "-" \
              + str(end_month) + ".20" + str(end_year)
 
@@ -41,7 +44,8 @@ myWorkbook = MyWorkbook(file_path, list_of_sheetnames)
 
 start_label = [int(list_of_sheetnames[0][:2]), int(list_of_sheetnames[0][-2:])]
 
-results_dir = os.getcwd() + "/results/" + part_label + " - wyniki"
+results_dir = folder_path + "/!Raporty/total_partial/" + part_label \
+              + " - wyniki/"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
     os.mkdir(results_dir + "/plots")
