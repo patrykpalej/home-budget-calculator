@@ -16,7 +16,7 @@ folder_path_file.close()
 
 spendings_file_path = folder_path + "/total data/total.xlsx"
 
-with open("spendings_finder/config.json", encoding='utf-8') as file:
+with open("keywords.json", encoding='utf-8') as file:
     config_json = json.load(file)
 
 config_list = config_json["keywords"]
