@@ -6,6 +6,7 @@ from functions.plotFuncs import plotPie, plotBar
 
 def create_all_plots(my_worksheet, month_label, results_dir):
     # a) Barplot for all categories
+    # region
     index_order = np.flip(np.argsort(my_worksheet.cats_sums_list), axis=0)
     values_desc = [my_worksheet.cats_sums_list[i] for i in index_order
                    if my_worksheet.cats_sums_list[i] > 0]
@@ -20,8 +21,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotBar(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # b) Piechart of spendings for the main categories
+    # region
     index_order = np.flip(np.argsort(my_worksheet.cats_sums_list), axis=0)
     _top_indices = index_order[0:5]
     _low_indices = index_order[5:len(index_order)]
@@ -45,8 +48,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # c) Piechart of the metacategories
+    # region
     metacats_values = [my_worksheet.sum_basic, my_worksheet.sum_addit,
                        my_worksheet.sum_giftdon]
     metacats_labels = [
@@ -64,8 +69,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # d) Piechart of incomes
+    # region
     _values_list = list(my_worksheet.incomes_dict.values())
     _labels_list = list(my_worksheet.incomes_dict.keys())
     incomes_values = [inc for inc in _values_list if inc > 0]
@@ -83,8 +90,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # e) Piechart of earnings
+    # region
     _values_list = list(my_worksheet.earnings_dict.values())
     _labels_list = list(my_worksheet.earnings_dict.keys())
     earnings_values = [ear for ear in _values_list if ear > 0]
@@ -102,8 +111,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # f) Piechart of food subcategories
+    # region
     amounts = my_worksheet.spends_values["Jedzenie"]
     subcats = my_worksheet.spends_items["Jedzenie"]
     subcats_dict = {}
@@ -142,8 +153,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # g) Piechart of "Hobby i przyjemności" items
+    # region
     amounts = my_worksheet.spends_values["Hobby i przyjemności"]
     subcats = my_worksheet.spends_items["Hobby i przyjemności"]
     subcats_dict = {}
@@ -168,8 +181,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # h) Piechart of "Rzeczy i sprzęty" items
+    # region
     amounts = my_worksheet.spends_values["Rzeczy i sprzęty"]
     subcats = my_worksheet.spends_items["Rzeczy i sprzęty"]
     subcats_dict = {}
@@ -194,5 +209,6 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     plt.close("all")

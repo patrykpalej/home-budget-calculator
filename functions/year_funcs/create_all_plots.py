@@ -10,6 +10,7 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
                      start_label):
     # -- Year as a whole
     # a) Barplot for all categories
+    # region
     index_order = np.flip(np.argsort(my_workbook.cats_sums_list), axis=0)
     values_desc = [my_workbook.cats_sums_list[i] for i in index_order
                    if my_workbook.cats_sums_list[i] > 0]
@@ -24,8 +25,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotBar(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # b) Piechart of spendings for the main categories
+    # region
     index_order = np.flip(np.argsort(my_workbook.cats_sums_list), axis=0)
     _top_indices = index_order[0:5]
     _low_indices = index_order[5:len(index_order)]
@@ -50,8 +53,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # c) Piechart of the metacategories
+    # region
     metacats_values = [my_workbook.sum_basic, my_workbook.sum_addit,
                        my_workbook.sum_giftdon]
     metacats_labels = [
@@ -69,8 +74,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # d) Piechart of incomes
+    # region
     _values_list_inc = list(my_workbook.incomes_dict.values())
     _labels_list_inc = list(my_workbook.incomes_dict.keys())
     # marks which incomes are "others"
@@ -104,8 +111,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # e) Piechart of earnings
+    # region
     _values_list_ear = list(my_workbook.earnings_dict.values())
     _labels_list_ear = list(my_workbook.earnings_dict.keys())
 
@@ -141,8 +150,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # f) Piechart of food subcategories
+    # region
     amounts = my_workbook.spends_values_yr["Jedzenie"]
     subcats = my_workbook.spends_items_yr["Jedzenie"]
     subcats_dict = {}
@@ -181,9 +192,11 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # -- Averaged month --
     # g) Piechart of spendings for the main categories
+    # region
     top_plus_others_values_avg = [i / len(my_worksheets)
                                   for i in top_plus_others_values]
     top_plus_others_labels_avg = [top_plus_others_labels_0[i] + " - "
@@ -200,8 +213,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # h) Piechart of the metacategories
+    # region
     metacats_values_avg = [i / len(my_worksheets) for i in metacats_values]
     metacats_labels_avg = ["Podstawowe - " + str(
         round(my_workbook.sum_basic / len(my_worksheets), 2)) + "zł",
@@ -219,8 +234,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # i) Piechart of incomes
+    # region
     incomes_values_avg = [i / len(my_worksheets) for i in incomes_values]
     incomes_labels_avg = [inc + " - " + str(round(_values_list_inc[i]
                                                   / len(my_worksheets),
@@ -247,8 +264,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # j) Piechart of earnings
+    # region
     earnings_values_avg = [i / len(my_worksheets) for i in earnings_values]
     earnings_labels_avg = [ear + " - " + str(
         round(_values_list_ear[i] / len(my_worksheets), 2)) + "zł"
@@ -273,9 +292,11 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # -- Year as a sequence of months --
     # k) Stackplot of cummulated spendings for the top categories
+    # region
     top_spends_seqs = []
     # top categories
     for c, cat in enumerate(top_labels):
@@ -301,8 +322,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotStack(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # l) Lineplot of cummulated spendings, incomes and savings
+    # region
     line_incomes = []
     line_spendings = []
     line_balance = []
@@ -328,8 +351,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotLine(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # m) Lineplot of spendings and incomes in subsequent months
+    # region
     spendings_list = []
     incomes_list = []
     earnings_list = []  # for the need of later xlsx summary
@@ -347,8 +372,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotLine(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # n) Lineplot of average spendings for subsequent categories so far
+    # region
     current_means_seqs = []
     for c, cat in enumerate(top_spends_seqs):
         current_means_seqs.append([])
@@ -363,8 +390,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotLine(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # o) Lineplot of main sources
+    # region
     #  choosing of the relevant sources
     incomes_main = []
     for inc in my_workbook.incomes_dict:
@@ -388,8 +417,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotLine(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # p) Scatterplot incomes vs. spendings
+    # region
     scatter_incomes = [sheet.incomes for sheet in my_workbook.sheets_list]
     scatter_spendings = [sheet.sum_total for sheet in my_workbook.sheets_list]
 
@@ -399,8 +430,10 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotScatter(values, title)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     # q) Lineplot of basic and additional spendings
+    # region
     basic_array = [s.sum_basic for s in my_workbook.sheets_list]
     addit_array = [s.sum_addit for s in my_workbook.sheets_list]
     giftdon_array = [s.sum_giftdon for s in my_workbook.sheets_list]
@@ -413,6 +446,7 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     fig = plotLine(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
+    # endregion
 
     plt.close("all")
 
