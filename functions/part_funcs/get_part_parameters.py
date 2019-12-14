@@ -8,7 +8,7 @@ def get_part_parameters(start_month, start_year, end_month, end_year):
     folder_path = folder_path_file.read()
     folder_path_file.close()
 
-    file_path = folder_path + "/total/total.xlsx"
+    file_path = folder_path + "/total data/total.xlsx"
     part_label = str(start_month) + ".20" + str(start_year) + "-" \
         + str(end_month) + ".20" + str(end_year)
 
@@ -36,8 +36,8 @@ def get_part_parameters(start_month, start_year, end_month, end_year):
     start_label = [int(list_of_sheetnames[0][:2]),
                    int(list_of_sheetnames[0][-2:])]
 
-    results_dir = folder_path + "/!Raporty/total_partial/" + part_label \
-        + " - wyniki/"
+    results_dir = folder_path + "/!Reports/total_partial_results/" + \
+        part_label + " - wyniki/"
     if not os.path.exists(results_dir):
         os.mkdir(results_dir)
         os.mkdir(results_dir + "/plots")

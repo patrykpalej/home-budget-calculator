@@ -14,7 +14,7 @@ folder_path_file = open("path.txt", "r")
 folder_path = folder_path_file.read()
 folder_path_file.close()
 
-spendings_file_path = folder_path + "/total/total.xlsx"
+spendings_file_path = folder_path + "/total data/total.xlsx"
 
 with open("spendings_finder/config.json", encoding='utf-8') as file:
     config_json = json.load(file)
@@ -155,7 +155,7 @@ for p, phrase in enumerate(config_list):
         output_xlsx.create_sheet("name", p+1)
 
 # 4. Postprocessing
-results_dir = folder_path + "/!Raporty/spendings_finder"
+results_dir = folder_path + "/!Reports/spendings_finder"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
 

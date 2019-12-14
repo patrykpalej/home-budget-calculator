@@ -9,7 +9,7 @@ def get_total_parameters():
     folder_path = folder_path_file.read()
     folder_path_file.close()
 
-    file_path = folder_path + "/total/total.xlsx"
+    file_path = folder_path + "/total data/total.xlsx"
 
     my_workbook = MyWorkbook(file_path)
     my_worksheets = my_workbook.mywb.sheetnames
@@ -24,8 +24,8 @@ def get_total_parameters():
                   + ("0" if end_label[0] <= 9 else "") + str(
         end_label[0]) + "." + str(end_label[1]) + ")"
 
-    results_dir = folder_path + "/!Raporty/total_partial/" + total_label \
-        + " - wyniki/"
+    results_dir = folder_path + "/!Reports/total_partial_results/" + \
+        total_label + " - wyniki/"
     if not os.path.exists(results_dir):
         os.mkdir(results_dir)
         os.mkdir(results_dir + "/plots")
