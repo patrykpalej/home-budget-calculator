@@ -107,9 +107,9 @@ def create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
 
         ws = summary_wb.create_sheet(cat_name, num_of_ws)
 
-        try:
+        if len(items):
             ws.column_dimensions["A"].width = max([len(i) for i in items]) + 2
-        except:
+        else:
             return summary_wb
 
         row = 0
