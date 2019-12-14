@@ -1,7 +1,4 @@
-import os
-import math
-
-from classes import MyWorkbook
+from functions.total_funcs.get_total_parameters import get_total_parameters
 from functions.total_funcs.create_all_plots import create_all_plots
 from functions.total_funcs.create_pptx_presentation \
     import create_pptx_presentation
@@ -9,38 +6,17 @@ from functions.total_funcs.create_xlsx_report import create_xlsx_report
 
 
 # Preparing the analysis
-folder_path_file = open("path.txt", "r")
-folder_path = folder_path_file.read()
-folder_path_file.close()
-
-file_path = folder_path + "/total/total.xlsx"
-
-myWorkbook = MyWorkbook(file_path)
-myWorksheets = myWorkbook.mywb.sheetnames
-n_of_months = len(myWorkbook.sheets_list)
-start_label = [int(myWorksheets[0][:2]), int(myWorksheets[0][-2:])]
-end_label = [start_label[0] + n_of_months%12 - 1,
-             start_label[1] + math.floor(n_of_months/12)]
-
-total_label = "Total (" + ("0" if start_label[0] <= 9 else "") \
-              + str(start_label[0]) + "." + str(start_label[1]) + " - " \
-              + ("0" if end_label[0] <= 9 else "") + str(end_label[0]) + "." \
-              + str(end_label[1]) + ")"
-
-results_dir = folder_path + "/!Raporty/total_partial/" + total_label \
-              + " - wyniki/"
-if not os.path.exists(results_dir):
-    os.mkdir(results_dir)
-    os.mkdir(results_dir + "/plots")
+folder_path, file_path, total_label, results_dir, myWorkbook, myWorksheets, \
+    start_label = get_total_parameters()
 
 
 # Actual analysis
 spendings_list, incomes_list, earnings_list, surplus_list = \
     create_all_plots(myWorkbook, myWorksheets, total_label, results_dir,
-                     start_label, n_of_months)
+                     start_label, len(myWorksheets))
 
 create_pptx_presentation(total_label, results_dir)
 
 create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
                    earnings_list, surplus_list, myWorkbook, start_label,
-                   n_of_months)
+                   len(myWorksheets))

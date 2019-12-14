@@ -6,7 +6,7 @@ from openpyxl.styles.borders import Border, Side
 
 
 def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
-                       earnings_list, surplus_list, myWorkbook, start_label,
+                       earnings_list, surplus_list, my_workbook, start_label,
                        n_of_months):
 
     summary_wb = openpyxl.Workbook()
@@ -88,9 +88,9 @@ def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
                 ws.cell(r, c).alignment = Alignment(horizontal="center")
 
         # 2. Listing the spendings
-        values = myWorkbook.spends_values_yr[cat_name]
-        items = myWorkbook.spends_items_yr[cat_name]
-        monthlabels = myWorkbook.spends_monthlabel_yr[cat_name]
+        values = my_workbook.spends_values_yr[cat_name]
+        items = my_workbook.spends_items_yr[cat_name]
+        monthlabels = my_workbook.spends_monthlabel_yr[cat_name]
 
         mdict = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień", 5: "Maj",
                  6: "Czerwiec", 7: "Lipiec", 8: "Sierpień", 9: "Wrzesień",
@@ -122,7 +122,7 @@ def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
                 row += 1
                 ws.cell(row, 1).value = \
                     mdict[month] + " " + "20" + str(year) + " - " \
-                    + str(sum(values_dict[number])) + "zł"
+                    + str(round(sum(values_dict[number]), 2)) + "zł"
                 ws.merge_cells(start_row=row, start_column=1, end_row=row,
                                end_column=2)
                 ws.cell(row, 1).alignment = Alignment(horizontal="center")
@@ -156,7 +156,7 @@ def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
         # 2a) Summary of the category (mean, median, std)
         # For monthly sums
         cat_spends_list = [sheet.cats_sums[cat_name]
-                           for sheet in myWorkbook.sheets_list]
+                           for sheet in my_workbook.sheets_list]
 
         ws.merge_cells(start_row=1, start_column=7, end_row=1,
                        end_column=9)
@@ -195,12 +195,12 @@ def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
 
         return summary_wb
 
-    summary_wb = export_to_excel("Rzeczy i sprzęty", 1)
-    summary_wb = export_to_excel("Hobby i przyjemności", 2)
-    summary_wb = export_to_excel("Transport i noclegi", 3)
-    summary_wb = export_to_excel("Podróże", 4)
-    summary_wb = export_to_excel("Abonamenty i usługi", 5)
-    summary_wb = export_to_excel("Leki i zdrowie", 6)
-    summary_wb = export_to_excel("Książki i nauka", 7)
+    list_of_categories \
+        = ["Rzeczy i sprzęty", "Hobby i przyjemności", "Transport i noclegi",
+           "Podróże", "Abonamenty i usługi", "Leki i zdrowie",
+           "Książki i nauka"]
+
+    for i, cat in enumerate(list_of_categories):
+        summary_wb = export_to_excel(cat, i + 1)
 
     summary_wb.save(results_dir + "/" + total_label + " - podsumowanie.xlsx")
