@@ -1,8 +1,7 @@
 import sys
 
 from classes import MyWorkbook
-from functions.month_funcs.get_month_paths_and_label \
-    import get_month_paths_and_label
+from functions.month_funcs.get_month_parameters import get_month_parameters
 from functions.month_funcs.create_all_plots import create_all_plots
 from functions.month_funcs.create_pptx_presentation \
     import create_pptx_presentation
@@ -13,7 +12,7 @@ year_num = sys.argv[2]
 
 # Preparing the analysis
 folder_path, file_path, month_label, results_dir \
-    = get_month_paths_and_label(month_num, year_num)
+    = get_month_parameters(month_num, year_num)
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheet = myWorkbook.sheets_list[0]

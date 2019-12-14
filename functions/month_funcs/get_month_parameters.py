@@ -1,7 +1,7 @@
 import os
 
 
-def get_month_paths_and_label(month_num, year_num):
+def get_month_parameters(month_num, year_num):
 
     folder_path_file = open("path.txt", "r")
     folder_path = folder_path_file.read()

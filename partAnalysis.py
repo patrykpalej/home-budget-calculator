@@ -1,8 +1,7 @@
 import sys
 
 from classes import MyWorkbook
-from functions.part_funcs.get_part_paths_and_label \
-    import get_part_paths_and_label
+from functions.part_funcs.get_part_parameters import get_part_parameters
 from functions.part_funcs.create_all_plots import create_all_plots
 from functions.part_funcs.create_pptx_presentation \
     import create_pptx_presentation
@@ -17,7 +16,7 @@ end_year = int(sys.argv[4])
 # Preparing the analysis
 folder_path, file_path, part_label, results_dir, start_label, \
     list_of_sheetnames \
-    = get_part_paths_and_label(start_month, start_year, end_month, end_year)
+    = get_part_parameters(start_month, start_year, end_month, end_year)
 
 myWorkbook = MyWorkbook(file_path, list_of_sheetnames)
 

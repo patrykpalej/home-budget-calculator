@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def get_part_paths_and_label(start_month, start_year, end_month, end_year):
+def get_part_parameters(start_month, start_year, end_month, end_year):
 
     folder_path_file = open("path.txt", "r")
     folder_path = folder_path_file.read()

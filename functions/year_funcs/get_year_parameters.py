@@ -1,7 +1,7 @@
 import os
 
 
-def get_year_paths_and_label(year_num):
+def get_year_parameters(year_num):
     folder_path_file = open("path.txt", "r")
     folder_path = folder_path_file.read()
     folder_path_file.close()
