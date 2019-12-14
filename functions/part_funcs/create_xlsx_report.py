@@ -5,19 +5,20 @@ from openpyxl.styles import PatternFill
 from openpyxl.styles.borders import Border, Side
 
 
-def create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
+def create_xlsx_report(results_dir, part_label, my_workbook, start_label,
                        n_of_months):
 
     wb_to_export = openpyxl.Workbook()
 
     def export_to_excel(cat_name, num_of_ws):
-        values = myWorkbook.spends_values_yr[cat_name]
-        items = myWorkbook.spends_items_yr[cat_name]
-        monthlabels = myWorkbook.spends_monthlabel_yr[cat_name]
+        values = my_workbook.spends_values_yr[cat_name]
+        items = my_workbook.spends_items_yr[cat_name]
+        monthlabels = my_workbook.spends_monthlabel_yr[cat_name]
 
-        mdict = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień", 5: "Maj",
-                 6: "Czerwiec", 7: "Lipiec", 8: "Sierpień", 9: "Wrzesień",
-                 10: "Październik", 11: "Listopad", 12: "Grudzień"}
+        mdict = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień",
+                 5: "Maj", 6: "Czerwiec", 7: "Lipiec", 8: "Sierpień",
+                 9: "Wrzesień", 10: "Październik", 11: "Listopad",
+                 12: "Grudzień"}
 
         values_dict = dict()
         items_dict = dict()
@@ -33,11 +34,8 @@ def create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
 
         ws = wb_to_export.create_sheet(cat_name, num_of_ws)
 
-        # "try" becase doesn"t work when no spendings
-        try:
+        if len(items):
             ws.column_dimensions["A"].width = max([len(i) for i in items]) + 2
-        except:
-            pass
 
         row = 0
         month = start_label[0]
@@ -46,7 +44,7 @@ def create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
             if number in monthlabels:
                 row += 1
                 ws.cell(row, 1).value = mdict[month] + "  " + str(month) \
-                                        + ".20" + str(year)
+                    + ".20" + str(year)
                 ws.merge_cells(start_row=row, start_column=1, end_row=row,
                                end_column=2)
                 ws.cell(row, 1).alignment = Alignment(horizontal="center")
@@ -84,10 +82,13 @@ def create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
         return wb_to_export
 
     wb_to_export.remove_sheet(wb_to_export.active)
-    wb_to_export = export_to_excel("Rzeczy i sprzęty", 0)
-    wb_to_export = export_to_excel("Hobby i przyjemności", 1)
-    wb_to_export = export_to_excel("Transport i noclegi", 2)
-    wb_to_export = export_to_excel("Podróże", 3)
+
+    list_of_categories \
+        = ["Rzeczy i sprzęty", "Hobby i przyjemności", "Transport i noclegi",
+           "Podróże", "Jedzenie"]
+
+    for i, cat in enumerate(list_of_categories):
+        wb_to_export = export_to_excel(cat, i + 1)
 
     wb_to_export.save(results_dir + "/" + part_label
                       + " - zestawienie wydatków.xlsx")
