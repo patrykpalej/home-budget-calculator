@@ -1,17 +1,22 @@
-import json
 import os
+import json
 import datetime
+import openpyxl
 import numpy as np
-from classes import *
 from openpyxl.styles import Alignment
-from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import PatternFill
+from openpyxl.styles.borders import Border, Side
 
+from classes import MyWorkbook
 
 # 1. Importing total data and config, choosing data in range
-spendings_file_path = os.getcwd() + "/data/total.xlsx"
+folder_path_file = open("path.txt", "r")
+folder_path = folder_path_file.read()
+folder_path_file.close()
 
-with open("spendings_finder/config.json", encoding='utf-8') as file:
+spendings_file_path = folder_path + "/total data/total.xlsx"
+
+with open("keywords.json", encoding='utf-8') as file:
     config_json = json.load(file)
 
 config_list = config_json["keywords"]
@@ -150,7 +155,7 @@ for p, phrase in enumerate(config_list):
         output_xlsx.create_sheet("name", p+1)
 
 # 4. Postprocessing
-results_dir = os.getcwd() + "/spendings_finder"
+results_dir = folder_path + "/!Reports/spendings_finder"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
 
