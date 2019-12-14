@@ -63,3 +63,20 @@ _BugFix_
 
 _SpendingsFinder_
 - for the set of given phrases script generates a report of when spendings with that phrase occured and what was the category
+
+v.1.8
+
+*path_from_txt*
+
+- implement reading data and results directory from .txt file
+- divide code into functions
+
+*beautify*
+
+- order imports by length
+
+- delete hardcoded sys.args
+
+- shorten lines to 79 chars
+
+  

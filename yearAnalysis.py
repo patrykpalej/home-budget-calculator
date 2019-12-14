@@ -1,33 +1,22 @@
-import os
 import sys
 
 from classes import MyWorkbook
+from functions.year_funcs.get_year_parameters import get_year_parameters
 from functions.year_funcs.create_all_plots import create_all_plots
 from functions.year_funcs.create_pptx_presentation \
     import create_pptx_presentation
 from functions.year_funcs.create_xlsx_report import create_xlsx_report
 
-
 year_num = sys.argv[1]
-# year_num = "99"  # hardcoded if no arguments
+
 
 # Preparing the analysis
-folder_path_file = open("path.txt", "r")
-folder_path = folder_path_file.read()
-folder_path_file.close()
-
-file_path = folder_path + "/yearly/20" + year_num + ".xlsx"
-year_label = "20" + year_num
+folder_path, file_path, year_label, results_dir \
+    = get_year_parameters(year_num)
 
 myWorkbook = MyWorkbook(file_path)
 myWorksheets = myWorkbook.mywb.sheetnames
 start_label = [int(myWorksheets[0][:2]), int(year_num)]
-
-results_dir = folder_path + "/!Raporty/yearly_reports/" + year_label \
-              + " - wyniki"
-if not os.path.exists(results_dir):
-    os.mkdir(results_dir)
-    os.mkdir(results_dir + "/plots")
 
 
 # Actual analysis
@@ -39,4 +28,3 @@ create_pptx_presentation(year_num, results_dir)
 
 create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
                    earnings_list, surplus_list, myWorkbook, start_label)
-

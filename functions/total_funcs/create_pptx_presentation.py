@@ -24,7 +24,7 @@ def create_pptx_presentation(total_label, results_dir):
         height = width = Inches(7.5)
 
         pic_path = results_dir + "/plots/plot" + str(i + 1) + ".png"
-        pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
+        slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
     # Averaged month
     slides.append(prs.slides.add_slide(title_slide_layout))
@@ -38,7 +38,7 @@ def create_pptx_presentation(total_label, results_dir):
         height = width = Inches(7.5)
 
         pic_path = results_dir + "/plots/plot" + str(i + 1 + 5) + ".png"
-        pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
+        slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
     # Total as a sequence of months
     slides.append(prs.slides.add_slide(title_slide_layout))
@@ -53,6 +53,6 @@ def create_pptx_presentation(total_label, results_dir):
         width = Inches(7.0)
 
         pic_path = results_dir + "/plots/plot" + str(i + 1 + 8) + ".png"
-        pic = slides[-1].shapes.add_picture(pic_path, left, top, height, width)
+        slides[-1].shapes.add_picture(pic_path, left, top, height, width)
 
     prs.save(results_dir + "/" + total_label + " - raport finansowy.pptx")

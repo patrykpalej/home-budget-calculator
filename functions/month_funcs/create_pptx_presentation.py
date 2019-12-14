@@ -15,8 +15,8 @@ def create_pptx_presentation(month_num, year_num, results_dir):
                   "04": "Kwiecień", "05": "Maj", "06": "Czerwiec",
                   "07": "Lipiec", "08": "Sierpień", "09": "Wrzesień",
                   "10": "Październik", "11": "Listopad", "12": "Grudzień"}
-    title.text = month_dict[
-                     month_num] + " 20" + year_num + " - raport finansowy"
+    title.text = month_dict[month_num] + " 20" + year_num \
+        + " - raport finansowy"
     subtitle.text = month_num + ".20" + year_num
 
     for i in range(8):
@@ -30,4 +30,3 @@ def create_pptx_presentation(month_num, year_num, results_dir):
 
     prs.save(results_dir + "/" + month_num + ".20" + year_num
              + " - raport finansowy.pptx")
-
