@@ -115,7 +115,7 @@ def create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
         row = 0
         for m, month_num in enumerate(np.unique(monthlabels)):
             row += 1
-            month_sum = str(sum(values_nested_list[m]))
+            month_sum = str(sum(round(values_nested_list[m], 2)))
             ws.cell(row, 1).value = mdict[month_num + start_label[0] - 1] \
                 + "  - " + month_sum + "zł"
             ws.merge_cells(start_row=row, start_column=1, end_row=row,
