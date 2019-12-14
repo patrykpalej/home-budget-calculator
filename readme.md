@@ -1,11 +1,5 @@
 # Home Budget Calculator 
 
-```
-![alt text](https://www.bostadspolitik.se/live/wp/wp-content/uploads/2019/01/skuld-1-e1546803575713-1200x750.jpg)
-```
-
-
-
 This is a program for analyzing and visualizing home budget. Input data is stored in excel worksheets which are to be filled manually by the user. A template with sample data (for 2099) can be found in data_and_results/ folder. There are four different analysis scenarios (described below). The output is a .pptx presentation and an .xlsx summary. The main need-to-know information is described below.  
 
 ### 1. Repository content
