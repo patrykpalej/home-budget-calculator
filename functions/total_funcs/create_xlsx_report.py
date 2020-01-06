@@ -78,7 +78,7 @@ def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
         ws.cell(1, 8).value = "Całkowita nadwyżka przychodów:"
         ws.cell(2, 8).value = "[zł]"
         ws.cell(2, 9).value = "[% przychodów]"
-        ws.cell(3, 8).value = sum(surplus_list)
+        ws.cell(3, 8).value = round(sum(surplus_list), 2)
         ws.cell(3, 9).value = round(
             sum(surplus_list) / sum(incomes_list) * 100, 2)
 
@@ -196,7 +196,7 @@ def create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
         return summary_wb
 
     list_of_categories \
-        = ["Rzeczy i sprzęty", "Hobby i przyjemności", "Transport i noclegi",
+        = ["Rzeczy i sprzęty", "Rozrywka", "Transport i noclegi",
            "Podróże", "Abonamenty i usługi", "Leki i zdrowie",
            "Książki i nauka"]
 

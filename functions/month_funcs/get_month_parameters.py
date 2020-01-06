@@ -11,7 +11,7 @@ def get_month_parameters(month_num, year_num):
         + ".xlsx"
     month_label = "20" + year_num + "." + month_num
 
-    results_dir = folder_path + "/!Reports/monthly_reports/" + month_label \
+    results_dir = folder_path + "/!Reports/monthly reports/" + month_label \
         + " - wyniki"
     if not os.path.exists(results_dir):
         os.mkdir(results_dir)

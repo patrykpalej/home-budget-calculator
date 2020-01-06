@@ -12,8 +12,8 @@ def plotPie(values, labels, plot_title):
             startangle=0)
 
     plt.title(plot_title, fontsize=24, pad=1)
-    plt.subplots_adjust(left=0.0, bottom=0.0, right=0.78, top=0.78)
-    plt.legend(labels=labels, loc=(0.8, 0.8), fontsize='xx-large')
+    plt.subplots_adjust(left=-0.02, bottom=0.0, right=0.78, top=0.78)
+    plt.legend(labels=labels, loc=(0.825, 0.75), fontsize='xx-large')
 
     return fig
 

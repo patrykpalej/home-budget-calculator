@@ -16,15 +16,14 @@ def get_total_parameters():
 
     n_of_months = len(my_workbook.sheets_list)
     start_label = [int(my_worksheets[0][:2]), int(my_worksheets[0][-2:])]
-    end_label = [start_label[0] + n_of_months % 12 - 1,
-                 start_label[1] + math.floor(n_of_months / 12)]
+    end_label = [int(my_worksheets[-1][:2]), int(my_worksheets[-1][-2:])]
 
-    total_label = "Total (" + ("0" if start_label[0] <= 9 else "") \
-                  + str(start_label[0]) + "." + str(start_label[1]) + " - " \
-                  + ("0" if end_label[0] <= 9 else "") + str(
-        end_label[0]) + "." + str(end_label[1]) + ")"
+    total_label = "20" + str(start_label[1]) + "." \
+        + ("0" if start_label[0] <= 9 else "") + str(start_label[0]) + " - " \
+        + "20" + str(end_label[1]) + "." \
+        + ("0" if end_label[0] <= 9 else "") + str(end_label[0])
 
-    results_dir = folder_path + "/!Reports/total_partial_results/" + \
+    results_dir = folder_path + "/!Reports/total and partial reports/" + \
         total_label + " - wyniki/"
     if not os.path.exists(results_dir):
         os.mkdir(results_dir)

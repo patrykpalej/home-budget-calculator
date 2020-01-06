@@ -77,7 +77,7 @@ def create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
         ws.cell(1, 8).value = "Całkowita nadwyżka przychodów:"
         ws.cell(2, 8).value = "[zł]"
         ws.cell(2, 9).value = "[% przychodów]"
-        ws.cell(3, 8).value = sum(surplus_list)
+        ws.cell(3, 8).value = round(sum(surplus_list), 2)
         ws.cell(3, 9).value = round(
             sum(surplus_list) / sum(incomes_list) * 100, 2)
 
@@ -115,7 +115,7 @@ def create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
         row = 0
         for m, month_num in enumerate(np.unique(monthlabels)):
             row += 1
-            month_sum = str(sum(values_nested_list[m]))
+            month_sum = str(round(sum(values_nested_list[m]), 2))
             ws.cell(row, 1).value = mdict[month_num + start_label[0] - 1] \
                 + "  - " + month_sum + "zł"
             ws.merge_cells(start_row=row, start_column=1, end_row=row,
@@ -186,7 +186,7 @@ def create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
         return summary_wb
 
     list_of_categories \
-        = ["Rzeczy i sprzęty", "Hobby i przyjemności", "Transport i noclegi",
+        = ["Rzeczy i sprzęty", "Rozrywka", "Transport i noclegi",
            "Podróże", "Abonamenty i usługi", "Leki i zdrowie",
            "Książki i nauka"]
 

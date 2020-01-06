@@ -84,8 +84,8 @@ def create_xlsx_report(results_dir, part_label, my_workbook, start_label,
     wb_to_export.remove_sheet(wb_to_export.active)
 
     list_of_categories \
-        = ["Rzeczy i sprzęty", "Hobby i przyjemności", "Transport i noclegi",
-           "Podróże", "Jedzenie"]
+        = ["Rzeczy i sprzęty", "Rozrywka", "Transport i noclegi",
+           "Abonamenty i usługi"]
 
     for i, cat in enumerate(list_of_categories):
         wb_to_export = export_to_excel(cat, i + 1)
