@@ -33,7 +33,6 @@ This is a program for analyzing and visualizing home budget. Input data is store
 | classes.py         | File for classes used in the program                         |
 | done.md            | Version history of the project                               |
 | keywords.json      | Configuration file for spendingsFinder (see: 2. Analysis scenarios) |
-| main.py            | Script for a potential complex scenario (like multiple running of the other scenarios) |
 | monthAnalysis.py   | Main script for a single month analysis scenario             |
 | partAnalysis.py    | Main script for the analysis of a chosen period              |
 | path.txt           | Here type absolute or relative path to your equivalent of data_and_results/ folder (anywhere on your computer) |
