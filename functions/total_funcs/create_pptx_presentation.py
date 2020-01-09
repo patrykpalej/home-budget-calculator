@@ -45,7 +45,7 @@ def create_pptx_presentation(total_label, results_dir):
     title = slides[-1].placeholders[1]
     title.text = "3. Total jako sekwencja miesięcy"
 
-    for i in range(7):
+    for i in range(8):
         slides.append(prs.slides.add_slide(blank_slide_layout))
         left = Inches(0.0)
         top = Inches(0.1)
