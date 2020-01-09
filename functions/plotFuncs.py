@@ -91,10 +91,11 @@ def twoAxisLinePlot(values, labels, plot_title, start_label):
 
     box = ax2.get_position()
     ax2.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-    ax1.legend(loc='center right', bbox_to_anchor=(1.32, 0.55),
+    ax1.legend(loc='center right', bbox_to_anchor=(1.34, 0.55),
                fontsize='x-large')
-    ax2.legend(loc='center right', bbox_to_anchor=(1.31, 0.4),
+    ax2.legend(loc='center right', bbox_to_anchor=(1.33, 0.4),
                fontsize='x-large')
+    ax2.set_ylim([-1, 1])
 
     x_tick_labels = []
     month = start_label[0]
