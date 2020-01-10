@@ -10,7 +10,7 @@ def get_part_parameters(start_month, start_year, end_month, end_year):
 
     file_path = folder_path + "/total data/total.xlsx"
     part_label = "20" + str(start_year) + "." \
-        + ("0" if start_month <= 9 else "") + str(start_month) + "-" \
+        + ("0" if start_month <= 9 else "") + str(start_month) + " - " \
         + "20" + str(end_year) + "." + ("0" if end_month <= 9 else "") \
         + str(end_month)
 
