@@ -78,22 +78,35 @@ def twoAxisLinePlot(values, labels, plot_title, start_label):
     plt.style.use('default')
 
     fig, ax1 = plt.subplots(figsize=(14, 9))
-    plt.grid(axis='both')
-    ax1.plot(values[0], label=labels[0], marker='.', markersize=14)
-    ax1.tick_params(axis='y', labelcolor='blue', labelsize=16)
-
     ax2 = ax1.twinx()
+    plt.grid(axis='both')
+    # - - -
+    ax1.plot(values[0], label=labels[0], marker='.', markersize=14,
+             color='#1f77b4')
+    trend = np.polyfit([i for i in range(len(values[0]))], values[0], 1)
+    p = np.poly1d(trend)
+    ax1.plot([0, len(values[0])], [p[0], p[0]+p[1]*len(values[0])],
+             color='#1f77b4', linestyle='dashed', label="Linia trendu")
+    ax1.tick_params(axis='y', labelcolor='#1f77b4', labelsize=16)
+    # --
     ax2.plot(values[1], label=labels[1], marker='.', markersize=14,
              color='orange')
+    relevant_values = [val for val in values[1] if -1 < val < 1]
+    trend = np.polyfit([i for i in range(len(relevant_values))],
+                       relevant_values, 1)
+    p = np.poly1d(trend)
+    ax2.plot([0, len(values[1])], [p[0], p[0] + p[1] * len(values[1])],
+             color='orange', linestyle='dashed', label="Linia trendu")
     ax2.tick_params(axis='y', labelcolor='orange', labelsize=16)
 
+    # - - -
     plt.title(plot_title, fontsize=22, pad=15)
 
     box = ax2.get_position()
     ax2.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-    ax1.legend(loc='center right', bbox_to_anchor=(1.34, 0.55),
+    ax1.legend(loc='center right', bbox_to_anchor=(1.34, 0.58),
                fontsize='x-large')
-    ax2.legend(loc='center right', bbox_to_anchor=(1.33, 0.4),
+    ax2.legend(loc='center right', bbox_to_anchor=(1.33, 0.38),
                fontsize='x-large')
     ax2.set_ylim([-1, 1])
 
@@ -113,7 +126,7 @@ def twoAxisLinePlot(values, labels, plot_title, start_label):
             year += 1
     plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
                x_tick_labels)
-    ax1.tick_params(labelsize=16, rotation=15)
+    ax1.tick_params(axis='x', labelsize=16, rotation=15)
 
     return fig
 
