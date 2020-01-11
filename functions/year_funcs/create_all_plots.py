@@ -103,7 +103,7 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
     values = incomes_values
     labels = incomes_labels
     title = year_label + " - Podział przychodów na poszczególne źródła\n\n" \
-        + "Suma przychodów: " + str(my_workbook.incomes) + "zł\n" \
+        + "Suma przychodów: " + str(round(my_workbook.incomes, 2)) + "zł\n" \
         + "Nadwyżka przychodów: " + str(round(my_workbook.balance[0], 2)) \
         + "zł  (" + str(round(100 * my_workbook.balance[0]
                                / my_workbook.incomes, 2)) + "%)"
@@ -141,7 +141,7 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
     values = earnings_values
     labels = earnings_labels
     title = year_label + " - Podział zarobków na poszczególne źrodła\n\n" \
-        + "Suma zarobków: " + str(my_workbook.earnings) + "zł\n" \
+        + "Suma zarobków: " + str(round(my_workbook.earnings, 2)) + "zł\n" \
         + "Nadwyżka zarobków: " + str(round(my_workbook.balance[1], 2)) \
         + "zł  (" + str(round(100 * my_workbook.balance[1]
                                / my_workbook.earnings, 2)) \

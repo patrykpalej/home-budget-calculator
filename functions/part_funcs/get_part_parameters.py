@@ -9,8 +9,10 @@ def get_part_parameters(start_month, start_year, end_month, end_year):
     folder_path_file.close()
 
     file_path = folder_path + "/total data/total.xlsx"
-    part_label = str(start_month) + ".20" + str(start_year) + "-" \
-        + str(end_month) + ".20" + str(end_year)
+    part_label = "20" + str(start_year) + "." \
+        + ("0" if start_month <= 9 else "") + str(start_month) + " - " \
+        + "20" + str(end_year) + "." + ("0" if end_month <= 9 else "") \
+        + str(end_month)
 
     if (start_year > end_year) or \
             (start_year == end_year and start_month > end_month):
@@ -36,7 +38,7 @@ def get_part_parameters(start_month, start_year, end_month, end_year):
     start_label = [int(list_of_sheetnames[0][:2]),
                    int(list_of_sheetnames[0][-2:])]
 
-    results_dir = folder_path + "/!Reports/total_partial_results/" + \
+    results_dir = folder_path + "/!Reports/total and partial reports/" + \
         part_label + " - wyniki/"
     if not os.path.exists(results_dir):
         os.mkdir(results_dir)

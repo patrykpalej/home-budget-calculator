@@ -155,10 +155,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # g) Piechart of "Hobby i przyjemności" items
+    # g) Piechart of "Rozrywka" items
     # region
-    amounts = my_worksheet.spends_values["Hobby i przyjemności"]
-    subcats = my_worksheet.spends_items["Hobby i przyjemności"]
+    amounts = my_worksheet.spends_values["Rozrywka"]
+    subcats = my_worksheet.spends_items["Rozrywka"]
     subcats_dict = {}
 
     for i, subcat in enumerate(subcats):
@@ -174,9 +174,9 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     values = subcats_values_1
     labels = subcats_labels_1
-    title = month_label + " - Podział wydatków kategorii\n Hobby i " \
-        "przyjemności\n\n" + "Całkowita kwota: " \
-        + str(my_worksheet.cats_sums["Hobby i przyjemności"]) + " zł\n"
+    title = month_label + " - Podział wydatków kategorii Rozrywka\n\n" \
+        + "Całkowita kwota: " \
+        + str(my_worksheet.cats_sums["Rozrywka"]) + " zł\n"
     fig_name = results_dir + "/plots/plot7.png"
 
     fig = plotPie(values, labels, title)
@@ -202,7 +202,7 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     values = subcats_values_2
     labels = subcats_labels_2
-    title = month_label + " - Podział wydatków kategorii\n Rzeczy i " \
+    title = month_label + " - Podział wydatków kategorii Rzeczy i " \
         "sprzęty\n\nCałkowita kwota: " \
         + str(my_worksheet.cats_sums["Rzeczy i sprzęty"]) + " zł\n"
     fig_name = results_dir + "/plots/plot8.png"

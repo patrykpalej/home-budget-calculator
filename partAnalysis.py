@@ -1,4 +1,6 @@
+import os
 import sys
+import shutil
 
 from classes import MyWorkbook
 from functions.part_funcs.get_part_parameters import get_part_parameters
@@ -22,11 +24,16 @@ myWorkbook = MyWorkbook(file_path, list_of_sheetnames)
 
 
 # Actual analysis
+if not os.path.exists(results_dir + "/plots/"):
+    os.mkdir(results_dir + "/plots/")
+
 spendings_list, incomes_list \
     = create_all_plots(myWorkbook, part_label, results_dir, start_label,
                        len(list_of_sheetnames))
 
 create_pptx_presentation(part_label, results_dir)
+
+shutil.rmtree(results_dir + "/plots/")
 
 create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
                    len(list_of_sheetnames))

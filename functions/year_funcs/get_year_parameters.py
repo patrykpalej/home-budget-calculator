@@ -9,7 +9,7 @@ def get_year_parameters(year_num):
     file_path = folder_path + "/yearly data/20" + year_num + ".xlsx"
     year_label = "20" + year_num
 
-    results_dir = folder_path + "/!Reports/yearly_reports/" + year_label \
+    results_dir = folder_path + "/!Reports/yearly reports/" + year_label \
         + " - wyniki"
     if not os.path.exists(results_dir):
         os.mkdir(results_dir)

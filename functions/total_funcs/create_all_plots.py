@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 from functions.plotFuncs import plotPie, plotBar, plotLine, plotStack, \
-    plotScatter
+    plotScatter, twoAxisLinePlot
 
 
 def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
@@ -383,6 +383,29 @@ def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
     fig_name = results_dir + "/plots/plot15.png"
 
     fig = plotLine(values, labels, title, start_label)
+    plt.savefig(figure=fig, fname=fig_name)
+    # endregion
+
+    # p) Lineplot of a relationship between incomes and spendings
+    # region
+    incomes_to_spendings = [mw.incomes/mw.sum_total
+                            for mw in my_workbook.sheets_list]
+    surplus = [((mw.incomes-mw.sum_total)/mw.incomes
+                if mw.incomes != 0 else np.inf)
+               for mw in my_workbook.sheets_list]
+
+    values = [incomes_to_spendings, surplus]
+    labels = ["Stosunek\nprzychodów\ndo wydatków",
+              "Nadwyżka\nprzychodów\njako ułamek"]
+    title = total_label + " - Relacja między przychodami a wydatkami\nna " \
+                          "przestrzeni czasu"
+    fig_name = results_dir + "/plots/plot16.png"
+
+    global_min = min(min(incomes_to_spendings), min(surplus))
+    not_inf_surplus = [val for val in surplus if val != np.inf]
+    global_max = max(max(incomes_to_spendings), max(not_inf_surplus))
+
+    fig = twoAxisLinePlot(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
