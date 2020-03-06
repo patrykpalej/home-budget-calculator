@@ -1,0 +1,17 @@
+copy_month_sheet
+------------------
+python copy_month_sheet.py <sheet_name/"last"> <if_year> <if_total>
+
+
+
+
+create_new_month_sheet
+-----------------------
+python create_new_month_sheet.py
+
+
+
+
+delete_last_sheet
+------------------
+python delete_last_sheet.py <year_nr> <if_year> <if_total>
