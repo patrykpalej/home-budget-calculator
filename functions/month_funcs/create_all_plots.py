@@ -5,7 +5,9 @@ from functions.plotFuncs import plotPie, plotBar
 
 
 def create_all_plots(my_worksheet, month_label, results_dir):
-    # a) Barplot for all categories
+    plot_nr = 1
+
+    # -- Barplot for all categories
     # region
     index_order = np.flip(np.argsort(my_worksheet.cats_sums_list), axis=0)
     values_desc = [my_worksheet.cats_sums_list[i] for i in index_order
@@ -17,13 +19,14 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     labels = labels_desc
     title = month_label + " - Kwoty wydawane miesięcznie \n na kolejne " \
                           "kategorie\n"
-    fig_name = results_dir + "/plots/plot1.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotBar(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # b) Piechart of spendings for the main categories
+    # -- Piechart of spendings for the main categories
     # region
     index_order = np.flip(np.argsort(my_worksheet.cats_sums_list), axis=0)
     _top_indices = index_order[0:5]
@@ -44,13 +47,14 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     title = month_label + " - Struktura miesięcznych wydatków\n z podziałem" \
                           " na kategorie\n\n" + "Suma wydatków: " \
                           + str(round(my_worksheet.sum_total, 2)) + "zł\n"
-    fig_name = results_dir + "/plots/plot2.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # c) Piechart of the metacategories
+    # -- Piechart of the metacategories
     # region
     metacats_values = [my_worksheet.sum_basic, my_worksheet.sum_addit,
                        my_worksheet.sum_giftdon]
@@ -65,13 +69,14 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     title = month_label + " - Podział wydatków na: \n" \
         + "Podstawowe, Dodatkowe i Prezenty/Donacje\n\n" + "Suma wydatków: " \
         + str(round(my_worksheet.sum_total, 2)) + "zł\n"
-    fig_name = results_dir + "/plots/plot3.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # d) Piechart of incomes
+    # -- Piechart of incomes
     # region
     _values_list = list(my_worksheet.incomes_dict.values())
     _labels_list = list(my_worksheet.incomes_dict.keys())
@@ -85,14 +90,15 @@ def create_all_plots(my_worksheet, month_label, results_dir):
         + "Suma przychodów: " + str(my_worksheet.incomes) + "zł\n" \
         + "Nadwyżka przychodów: " + str(round(my_worksheet.balance[0], 2)) \
         + "zł (" + str(round(100 * my_worksheet.balance[0]
-                              / my_worksheet.incomes, 2)) + "%)\n"
-    fig_name = results_dir + "/plots/plot4.png"
+                             / my_worksheet.incomes, 2)) + "%)\n"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # e) Piechart of earnings
+    # -- Piechart of earnings
     # region
     _values_list = list(my_worksheet.earnings_dict.values())
     _labels_list = list(my_worksheet.earnings_dict.keys())
@@ -106,14 +112,15 @@ def create_all_plots(my_worksheet, month_label, results_dir):
         + "Suma zarobków: " + str(my_worksheet.earnings) + "zł\n" \
         + "Nadwyżka zarobków: " + str(round(my_worksheet.balance[1], 2)) \
         + "zł (" + str(round(100 * my_worksheet.balance[1]
-                              / my_worksheet.earnings, 2)) + "%)\n"
-    fig_name = results_dir + "/plots/plot5.png"
+                             / my_worksheet.earnings, 2)) + "%)\n"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # f) Piechart of food subcategories
+    # -- Piechart of food subcategories
     # region
     amounts = my_worksheet.spends_values["Jedzenie"]
     subcats = my_worksheet.spends_items["Jedzenie"]
@@ -149,13 +156,14 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     labels = subcats_labels_with_others
     title = month_label + " - Podział wydatków spożywczych\n\nCałkowita" \
         " kwota: " + str(my_worksheet.cats_sums["Jedzenie"]) + " zł\n"
-    fig_name = results_dir + "/plots/plot6.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # g) Piechart of "Rozrywka" items
+    # -- Piechart of "Rozrywka" items
     # region
     amounts = my_worksheet.spends_values["Rozrywka"]
     subcats = my_worksheet.spends_items["Rozrywka"]
@@ -177,13 +185,14 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     title = month_label + " - Podział wydatków kategorii Rozrywka\n\n" \
         + "Całkowita kwota: " \
         + str(my_worksheet.cats_sums["Rozrywka"]) + " zł\n"
-    fig_name = results_dir + "/plots/plot7.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # h) Piechart of "Rzeczy i sprzęty" items
+    # -- Piechart of "Rzeczy i sprzęty" items
     # region
     amounts = my_worksheet.spends_values["Rzeczy i sprzęty"]
     subcats = my_worksheet.spends_items["Rzeczy i sprzęty"]
@@ -205,7 +214,8 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     title = month_label + " - Podział wydatków kategorii Rzeczy i " \
         "sprzęty\n\nCałkowita kwota: " \
         + str(my_worksheet.cats_sums["Rzeczy i sprzęty"]) + " zł\n"
-    fig_name = results_dir + "/plots/plot8.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
