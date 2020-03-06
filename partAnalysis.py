@@ -27,11 +27,11 @@ myWorkbook = MyWorkbook(file_path, list_of_sheetnames)
 if not os.path.exists(results_dir + "/plots/"):
     os.mkdir(results_dir + "/plots/")
 
-spendings_list, incomes_list \
+spendings_list, incomes_list, plot_numbers_list \
     = create_all_plots(myWorkbook, part_label, results_dir, start_label,
                        len(list_of_sheetnames))
 
-create_pptx_presentation(part_label, results_dir)
+create_pptx_presentation(part_label, results_dir, plot_numbers_list)
 
 shutil.rmtree(results_dir + "/plots/")
 

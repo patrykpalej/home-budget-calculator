@@ -6,6 +6,7 @@ from functions.plotFuncs import plotPie, plotBar
 
 def create_all_plots(my_worksheet, month_label, results_dir):
     plot_nr = 1
+    plot_numbers_list = []
 
     # -- Barplot for all categories
     # region
@@ -221,4 +222,8 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
+    plot_numbers_list.append(plot_nr-1)
+
     plt.close("all")
+
+    return plot_numbers_list

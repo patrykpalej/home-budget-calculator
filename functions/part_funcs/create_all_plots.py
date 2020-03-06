@@ -7,6 +7,7 @@ from functions.plotFuncs import plotPie, plotBar, plotLine, plotStack
 def create_all_plots(my_workbook, part_label, results_dir, start_label,
                      n_of_months):
     plot_nr = 1
+    plot_numbers_list = []
 
     # ---- Part as a whole ----
     # -- Barplot for all categories
@@ -168,6 +169,7 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
+    plot_numbers_list.append(plot_nr - 1)
 
     # ---- Averaged month ----
     # -- Piechart of spendings for the main categories
@@ -266,6 +268,7 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
     fig = plotPie(values, labels, title)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
+    plot_numbers_list.append(plot_nr - 1)
 
     # ---- Part as a sequence of months ----
     # -- Stackplot of cummulated spendings for the top categories
@@ -391,7 +394,8 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
     fig = plotLine(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
+    plot_numbers_list.append(plot_nr - 1)
 
     plt.close("all")
 
-    return spendings_list, incomes_list
+    return spendings_list, incomes_list, plot_numbers_list

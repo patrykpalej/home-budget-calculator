@@ -2,7 +2,8 @@ from pptx.util import Inches
 from pptx import Presentation
 
 
-def create_pptx_presentation(month_num, year_num, results_dir):
+def create_pptx_presentation(month_num, year_num, results_dir,
+                             plot_numbers_list):
     prs = Presentation()
     title_slide_layout = prs.slide_layouts[0]
     blank_slide_layout = prs.slide_layouts[6]
@@ -19,7 +20,7 @@ def create_pptx_presentation(month_num, year_num, results_dir):
         + " - raport finansowy"
     subtitle.text = month_num + ".20" + year_num
 
-    for i in range(8):
+    for i in range(plot_numbers_list[0]):
         slides.append(prs.slides.add_slide(blank_slide_layout))
         left = Inches(1.5)
         top = Inches(0.0)

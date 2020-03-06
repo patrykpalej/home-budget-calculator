@@ -25,11 +25,11 @@ start_label = [int(myWorksheets[0][:2]), int(year_num)]
 if not os.path.exists(results_dir + "/plots/"):
     os.mkdir(results_dir + "/plots/")
 
-spendings_list, incomes_list, earnings_list, surplus_list \
+spendings_list, incomes_list, earnings_list, surplus_list, plot_numbers_list \
     = create_all_plots(myWorkbook, myWorksheets, year_label, results_dir,
                        start_label)
 
-create_pptx_presentation(year_num, results_dir)
+create_pptx_presentation(year_num, results_dir, plot_numbers_list)
 
 shutil.rmtree(results_dir + "/plots/")
 

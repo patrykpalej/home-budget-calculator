@@ -2,3 +2,5 @@
 __pycache__/
 ~$*.xlsx
 main.py
+data_and_results/
+path.txt
