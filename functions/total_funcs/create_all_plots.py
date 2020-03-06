@@ -379,7 +379,8 @@ def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
 
     values = [scatter_incomes, scatter_spendings]
     title = total_label + " - Przychody vs. wydatki"
-    fig_name = results_dir + "/plots/plot14.png"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
 
     fig = plotScatter(values, title)
     plt.savefig(figure=fig, fname=fig_name)
