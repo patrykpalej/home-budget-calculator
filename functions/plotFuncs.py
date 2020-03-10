@@ -2,7 +2,7 @@ import numpy as np
 import seaborn as sns
 from math import floor
 import matplotlib.pyplot as plt
-from matplotlib.ticker import AutoMinorLocator, MultipleLocator, MaxNLocator
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator, MaxNLocator, AutoLocator
 
 
 def plotPie(values, labels, plot_title):
@@ -25,7 +25,7 @@ def plotBar(values, labels, plot_title):
     fig, ax = plt.subplots(figsize=(12, 12*0.83), facecolor='white')
 
     sns.barplot(x=values, y=labels, zorder=2)
-    ax.xaxis.set_minor_locator(MaxNLocator(10))
+    ax.xaxis.set_minor_locator(AutoLocator())
 
     plt.tick_params(axis='both', which='major', labelsize=14)
     plt.subplots_adjust(left=0.26, bottom=0.1, right=0.9, top=0.85)
