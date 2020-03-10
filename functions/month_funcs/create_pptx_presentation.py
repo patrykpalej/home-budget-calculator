@@ -22,12 +22,13 @@ def create_pptx_presentation(month_num, year_num, results_dir,
 
     for i in range(plot_numbers_list[0]):
         slides.append(prs.slides.add_slide(blank_slide_layout))
-        left = Inches(1.5)
+        left = Inches(0.5)
         top = Inches(0.0)
-        height = width = Inches(7.5)
+        height = Inches(7.5)
+        width = Inches(9.0)
 
         pic_path = results_dir + "/plots/plot" + str(i + 1) + ".png"
-        slides[-1].shapes.add_picture(pic_path, left, top, height, width)
+        slides[-1].shapes.add_picture(pic_path, left, top, width, height)
 
     prs.save(results_dir + "/" + month_num + ".20" + year_num
              + " - raport finansowy.pptx")

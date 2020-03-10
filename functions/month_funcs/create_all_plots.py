@@ -164,6 +164,36 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
+    # -- Piechart of biggest expenses
+    # region
+    all_spends_values = my_worksheet.spends_values
+    all_spends_items = my_worksheet.spends_items
+    high_spends_values = []
+    high_spends_items = []
+
+    value_treshold = 100
+
+    for values_list, items_list, cat_name in zip(all_spends_values.values(),
+                                                 all_spends_items.values(),
+                                                 all_spends_values.keys()):
+        for value, item in zip(values_list, items_list):
+            if value >= value_treshold and cat_name not in ["Mieszkanie",
+                                                            "Jedzenie"]:
+                high_spends_values.append(value)
+                high_spends_items.append(item)
+
+    values = sorted(high_spends_values)
+    values.reverse()
+    labels = [x for _, x in sorted(zip(high_spends_values, high_spends_items))]
+    labels.reverse()
+    title = month_label + " - Największe wydatki w miesiącu"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
+
+    fig = plotBar(values, labels, title)
+    plt.savefig(figure=fig, fname=fig_name)
+    # endregion
+
     # -- Piechart of "Rozrywka" items
     # region
     amounts = my_worksheet.spends_values["Rozrywka"]
