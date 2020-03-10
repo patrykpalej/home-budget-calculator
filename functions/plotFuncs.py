@@ -1,13 +1,14 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
+import seaborn as sns
 from math import floor
+import matplotlib.pyplot as plt
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator, MaxNLocator
 
 
 def plotPie(values, labels, plot_title):
 
     plt.style.use('default')
-    fig = plt.figure(figsize=(13, 13))
+    fig = plt.figure(figsize=(13, 13*0.83))
     plt.pie(x=values, autopct='%1.0f%%', textprops={'fontsize': 20},
             startangle=0)
 
@@ -21,15 +22,16 @@ def plotPie(values, labels, plot_title):
 def plotBar(values, labels, plot_title):
 
     plt.style.use('default')
-    fig = plt.figure(figsize=(12, 12), facecolor='white')
+    fig, ax = plt.subplots(figsize=(12, 12*0.83), facecolor='white')
 
     sns.barplot(x=values, y=labels, zorder=2)
+    ax.xaxis.set_minor_locator(MaxNLocator(10))
 
-    plt.tick_params(axis='both', which='major', labelsize=20)
+    plt.tick_params(axis='both', which='major', labelsize=14)
     plt.subplots_adjust(left=0.26, bottom=0.1, right=0.9, top=0.85)
     plt.title(plot_title, fontsize=24, pad=10)
     plt.xlabel('Kwota wydana [zł]', fontsize=20)
-    plt.grid(zorder=0, axis='x')
+    plt.grid(zorder=0, axis='x', which='both')
 
     return fig
 
