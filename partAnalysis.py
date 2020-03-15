@@ -39,5 +39,4 @@ shutil.rmtree(results_dir + "/plots/")
 create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
                    len(list_of_sheetnames))
 
-list_most_expensive(results_dir, part_label, myWorkbook, start_label,
-                    len(list_of_sheetnames))
+list_most_expensive(results_dir, part_label, myWorkbook, start_label)

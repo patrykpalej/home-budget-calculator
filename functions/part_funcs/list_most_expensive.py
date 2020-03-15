@@ -1,9 +1,12 @@
 import openpyxl
+import numpy as np
 from math import floor
+from openpyxl.styles import Alignment
+from openpyxl.styles import PatternFill
+from openpyxl.styles.borders import Border, Side
 
 
-def list_most_expensive(results_dir, part_label, my_workbook, start_label,
-                        n_of_months):
+def list_most_expensive(results_dir, part_label, my_workbook, start_label):
 
     wb_to_export = openpyxl.Workbook()
 
@@ -19,6 +22,10 @@ def list_most_expensive(results_dir, part_label, my_workbook, start_label,
 
     value_treshold = 100
 
+    mdict = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień", 5: "Maj",
+             6: "Czerwiec", 7: "Lipiec", 8: "Sierpień", 9: "Wrzesień",
+             10: "Październik", 11: "Listopad", 12: "Grudzień", 0: "Grudzień"}
+
     for values, items, months, cat_name in zip(all_spends_values.values(),
                                                all_spends_items.values(),
                                                all_spends_months.values(),
@@ -29,29 +36,49 @@ def list_most_expensive(results_dir, part_label, my_workbook, start_label,
                 high_spends_values.append(value)
                 high_spends_items.append(item)
 
-                month_label = (month + start_label[0]) % 12
+                month_label = ((month + start_label[0] - 1)
+                               if month + start_label[0] - 1 <= 12
+                               else (month + start_label[0] - 1) % 12)
                 year_label = start_label[1] \
                     + floor((month-1 + start_label[0] - 1) / 12)
-                high_spends_dates.append(str(month_label) + ".20" +
+                high_spends_dates.append(mdict[month_label] + " 20" +
                                          str(year_label))
 
                 high_spends_categories.append(cat_name)
 
+    sorted_indices = list(np.argsort(high_spends_values))
+    sorted_indices.reverse()
+
     # Excel filling
     ws = wb_to_export.active
 
-    ws.cell(1, 1).value = "id"
-    ws.cell(1, 2).value = "Nazwa"
-    ws.cell(1, 3).value = "Wartość"
-    ws.cell(1, 4).value = "Kategoria"
-    ws.cell(1, 5).value = "Miesiąc"
+    thin_border = Border(left=Side(style="thin"), right=Side(style="thin"),
+                         top=Side(style="thin"), bottom=Side(style="thin"))
 
-    for row in range(len(high_spends_values)):
-        ws.cell(2+row, 1).value = row+1
-        ws.cell(2+row, 2).value = high_spends_items[row]
-        ws.cell(2+row, 3).value = high_spends_values[row]
-        ws.cell(2+row, 4).value = high_spends_categories[row]
-        ws.cell(2+row, 5).value = high_spends_dates[row]
+    for i, colname in enumerate(["id", "Nazwa", "Wartość [zł]", "Kategoria",
+                                 "Miesiąc"]):
+        ws.cell(1, i+1).value = colname
+        ws.cell(1, i+1).fill = PatternFill(fgColor="93e1e6", fill_type="solid")
+
+    for i, one_list in enumerate([high_spends_items, high_spends_values,
+                                  high_spends_categories, high_spends_dates]):
+        for row, index in enumerate(sorted_indices):
+            ws.cell(2+row, 1).value = row+1
+            ws.cell(2+row, i+2).value = one_list[index]
+
+    for row in range(1, len(high_spends_values)+2):
+        for i in range(5):
+            ws.cell(row, i+1).alignment = Alignment(horizontal="center")
+            ws.cell(row, i+1).border = thin_border
+
+    ws.column_dimensions["A"].width = 5
+    ws.column_dimensions["B"].width = max([len(i) for i in
+                                           high_spends_items]) + 1
+    ws.column_dimensions["C"].width = 12
+    ws.column_dimensions["D"].width = max([len(i) for i in
+                                           high_spends_categories])
+    ws.column_dimensions["E"].width = max([len(i) for i in
+                                           high_spends_dates])
 
     wb_to_export.save(results_dir + "/" + part_label
                       + " - największe wydatki.xlsx")
