@@ -6,6 +6,7 @@ from functions.total_funcs.create_all_plots import create_all_plots
 from functions.total_funcs.create_pptx_presentation \
     import create_pptx_presentation
 from functions.total_funcs.create_xlsx_report import create_xlsx_report
+from functions.total_funcs.list_most_expensive import list_most_expensive
 
 
 # Preparing the analysis
@@ -28,3 +29,5 @@ shutil.rmtree(results_dir + "/plots/")
 create_xlsx_report(results_dir, total_label, spendings_list, incomes_list,
                    earnings_list, surplus_list, myWorkbook, start_label,
                    len(myWorksheets))
+
+list_most_expensive(results_dir, total_label, myWorkbook, start_label)
