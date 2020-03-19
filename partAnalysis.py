@@ -8,6 +8,7 @@ from functions.part_funcs.create_all_plots import create_all_plots
 from functions.part_funcs.create_pptx_presentation \
     import create_pptx_presentation
 from functions.part_funcs.create_xlsx_report import create_xlsx_report
+from functions.part_funcs.list_most_expensive import list_most_expensive
 
 start_month = int(sys.argv[1])
 start_year = int(sys.argv[2])
@@ -37,3 +38,5 @@ shutil.rmtree(results_dir + "/plots/")
 
 create_xlsx_report(results_dir, part_label, myWorkbook, start_label,
                    len(list_of_sheetnames))
+
+list_most_expensive(results_dir, part_label, myWorkbook, start_label)
