@@ -6,8 +6,7 @@ from openpyxl.styles import PatternFill
 from openpyxl.styles.borders import Border, Side
 
 
-def list_most_expensive(results_dir, total_label, my_workbook, start_label):
-    
+def list_most_expensive(results_dir, year_label, my_workbook, start_label):
     wb_to_export = openpyxl.Workbook()
 
     # Data preparation
@@ -81,5 +80,5 @@ def list_most_expensive(results_dir, total_label, my_workbook, start_label):
     ws.column_dimensions["E"].width = max([len(i) for i in
                                            high_spends_dates])
 
-    wb_to_export.save(results_dir + "/" + total_label
+    wb_to_export.save(results_dir + "/20" + str(year_label)
                       + " - największe wydatki.xlsx")
