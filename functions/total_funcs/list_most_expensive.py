@@ -50,6 +50,7 @@ def list_most_expensive(results_dir, total_label, my_workbook, start_label):
     sorted_indices.reverse()
 
     # Excel filling
+    # -- main table
     ws = wb_to_export.active
 
     thin_border = Border(left=Side(style="thin"), right=Side(style="thin"),
@@ -80,6 +81,51 @@ def list_most_expensive(results_dir, total_label, my_workbook, start_label):
                                            high_spends_categories])
     ws.column_dimensions["E"].width = max([len(i) for i in
                                            high_spends_dates])
+
+    # -- small table
+    unique_categories = list(np.unique(high_spends_categories))
+    unique_cat_dict = dict()
+    for k in unique_categories:
+        unique_cat_dict[k] = []
+
+    for unique_cat in unique_categories:
+        for val, cat in zip(high_spends_values, high_spends_categories):
+            if cat == unique_cat:
+                unique_cat_dict[unique_cat].append(val)
+
+    summary_cat_dict = dict()
+    for k in unique_cat_dict.keys():
+        summary_cat_dict[k] = [len(unique_cat_dict[k]),
+                               np.mean(unique_cat_dict[k])]
+
+    ws.cell(2, 8).value = "Kategoria"
+    ws.cell(2, 9).value = "Ilość"
+    ws.cell(2, 10).value = "Średnia wartość [zł]"
+
+    ws.cell(2, 8).fill = PatternFill(fgColor="93e1e6", fill_type="solid")
+    ws.cell(2, 9).fill = PatternFill(fgColor="93e1e6", fill_type="solid")
+    ws.cell(2, 10).fill = PatternFill(fgColor="93e1e6", fill_type="solid")
+
+    for row in range(len(summary_cat_dict.keys()) + 1):
+        for i in range(3):
+            ws.cell(row + 2, i + 8).alignment = Alignment(horizontal="center")
+            ws.cell(row + 2, i + 8).border = thin_border
+
+    i = 0
+    values_unsorted = [x[0] for x in summary_cat_dict.values()]
+    arg_sort = list(np.argsort(np.argsort(values_unsorted)))
+
+    for cat, summary in summary_cat_dict.items():
+        ws.cell(len(arg_sort) - arg_sort[i] + 2, 8).value = cat
+        ws.cell(len(arg_sort) - arg_sort[i] + 2, 9).value = summary[0]
+        ws.cell(len(arg_sort) - arg_sort[i] + 2, 10).value = round(summary[1],
+                                                                   2)
+        i += 1
+
+    ws.column_dimensions["H"].width = max([len(i) for i in
+                                           summary_cat_dict.keys()]) + 1
+    ws.column_dimensions["J"].width = 18
+    # -----
 
     wb_to_export.save(results_dir + "/" + total_label
                       + " - największe wydatki.xlsx")
