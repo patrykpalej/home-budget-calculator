@@ -51,6 +51,7 @@ def list_most_expensive(results_dir, year_label, my_workbook, start_label):
     # Excel filling
     # -- main table
     ws = wb_to_export.active
+    ws.title = "> 100zł"
 
     thin_border = Border(left=Side(style="thin"), right=Side(style="thin"),
                          top=Side(style="thin"), bottom=Side(style="thin"))
