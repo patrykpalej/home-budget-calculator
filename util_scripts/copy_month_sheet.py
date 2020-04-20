@@ -48,7 +48,10 @@ def copy_cell(source_cell, coord, tgt):
     tgt.cell(coord[0], coord[1]).value = source_cell.value
     tgt.cell(coord[0], coord[1]).comment = source_cell.comment
     if source_cell.has_style:
-        tgt.cell(coord[0], coord[1])._style = copy(source_cell._style)
+        tgt.cell(coord[0], coord[1]).border = copy(source_cell.border)
+        tgt.cell(coord[0], coord[1]).number_format = source_cell.number_format
+        tgt.cell(coord[0], coord[1]).fill = copy(source_cell.fill)
+
     return tgt.cell(coord[0], coord[1])
 
 
