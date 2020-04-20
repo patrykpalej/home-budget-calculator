@@ -164,7 +164,7 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
-    # -- Piechart of biggest expenses
+    # -- Barplot of biggest expenses
     # region
     all_spends_values = my_worksheet.spends_values
     all_spends_items = my_worksheet.spends_items
