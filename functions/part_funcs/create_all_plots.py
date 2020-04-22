@@ -20,7 +20,7 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
 
     values = values_desc
     labels = labels_desc
-    title = part_label + " - Kwoty wydane w ciągu całego okresu \nna " \
+    title = part_label + " - Kwoty wydane w ciągu\n całego okresu na " \
                          "kolejne kategorie"
     fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
     plot_nr += 1
@@ -116,7 +116,7 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
     values = earnings_values
     labels = earnings_labels
     title = part_label + " - Podział zarobków na \nposzczególne źrodła\n\n" \
-        + "Suma zarobków: " + str(my_workbook.earnings) + "zł\n" \
+        + "Suma zarobków: " + str(round(my_workbook.earnings, 2)) + "zł\n" \
         + "Nadwyżka zarobków: " + str(round(my_workbook.balance[1], 2)) \
         + "zł  (" + str(round(100 * my_workbook.balance[1]
                               / my_workbook.earnings, 2)) + "%)"

@@ -22,7 +22,7 @@ def create_all_plots(my_workbook, my_worksheets, year_label, results_dir,
 
     values = values_desc
     labels = labels_desc
-    title = year_label + " - Kwoty wydane w ciągu roku \n na kolejne " \
+    title = year_label + " - Kwoty wydane w ciągu\n roku na kolejne " \
                          "kategorie\n"
     fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
     plot_nr += 1
