@@ -28,8 +28,8 @@ def plotBar(values, labels, plot_title):
     ax.xaxis.set_minor_locator(AutoLocator())
 
     plt.tick_params(axis='both', which='major', labelsize=14)
-    plt.subplots_adjust(left=0.26, bottom=0.1, right=0.9, top=0.85)
-    plt.title(plot_title, fontsize=24, pad=10)
+    plt.subplots_adjust(left=0.3, bottom=0.1, right=0.98, top=0.85)
+    plt.title(plot_title, fontsize=24, pad=10, loc='left')
     plt.xlabel('Kwota wydana [zł]', fontsize=20)
     plt.grid(zorder=0, axis='x', which='both')
 

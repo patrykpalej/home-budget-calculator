@@ -144,10 +144,10 @@ def create_all_plots(my_worksheet, month_label, results_dir):
     others_sum = 0
     for i, sc_f in enumerate(_subcats_fractions):
         if sc_f > 0.02:
-            subcats_values_with_others.append(subcats_values[i])
+            subcats_values_with_others.append(round(subcats_values[i], 2))
             subcats_labels_with_others.append(subcats_labels[i])
         else:
-            others_sum += subcats_values[i]
+            others_sum += round(subcats_values[i], 2)
 
     if others_sum > 0:
         subcats_values_with_others.append(others_sum)
