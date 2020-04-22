@@ -14,4 +14,4 @@ python create_new_month_sheet.py
 
 delete_last_sheet
 ------------------
-python delete_last_sheet.py <year_nr> <if_year> <if_total>
+python delete_last_sheet.py <short_year_nr> <if_year> <if_total>

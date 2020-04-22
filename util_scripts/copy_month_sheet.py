@@ -35,7 +35,7 @@ year_sheet_path = year_folder_path + file_name[:4] + ".xlsx"
 total_sheet_path = total_folder_path + "total.xlsx"
 
 # 3. Get first sheet of the month data .xlsx file and list of width
-month_workbook = load_workbook(month_sheet_path)
+month_workbook = load_workbook(month_sheet_path, data_only=True)
 month_worksheet = month_workbook.active
 col_widths = []
 for col_num in range(0, 20):
@@ -57,7 +57,7 @@ def copy_cell(source_cell, coord, tgt):
 
 # year
 if if_year == "1":
-    year_workbook = load_workbook(year_sheet_path)
+    year_workbook = load_workbook(year_sheet_path, data_only=True)
     year_workbook.create_sheet(file_name[5:7])
     year_worksheet = year_workbook[year_workbook.sheetnames[-1]]
 
