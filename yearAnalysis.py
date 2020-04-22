@@ -8,6 +8,8 @@ from functions.year_funcs.create_all_plots import create_all_plots
 from functions.year_funcs.create_pptx_presentation \
     import create_pptx_presentation
 from functions.year_funcs.create_xlsx_report import create_xlsx_report
+from functions.year_funcs.list_most_expensive import list_most_expensive
+
 
 year_num = sys.argv[1]
 
@@ -25,13 +27,15 @@ start_label = [int(myWorksheets[0][:2]), int(year_num)]
 if not os.path.exists(results_dir + "/plots/"):
     os.mkdir(results_dir + "/plots/")
 
-spendings_list, incomes_list, earnings_list, surplus_list \
+spendings_list, incomes_list, earnings_list, surplus_list, plot_numbers_list \
     = create_all_plots(myWorkbook, myWorksheets, year_label, results_dir,
                        start_label)
 
-create_pptx_presentation(year_num, results_dir)
+create_pptx_presentation(year_num, results_dir, plot_numbers_list)
 
 shutil.rmtree(results_dir + "/plots/")
 
 create_xlsx_report(results_dir, year_num, spendings_list, incomes_list,
                    earnings_list, surplus_list, myWorkbook, start_label)
+
+list_most_expensive(results_dir, year_label, myWorkbook, start_label)

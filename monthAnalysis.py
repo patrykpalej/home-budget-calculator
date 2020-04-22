@@ -23,8 +23,8 @@ myWorksheet = myWorkbook.sheets_list[0]
 if not os.path.exists(results_dir + "/plots/"):
     os.mkdir(results_dir + "/plots/")
 
-create_all_plots(myWorksheet, month_label, results_dir)
+plot_numbers_list = create_all_plots(myWorksheet, month_label, results_dir)
 
-create_pptx_presentation(month_num, year_num, results_dir)
+create_pptx_presentation(month_num, year_num, results_dir, plot_numbers_list)
 
 shutil.rmtree(results_dir + "/plots/")

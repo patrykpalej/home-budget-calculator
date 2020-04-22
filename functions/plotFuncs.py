@@ -1,13 +1,14 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
+import seaborn as sns
 from math import floor
+import matplotlib.pyplot as plt
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator, MaxNLocator, AutoLocator
 
 
 def plotPie(values, labels, plot_title):
 
     plt.style.use('default')
-    fig = plt.figure(figsize=(13, 13))
+    fig = plt.figure(figsize=(13, 13*0.83))
     plt.pie(x=values, autopct='%1.0f%%', textprops={'fontsize': 20},
             startangle=0)
 
@@ -21,15 +22,16 @@ def plotPie(values, labels, plot_title):
 def plotBar(values, labels, plot_title):
 
     plt.style.use('default')
-    fig = plt.figure(figsize=(12, 12), facecolor='white')
+    fig, ax = plt.subplots(figsize=(12, 12*0.83), facecolor='white')
 
     sns.barplot(x=values, y=labels, zorder=2)
+    ax.xaxis.set_minor_locator(AutoLocator())
 
-    plt.tick_params(axis='both', which='major', labelsize=20)
-    plt.subplots_adjust(left=0.26, bottom=0.1, right=0.9, top=0.85)
-    plt.title(plot_title, fontsize=24, pad=10)
+    plt.tick_params(axis='both', which='major', labelsize=14)
+    plt.subplots_adjust(left=0.3, bottom=0.1, right=0.98, top=0.85)
+    plt.title(plot_title, fontsize=24, pad=10, loc='left')
     plt.xlabel('Kwota wydana [zł]', fontsize=20)
-    plt.grid(zorder=0, axis='x')
+    plt.grid(zorder=0, axis='x', which='both')
 
     return fig
 
@@ -191,5 +193,60 @@ def plotScatter(values, plot_title):
     ax.tick_params(labelsize=16)
     plt.grid()
     plt.legend()
+
+    return fig
+
+
+def twoAxisLinePlot1(values, labels, plot_title, start_label, n_rolling):
+    plt.style.use('default')
+
+    fig, ax1 = plt.subplots(figsize=(14, 9))
+    ax2 = ax1.twinx()
+    plt.grid(axis='both')
+    # - - -
+    ax1.plot(values[0], label=labels[0], marker='.', markersize=14,
+             color='#1f77b4')
+    trend = np.polyfit([i for i in range(len(values[0]))], values[0], 1)
+    p = np.poly1d(trend)
+    ax1.plot([0, len(values[0])], [p[0], p[0]+p[1]*len(values[0])],
+             color='#1f77b4', linestyle='dashed', label="Linia trendu")
+    ax1.tick_params(axis='y', labelcolor='#1f77b4', labelsize=16)
+    # --
+    ax2.plot(np.arange(n_rolling-1, len(values[1])+n_rolling-1), values[1],
+             label=labels[1], marker='.', markersize=14, color='orange')
+    trend = np.polyfit([i for i in range(len(values[1]))], values[1], 1)
+    p = np.poly1d(trend)
+    ax2.plot([n_rolling-1, len(values[1])+n_rolling-1],
+             [p[0], p[0] + p[1] * len(values[1])],
+             color='orange', linestyle='dashed', label="Linia trendu")
+    ax2.tick_params(axis='y', labelcolor='orange', labelsize=16)
+
+    # - - -
+    plt.title(plot_title, fontsize=22, pad=15)
+
+    box = ax2.get_position()
+    ax2.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax1.legend(loc='center right', bbox_to_anchor=(1.34, 0.58),
+               fontsize='x-large')
+    ax2.legend(loc='center right', bbox_to_anchor=(1.33, 0.38),
+               fontsize='x-large')
+
+    x_tick_labels = []
+    month = start_label[0]
+    year = start_label[1]
+    for i in range(1 + floor(len(values[0]) / 2)):
+        # to prevent xticklabels exceeding the actual time period
+        if 2 * i + 1 > len(values[0]):
+            break
+
+        x_tick_labels.append(str(month) + '.20' + str(year))
+        month += 2
+
+        if month > 12:
+            month -= 12
+            year += 1
+    plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
+               x_tick_labels)
+    ax1.tick_params(axis='x', labelsize=16, rotation=15)
 
     return fig
