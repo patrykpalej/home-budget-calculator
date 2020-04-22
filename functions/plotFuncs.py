@@ -195,3 +195,58 @@ def plotScatter(values, plot_title):
     plt.legend()
 
     return fig
+
+
+def twoAxisLinePlot1(values, labels, plot_title, start_label, n_rolling):
+    plt.style.use('default')
+
+    fig, ax1 = plt.subplots(figsize=(14, 9))
+    ax2 = ax1.twinx()
+    plt.grid(axis='both')
+    # - - -
+    ax1.plot(values[0], label=labels[0], marker='.', markersize=14,
+             color='#1f77b4')
+    trend = np.polyfit([i for i in range(len(values[0]))], values[0], 1)
+    p = np.poly1d(trend)
+    ax1.plot([0, len(values[0])], [p[0], p[0]+p[1]*len(values[0])],
+             color='#1f77b4', linestyle='dashed', label="Linia trendu")
+    ax1.tick_params(axis='y', labelcolor='#1f77b4', labelsize=16)
+    # --
+    ax2.plot(np.arange(n_rolling-1, len(values[1])+n_rolling-1), values[1],
+             label=labels[1], marker='.', markersize=14, color='orange')
+    trend = np.polyfit([i for i in range(len(values[1]))], values[1], 1)
+    p = np.poly1d(trend)
+    ax2.plot([n_rolling-1, len(values[1])+n_rolling-1],
+             [p[0], p[0] + p[1] * len(values[1])],
+             color='orange', linestyle='dashed', label="Linia trendu")
+    ax2.tick_params(axis='y', labelcolor='orange', labelsize=16)
+
+    # - - -
+    plt.title(plot_title, fontsize=22, pad=15)
+
+    box = ax2.get_position()
+    ax2.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax1.legend(loc='center right', bbox_to_anchor=(1.34, 0.58),
+               fontsize='x-large')
+    ax2.legend(loc='center right', bbox_to_anchor=(1.33, 0.38),
+               fontsize='x-large')
+
+    x_tick_labels = []
+    month = start_label[0]
+    year = start_label[1]
+    for i in range(1 + floor(len(values[0]) / 2)):
+        # to prevent xticklabels exceeding the actual time period
+        if 2 * i + 1 > len(values[0]):
+            break
+
+        x_tick_labels.append(str(month) + '.20' + str(year))
+        month += 2
+
+        if month > 12:
+            month -= 12
+            year += 1
+    plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
+               x_tick_labels)
+    ax1.tick_params(axis='x', labelsize=16, rotation=15)
+
+    return fig

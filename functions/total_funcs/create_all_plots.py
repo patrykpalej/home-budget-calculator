@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 from functions.plotFuncs import plotPie, plotBar, plotLine, plotStack, \
-    plotScatter, twoAxisLinePlot
+    plotScatter, twoAxisLinePlot, twoAxisLinePlot1
 
 
 def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
@@ -151,7 +151,8 @@ def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
 
     if others_sum > 0:
         subcats_values_with_others.append(others_sum)
-        subcats_labels_with_others.append("inne - " + str(others_sum) + "zł")
+        subcats_labels_with_others.append("inne - "
+                                          + str(round(others_sum, 2)) + "zł")
 
     values = subcats_values_with_others
     labels = subcats_labels_with_others
@@ -429,6 +430,29 @@ def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
     fig = twoAxisLinePlot(values, labels, title, start_label)
     plt.savefig(figure=fig, fname=fig_name)
     # endregion
+
+    # -- Cummulated and rolling average of incomes
+    # region
+    incomes = [mw.incomes for mw in my_workbook.sheets_list]
+
+    cum_average = np.cumsum(incomes)/np.arange(1, len(incomes)+1)
+    n_rolling = 6
+    rolling_average \
+        = np.convolve(incomes, np.ones((n_rolling,))/n_rolling, mode='valid')
+
+    values = [list(cum_average), list(rolling_average)]
+    labels = ["Skumulowana\nśrednia\nprzychodów",
+              "Średnia\n przychodów\nza ostatnie\n{} miesięcy"
+              .format(n_rolling)]
+    title = total_label + " - Skumulowana oraz krocząca średnia przychodów\n" \
+                          "na przestrzeni czasu"
+    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    plot_nr += 1
+
+    fig = twoAxisLinePlot1(values, labels, title, start_label, n_rolling)
+    plt.savefig(figure=fig, fname=fig_name)
+    # endregion
+
     plot_numbers_list.append(plot_nr - 1)
 
     plt.close("all")
