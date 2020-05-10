@@ -1,3 +1,8 @@
+check_total_balance
+--------------------
+python check_total_balance.py   // fill balance_check.json file first
+
+
 copy_month_sheet
 ------------------
 python copy_month_sheet.py <sheet_name/"last"> <if_year> <if_total>

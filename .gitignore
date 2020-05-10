@@ -4,4 +4,3 @@ __pycache__/
 main.py
 data_and_results/
 path.txt
-balance_check.json
