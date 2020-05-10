@@ -27,8 +27,12 @@ total_folder_path = root_path + "/total data/"
 folder_path_file.close()
 
 # 2. Get paths of desired files
-file_name = (os.listdir(month_folder_path)[-1]
-             if sheet_name == "last" else sheet_name)
+if sheet_name == "last":
+    file_name = os.listdir(month_folder_path)[-1]
+elif sheet_name == "prelast":
+    file_name = os.listdir(month_folder_path)[-2]
+else:
+    file_name = sheet_name
 
 month_sheet_path = month_folder_path + file_name
 year_sheet_path = year_folder_path + file_name[:4] + ".xlsx"
