@@ -196,62 +196,62 @@ def create_all_plots(my_worksheet, month_label, results_dir):
 
     # -- Piechart of "Rozrywka" items
     # region
-    amounts = my_worksheet.spends_values["Rozrywka"]
-    subcats = my_worksheet.spends_items["Rozrywka"]
-    subcats_dict = {}
+    # amounts = my_worksheet.spends_values["Rozrywka"]
+    # subcats = my_worksheet.spends_items["Rozrywka"]
+    # subcats_dict = {}
+    #
+    # for i, subcat in enumerate(subcats):
+    #     if subcat in list(subcats_dict.keys()):
+    #         subcats_dict[subcat] += amounts[i]
+    #     else:
+    #         subcats_dict[subcat] = amounts[i]
+    #
+    # subcats_values_1 = list(subcats_dict.values())
+    # subcats_labels_1 = [list(subcats_dict.keys())[i] + " - "
+    #                     + str(round(list(subcats_dict.values())[i], 2)) + "zł"
+    #                     for i in range(len(list(subcats_dict.keys())))]
+    #
+    # values = subcats_values_1
+    # labels = subcats_labels_1
+    # title = month_label + " - Podział wydatków kategorii Rozrywka\n\n" \
+    #     + "Całkowita kwota: " \
+    #     + str(my_worksheet.cats_sums["Rozrywka"]) + " zł\n"
+    # fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    # plot_nr += 1
 
-    for i, subcat in enumerate(subcats):
-        if subcat in list(subcats_dict.keys()):
-            subcats_dict[subcat] += amounts[i]
-        else:
-            subcats_dict[subcat] = amounts[i]
-
-    subcats_values_1 = list(subcats_dict.values())
-    subcats_labels_1 = [list(subcats_dict.keys())[i] + " - "
-                        + str(round(list(subcats_dict.values())[i], 2)) + "zł"
-                        for i in range(len(list(subcats_dict.keys())))]
-
-    values = subcats_values_1
-    labels = subcats_labels_1
-    title = month_label + " - Podział wydatków kategorii Rozrywka\n\n" \
-        + "Całkowita kwota: " \
-        + str(my_worksheet.cats_sums["Rozrywka"]) + " zł\n"
-    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
-    plot_nr += 1
-
-    fig = plotPie(values, labels, title)
-    plt.savefig(figure=fig, fname=fig_name)
+    # fig = plotPie(values, labels, title)
+    # plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
     # -- Piechart of "Rzeczy i sprzęty" items
     # region
-    amounts = my_worksheet.spends_values["Rzeczy i sprzęty"]
-    subcats = my_worksheet.spends_items["Rzeczy i sprzęty"]
-    subcats_dict = {}
-
-    for i, subcat in enumerate(subcats):
-        if subcat in list(subcats_dict.keys()):
-            subcats_dict[subcat] += amounts[i]
-        else:
-            subcats_dict[subcat] = amounts[i]
-
-    subcats_values_2 = list(subcats_dict.values())
-    subcats_labels_2 = [list(subcats_dict.keys())[i] + " - "
-                        + str(round(list(subcats_dict.values())[i], 2)) + "zł"
-                        for i in range(len(list(subcats_dict.keys())))]
-
-    values = subcats_values_2
-    labels = subcats_labels_2
-    title = month_label + " - Podział wydatków kategorii Rzeczy i " \
-        "sprzęty\n\nCałkowita kwota: " \
-        + str(my_worksheet.cats_sums["Rzeczy i sprzęty"]) + " zł\n"
-    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
-    plot_nr += 1
-
-    fig = plotPie(values, labels, title)
-    plt.savefig(figure=fig, fname=fig_name)
-    # endregion
-
+    # amounts = my_worksheet.spends_values["Rzeczy i sprzęty"]
+    # subcats = my_worksheet.spends_items["Rzeczy i sprzęty"]
+    # subcats_dict = {}
+    #
+    # for i, subcat in enumerate(subcats):
+    #     if subcat in list(subcats_dict.keys()):
+    #         subcats_dict[subcat] += amounts[i]
+    #     else:
+    #         subcats_dict[subcat] = amounts[i]
+    #
+    # subcats_values_2 = list(subcats_dict.values())
+    # subcats_labels_2 = [list(subcats_dict.keys())[i] + " - "
+    #                     + str(round(list(subcats_dict.values())[i], 2)) + "zł"
+    #                     for i in range(len(list(subcats_dict.keys())))]
+    #
+    # values = subcats_values_2
+    # labels = subcats_labels_2
+    # title = month_label + " - Podział wydatków kategorii Rzeczy i " \
+    #     "sprzęty\n\nCałkowita kwota: " \
+    #     + str(my_worksheet.cats_sums["Rzeczy i sprzęty"]) + " zł\n"
+    # fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    # plot_nr += 1
+    #
+    # fig = plotPie(values, labels, title)
+    # plt.savefig(figure=fig, fname=fig_name)
+    # # endregion
+    #
     plot_numbers_list.append(plot_nr-1)
 
     plt.close("all")
