@@ -50,7 +50,7 @@ for month in range(len(sheetnames_in_range)):
     month_dict = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień",
                   5: "Maj", 6: "Czerwiec", 7: "Lipiec", 8: "Sierpień",
                   9: "Wrzesień", 10: "Październik", 11: "Listopad",
-                  12: "Grudzień"}
+                  12: "Grudzień", 0: "Grudzień"}
 
     year_label = " 20" + str(start_date.year
                              + int(format((np.floor(
@@ -155,7 +155,7 @@ for p, phrase in enumerate(config_list):
         output_xlsx.create_sheet("name", p+1)
 
 # 4. Postprocessing
-results_dir = folder_path + "/!Reports/spendings_finder"
+results_dir = folder_path + "/!Reports/spendings finder"
 if not os.path.exists(results_dir):
     os.mkdir(results_dir)
 
