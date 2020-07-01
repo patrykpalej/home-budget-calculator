@@ -152,11 +152,3 @@ To understand variables naming better here is a brief dictionary of some nomencl
 | sources        | Sources of incomes/earnings                                  |
 | balance        | Difference between incomes/earnings and spendings            |
 
-
-
-### 6. More information
-
-The project is described in details on the blog: 
-
-https://ds-ml.blog/2019/09/10/kalkulator-budzetu-domowego-1-wprowadzenie/
-
