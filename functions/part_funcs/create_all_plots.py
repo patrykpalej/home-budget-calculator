@@ -84,10 +84,31 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
     # region
     _values_list_inc = list(my_workbook.incomes_dict.values())
     _labels_list_inc = list(my_workbook.incomes_dict.keys())
-    incomes_values = [inc for inc in _values_list_inc if inc > 0]
+
+    # marks which incomes are "others"
+    others_markers_inc = [1 if i < 0.02 * sum(_values_list_inc) else 0
+                          for i in _values_list_inc]
+
+    incomes_values = [inc for i, inc in enumerate(_values_list_inc)
+                      if inc > 0 and others_markers_inc[i] == 0]
     incomes_labels = [inc + " - " + str(_values_list_inc[i]) + "zł"
                       for i, inc in enumerate(_labels_list_inc)
-                      if _values_list_inc[i] > 0]
+                      if _values_list_inc[i] > 0
+                      and others_markers_inc[i] == 0]
+
+    if sum(others_markers_inc) > 0:
+        sum_others = 0
+        for i, inc in enumerate(_values_list_inc):
+            if others_markers_inc[i] == 1:
+                sum_others += inc
+
+        incomes_values.append(sum_others)
+        incomes_labels.append("Inne - " + str(incomes_values[-1]) + "zł")
+
+    # incomes_values = [inc for inc in _values_list_inc if inc > 0]
+    # incomes_labels = [inc + " - " + str(round(_values_list_inc[i], 2)) + "zł"
+    #                   for i, inc in enumerate(_labels_list_inc)
+    #                   if _values_list_inc[i] > 0]
 
     values = incomes_values
     labels = incomes_labels
@@ -106,25 +127,25 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
 
     # -- Piechart of earnings
     # region
-    _values_list_ear = list(my_workbook.earnings_dict.values())
-    _labels_list_ear = list(my_workbook.earnings_dict.keys())
-    earnings_values = [ear for ear in _values_list_ear if ear > 0]
-    earnings_labels = [ear + " - " + str(_values_list_ear[i]) + "zł"
-                       for i, ear in enumerate(_labels_list_ear)
-                       if _values_list_ear[i] > 0]
-
-    values = earnings_values
-    labels = earnings_labels
-    title = part_label + " - Podział zarobków na \nposzczególne źrodła\n\n" \
-        + "Suma zarobków: " + str(round(my_workbook.earnings, 2)) + "zł\n" \
-        + "Nadwyżka zarobków: " + str(round(my_workbook.balance[1], 2)) \
-        + "zł  (" + str(round(100 * my_workbook.balance[1]
-                              / my_workbook.earnings, 2)) + "%)"
-    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
-    plot_nr += 1
-
-    fig = plotPie(values, labels, title)
-    plt.savefig(figure=fig, fname=fig_name)
+    # _values_list_ear = list(my_workbook.earnings_dict.values())
+    # _labels_list_ear = list(my_workbook.earnings_dict.keys())
+    # earnings_values = [ear for ear in _values_list_ear if ear > 0]
+    # earnings_labels = [ear + " - " + str(round(_values_list_ear[i], 2)) + "zł"
+    #                    for i, ear in enumerate(_labels_list_ear)
+    #                    if _values_list_ear[i] > 0]
+    #
+    # values = earnings_values
+    # labels = earnings_labels
+    # title = part_label + " - Podział zarobków na \nposzczególne źrodła\n\n" \
+    #     + "Suma zarobków: " + str(round(my_workbook.earnings, 2)) + "zł\n" \
+    #     + "Nadwyżka zarobków: " + str(round(my_workbook.balance[1], 2)) \
+    #     + "zł  (" + str(round(100 * my_workbook.balance[1]
+    #                           / my_workbook.earnings, 2)) + "%)"
+    # fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    # plot_nr += 1
+    #
+    # fig = plotPie(values, labels, title)
+    # plt.savefig(figure=fig, fname=fig_name)
     # endregion
 
     # -- Piechart of food subcategories
@@ -157,7 +178,8 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
 
     if others_sum > 0:
         subcats_values_with_others.append(others_sum)
-        subcats_labels_with_others.append("inne - " + str(others_sum) + "zł")
+        subcats_labels_with_others.append("inne - "
+                                          + str(round(others_sum, 2)) + "zł")
 
     values = subcats_values_with_others
     labels = subcats_labels_with_others
@@ -222,7 +244,14 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
     incomes_labels_avg = [inc + " - " + str(round(_values_list_inc[i]
                                                   / n_of_months, 2)) + "zł"
                           for i, inc in enumerate(_labels_list_inc)
-                          if _values_list_inc[i] > 0]
+                          if others_markers_inc[i] == 0]
+                          # if _values_list_inc[i] > 0]
+
+    if sum(others_markers_inc) > 0:
+        # incomes_values_avg.append(str(round(others_sum / n_of_months, 2)))
+        incomes_labels_avg.append("Inne - "
+                    + str(round(incomes_values[-1] / n_of_months, 2))
+                    + "zł")
 
     values = incomes_values_avg
     labels = incomes_labels_avg
@@ -244,29 +273,29 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
 
     # -- Piechart of earnings
     # region
-    earnings_values_avg = [i / n_of_months for i in earnings_values]
-    earnings_labels_avg = [ear + " - "
-                           + str(round(_values_list_ear[i] / n_of_months, 2))
-                           + "zł"
-                           for i, ear in enumerate(_labels_list_ear)
-                           if _values_list_ear[i] > 0]
-
-    values = earnings_values_avg
-    labels = earnings_labels_avg
-    title = part_label + " - Podział zarobków na poszczególne \nźródła " \
-        "w uśrednionym miesiącu\n\nSuma zarobków: " \
-        + str(round(my_workbook.earnings / n_of_months, 2)) + "zł\n" \
-        "Nadwyżka zarobków: " \
-        + str(round(my_workbook.balance[1] / n_of_months, 2)) \
-        + "zł  (" + str(round(100 * my_workbook.balance[1] / n_of_months
-                               / (my_workbook.earnings / n_of_months), 2)) \
-        + "%)"
-
-    fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
-    plot_nr += 1
-
-    fig = plotPie(values, labels, title)
-    plt.savefig(figure=fig, fname=fig_name)
+    # earnings_values_avg = [round(i / n_of_months, 2) for i in earnings_values]
+    # earnings_labels_avg = [ear + " - "
+    #                        + str(round(_values_list_ear[i] / n_of_months, 2))
+    #                        + "zł"
+    #                        for i, ear in enumerate(_labels_list_ear)
+    #                        if _values_list_ear[i] > 0]
+    #
+    # values = earnings_values_avg
+    # labels = earnings_labels_avg
+    # title = part_label + " - Podział zarobków na poszczególne \nźródła " \
+    #     "w uśrednionym miesiącu\n\nSuma zarobków: " \
+    #     + str(round(my_workbook.earnings / n_of_months, 2)) + "zł\n" \
+    #     "Nadwyżka zarobków: " \
+    #     + str(round(my_workbook.balance[1] / n_of_months, 2)) \
+    #     + "zł  (" + str(round(100 * my_workbook.balance[1] / n_of_months
+    #                            / (my_workbook.earnings / n_of_months), 2)) \
+    #     + "%)"
+    #
+    # fig_name = results_dir + "/plots/plot{}.png".format(plot_nr)
+    # plot_nr += 1
+    #
+    # fig = plotPie(values, labels, title)
+    # plt.savefig(figure=fig, fname=fig_name)
     # endregion
     plot_numbers_list.append(plot_nr - 1)
 

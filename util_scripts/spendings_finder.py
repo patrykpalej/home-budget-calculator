@@ -7,10 +7,13 @@ from openpyxl.styles import Alignment
 from openpyxl.styles import PatternFill
 from openpyxl.styles.borders import Border, Side
 
+import sys
+sys.path.append("..")
+
 from classes import MyWorkbook
 
 # 1. Importing total data and config, choosing data in range
-folder_path_file = open("path.txt", "r")
+folder_path_file = open("../path.txt", "r")
 folder_path = folder_path_file.read()
 folder_path_file.close()
 
