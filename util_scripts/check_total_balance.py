@@ -6,11 +6,13 @@ between earnings and spendings so far to check the ballance
 import os
 import json
 
+import sys
+sys.path.append("..")
 from classes import MyWorkbook
 
 
 # 1. Get state of bank accounts from json file
-with open("../balance_check.json", encoding='utf-8') as file:
+with open("balance_check.json", encoding='utf-8') as file:
     bank_accounts_state = json.load(file)
 
 current_cash = sum(list(bank_accounts_state.values()))
@@ -46,7 +48,7 @@ balance = current_cash + total_spendings + month_spendings - total_incomes \
           - month_incomes
 
 balance_dict = {"balance": round(balance, 2),
-                "current_cash": round(current_cash, 2),
+                "current_money": round(current_cash, 2),
                 "all_incomes": round(total_incomes + month_incomes, 2),
                 "all_spendings": round(total_spendings + month_spendings, 2)}
 
