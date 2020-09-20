@@ -2,6 +2,9 @@ import numpy as np
 import seaborn as sns
 from math import floor
 import matplotlib.pyplot as plt
+from datetime import date
+from math import ceil
+from dateutil.relativedelta import *
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator, MaxNLocator, AutoLocator
 
 
@@ -54,6 +57,7 @@ def plotLine(values, labels, plot_title, start_label):
               fontsize='x-large')
     plt.ylabel('Kwota [zł]', fontdict={'size': 18})
 
+    # -- xtick labels
     x_tick_labels = []
     month = start_label[0]
     year = start_label[1]
@@ -68,9 +72,18 @@ def plotLine(values, labels, plot_title, start_label):
         if month > 12:
             month -= 12
             year += 1
+    xticks_idx = [2 * i for i in range(1 + round(len(values[0]) / 2))]
 
-    plt.xticks([2*i for i in range(1+round(len(values[0])/2))],
-               x_tick_labels, rotation=15)
+    if len(values[0]) > 20:
+        start_date = date(2000 + start_label[1], start_label[0], 1)
+        dates_range = [start_date + relativedelta(months=i)
+                       for i in range(len(values[0]))]
+        xticks_values = dates_range[0::ceil(len(values[0])/10)]
+        xticks_idx = list(range(len(values[0])))[0::ceil(len(values[0])/10)]
+        x_tick_labels = [str(date(x.year, x.month, 1).strftime("%m.%Y"))
+                         for x in xticks_values]
+
+    plt.xticks(xticks_idx, x_tick_labels, rotation=15)
     ax.tick_params(labelsize=16)
 
     return fig
@@ -112,6 +125,7 @@ def twoAxisLinePlot(values, labels, plot_title, start_label):
                fontsize='x-large')
     ax2.set_ylim([-1, 1])
 
+    # -- xtick labels
     x_tick_labels = []
     month = start_label[0]
     year = start_label[1]
@@ -126,8 +140,18 @@ def twoAxisLinePlot(values, labels, plot_title, start_label):
         if month > 12:
             month -= 12
             year += 1
-    plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
-               x_tick_labels)
+    xticks_idx = [2 * i for i in range(1 + round(len(values[0]) / 2))]
+
+    if len(values[0]) > 20:
+        start_date = date(2000 + start_label[1], start_label[0], 1)
+        dates_range = [start_date + relativedelta(months=i)
+                       for i in range(len(values[0]))]
+        xticks_values = dates_range[0::ceil(len(values[0])/10)]
+        xticks_idx = list(range(len(values[0])))[0::ceil(len(values[0])/10)]
+        x_tick_labels = [str(date(x.year, x.month, 1).strftime("%m.%Y"))
+                         for x in xticks_values]
+
+    plt.xticks(xticks_idx, x_tick_labels)
     ax1.tick_params(axis='x', labelsize=16, rotation=15)
 
     return fig
@@ -160,10 +184,19 @@ def plotStack(values, labels, plot_title, start_label):
             month -= 12
             year += 1
 
-    plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
-               x_tick_labels, rotation=15)
+    xticks_idx = [2 * i for i in range(1 + round(len(values[0]) / 2))]
 
-    ax.tick_params(labelsize=16)
+    if len(values[0]) > 20:
+        start_date = date(2000 + start_label[1], start_label[0], 1)
+        dates_range = [start_date + relativedelta(months=i)
+                       for i in range(len(values[0]))]
+        xticks_values = dates_range[0::ceil(len(values[0]) / 10)]
+        xticks_idx = list(range(len(values[0])))[0::ceil(len(values[0]) / 10)]
+        x_tick_labels = [str(date(x.year, x.month, 1).strftime("%m.%Y"))
+                         for x in xticks_values]
+
+    plt.xticks(xticks_idx, x_tick_labels)
+    ax.tick_params(labelsize=16, rotation=15)
 
     return fig
 
@@ -245,8 +278,22 @@ def twoAxisLinePlot1(values, labels, plot_title, start_label, n_rolling):
         if month > 12:
             month -= 12
             year += 1
-    plt.xticks([2 * i for i in range(1 + round(len(values[0]) / 2))],
-               x_tick_labels)
+
+    xticks_idx = [2 * i for i in range(1 + round(len(values[0]) / 2))]
+
+    if len(values[0]) > 20:
+        start_date = date(2000 + start_label[1], start_label[0], 1)
+        dates_range = [start_date + relativedelta(months=i)
+                       for i in range(len(values[0]))]
+        xticks_values = dates_range[0::ceil(len(values[0]) / 10)]
+        xticks_idx = list(range(len(values[0])))[0::ceil(len(values[0]) / 10)]
+        x_tick_labels = [str(date(x.year, x.month, 1).strftime("%m.%Y"))
+                         for x in xticks_values]
+
+    plt.xticks(xticks_idx, x_tick_labels)
     ax1.tick_params(axis='x', labelsize=16, rotation=15)
+
+    ax1.set_ylim([0, 1.1*max(max(values[0]), max(values[1]))])
+    ax2.set_ylim([0, 1.1*max(max(values[0]), max(values[1]))])
 
     return fig
