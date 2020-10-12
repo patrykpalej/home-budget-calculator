@@ -104,7 +104,8 @@ def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
                 sum_others += inc
 
         incomes_values.append(sum_others)
-        incomes_labels.append("Inne - " + str(incomes_values[-1]) + "zł")
+        incomes_labels.append("Inne - " + str(round(incomes_values[-1], 2))
+                              + "zł")
 
     values = incomes_values
     labels = incomes_labels
@@ -229,7 +230,7 @@ def create_all_plots(my_workbook, my_worksheets, total_label, results_dir,
 
     values = incomes_values_avg
     labels = incomes_labels_avg
-    title = total_label + " - Podział przychodów na poszczególne \nźródła" \
+    title = total_label + " - Podział przychodów na poszczególne \nźródła " \
         "w uśrednionym miesiącu\n\n" + "Suma przychodów: " \
         + str(round(my_workbook.incomes / n_of_months, 2)) + "zł\n" \
         + "Nadwyżka przychodów: " \

@@ -103,7 +103,8 @@ def create_all_plots(my_workbook, part_label, results_dir, start_label,
                 sum_others += inc
 
         incomes_values.append(sum_others)
-        incomes_labels.append("Inne - " + str(incomes_values[-1]) + "zł")
+        incomes_labels.append("Inne - " + str(round(incomes_values[-1], 2))
+                              + "zł")
 
     # incomes_values = [inc for inc in _values_list_inc if inc > 0]
     # incomes_labels = [inc + " - " + str(round(_values_list_inc[i], 2)) + "zł"
