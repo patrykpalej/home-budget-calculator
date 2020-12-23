@@ -1,3 +1,4 @@
+import re
 import openpyxl
 
 
@@ -174,8 +175,12 @@ class MyWorksheet:
                         self.spends_values[self.cats_names[i]].append(_spending)
                         try:
                             _item = self.myws.cell(row_nr, col_nr).comment.text
-                            self.spends_items[self.cats_names[i]]\
-                                .append(_item[_item.find(':\n')+2:])
+                            if ':\n' in _item:
+                                clean_item = _item[_item.find(':\n') + 2:].strip()
+                            else:
+                                idx = re.search(r'\d\d:\d\d\)\n', _item).end()
+                                clean_item = _item[idx:]
+                            self.spends_items[self.cats_names[i]].append(clean_item)
                         except:
                             self.spends_items[self.cats_names[i]].append('')
                     else:
